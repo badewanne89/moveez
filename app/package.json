@@ -4,7 +4,7 @@
   "description": "a webbased service to keep track of the movies you would like to watch",
   "main": "app.js",
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "mocha --timeout 20000",
     "start": "node app.js"
   },
   "repository": {
@@ -21,7 +21,10 @@
   },
   "homepage": "https://www.moveez.de",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "mongoose": "^4.13.7",
     "morgan": "^1.9.0"
   },
   "devDependencies": {

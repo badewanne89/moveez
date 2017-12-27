@@ -1,0 +1,13 @@
+<% include ../partials/header %>
+
+<h1>this is your title list</h1>
+
+<ul>
+<% titles.forEach(function(title){ %>
+    <li><%= title.name %></li>
+<% }); %> 
+</ul>
+
+<a href="/title/new/">add new title</a>
+
+<% include ../partials/footer %>
