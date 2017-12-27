@@ -1,14 +1,14 @@
 pipeline {
   agent {
-    docker {
-      image 'node'
+    dockerfile {
+      filename 'node'
     }
     
   }
   stages {
     stage('Build') {
       steps {
-        sh 'npm test'
+        sh 'cd app && npm test'
       }
     }
   }
