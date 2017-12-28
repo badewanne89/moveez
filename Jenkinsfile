@@ -28,7 +28,7 @@ pipeline {
                   //TODO
                     //load pipeline configuration from same path as Jenkinsfile
                     config = load '/config/config.jenkins'
-                    package = load 'package.json'
+                    def package = load 'package.json'
                     //!set creates a long release name for archiving with job name, version, build number
                     // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
                     releaseName = "${env.JOB_NAME}_${package.version}_${env.BUILD_NUMBER}_${env.GIT_COMMIT}"
