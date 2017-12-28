@@ -26,7 +26,9 @@ pipeline {
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     //currentBuild.displayName = "1.0.0_${env.BUILD_NUMBER}"
                     //mailParams = ['#BUILD_NAME': releaseName, '#LINK': "${env.JOB_DISPLAY_URL}"]
-                    echo "TODO"
+                    
+                    //install npm dependencies
+                    sh "npm install"
                 }
             }
         }
@@ -36,7 +38,7 @@ pipeline {
                     SONAR: {
                         script{
                             //!- unit/integration test
-                            sh "cd app && npm test"
+                            sh "npm test"
                             //!- Source Code Check with SonarQube
                             //TODO
                         }
