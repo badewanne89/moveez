@@ -59,7 +59,6 @@ pipeline {
                 script {
                     //create docker image
                     def dockerImage = docker.build("${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
-                    dockerImage.push('latest')
                 }
             }
         }
