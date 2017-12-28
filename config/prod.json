@@ -1,0 +1,12 @@
+//https://github.com/lorenwest/node-config/wiki/Securing-Production-Config-Files
+{
+    "dbProtocol": "mongodb",
+    "dbPort": "",
+    "dbName": "",
+    "dbHost": "",
+    "dbUser": "",
+    "dbPassword" : "",
+    "dbConnectionOptions": {
+        "useMongoClient": true
+    }
+}

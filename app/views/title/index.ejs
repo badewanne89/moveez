@@ -2,12 +2,15 @@
 
 <h1>this is your title list</h1>
 
+<form action="/title" method="POST">
+    <input type="text" placeholder="name" name="title[name]">
+    <button>Add title</button>
+</form>
+
 <ul>
 <% titles.forEach(function(title){ %>
     <li><%= title.name %></li>
 <% }); %> 
 </ul>
-
-<a href="/title/new/">add new title</a>
 
 <% include ../partials/footer %>

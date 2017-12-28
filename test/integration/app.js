@@ -2,10 +2,10 @@ process.env.NODE_ENV = 'test'
 
 var chai = require("chai"),
     chaitHttp = require("chai-http"),
-    app = require("../app.js"),
+    app = require("../../app/app.js"),
     should = chai.should(),
     mongoose = require("mongoose"),
-    Title = require("../models/title")
+    Title = require("../../app/models/title")
     
 chai.use(chaitHttp)
 
@@ -32,14 +32,6 @@ describe("Moveez integration tests", () => {
                 res.should.have.status(200)
                 res.body.should.be.a('array');
                 res.body.length.should.be.eql(0);
-                done()
-            })
-        })
-        it("it should GET the form to add a new title", (done) => {
-            chai.request(app)
-            .get("/title/new")
-            .end((err, res) => {
-                res.should.have.status(200)
                 done()
             })
         })

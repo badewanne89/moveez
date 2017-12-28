@@ -36,11 +36,13 @@ app.get("/", (req, res) => res.json({message: "Welcome to moveez!"}))
 app.route("/title")
     .get(title.getTitles)
     .post(title.postTitle)
-app.route("/title/new")
-    .get(title.newTitle)
 
 //SERVER
-app.listen(process.env.PORT, process.env.IP, () => console.log("Moveez started on " + process.env.IP + ":" + process.env.PORT))
+app.listen(process.env.PORT, process.env.IP, () => {
+    console.log("Moveez started on " + process.env.IP + ":" + process.env.PORT)
+    console.log("mode: " + process.env.NODE_ENV)
+    console.log("db: " + dbConnectionString)
+})
 
 //expose for integration testing with mocha
 module.exports = app
