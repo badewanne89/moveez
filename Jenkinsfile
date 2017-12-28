@@ -124,7 +124,7 @@ pipeline {
     post {
         failure {
             //!Notify team and abbort Change if needed
-            //TODO
+            echo "TODO"
         }
         always {
             //!delete workspace
