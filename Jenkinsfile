@@ -60,10 +60,12 @@ pipeline {
                     SECURITY: {
                         script {
                             //TODO maybe with sonar as well
+                            echo "TODO"
                         }
                     },
                     OSLC: {
                         //!- Open Source License Compliance Test
+                        echo "TODO"
                     }
                 )
             }
@@ -80,7 +82,8 @@ pipeline {
             steps {
                 script {
                     //create docker image
-                    def customImage = docker.build("my-image:${env.BUILD_ID}")
+                    echo "TODO"
+                    //def customImage = docker.build("my-image:${env.BUILD_ID}")
                     //customImage.push('latest')
                 }
             }
@@ -99,6 +102,7 @@ pipeline {
                     FUNCTIONAL: {
                         script {
                             //deploy environment for functional tests
+                            echo "TODO"
                             //start webdriver.io test
                             //destroy environment for functional tests
                         }
@@ -107,11 +111,13 @@ pipeline {
                         script {
                             //deploy environment for performance tests
                             //start octoperf test
+                            echo "TODO"
                             //destroy environment for performance tests
                         }
                     },
                     EXPLORATIVE: {
                         //deploy environment for explorative tests
+                        echo "TODO"
                     }
                 )
             }
@@ -152,6 +158,7 @@ pipeline {
                 script {
                     //lock PROD environment since you can only deploy once at a time
                     lock(resource: "$JOB_NAME-prod_env"){
+                        echo "TODO"
                         //Deployment (per node)
                         //- Flightcheck (per node)
                         //- Check Monitoringevents and Logfiles (per node)
