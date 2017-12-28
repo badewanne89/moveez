@@ -58,9 +58,8 @@ pipeline {
             steps {
                 script {
                     //create docker image
-                    echo "TODO"
-                    //def customImage = docker.build("my-image:${env.BUILD_ID}")
-                    //customImage.push('latest')
+                    def dockerImage = docker.build("${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
+                    dockerImage.push('latest')
                 }
             }
         }
