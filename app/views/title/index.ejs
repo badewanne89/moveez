@@ -1,16 +1,24 @@
 <% include ../partials/header %>
 
-<h1>this is your title list</h1>
-
-<form action="/title" method="POST">
-    <input type="text" placeholder="name" name="title[name]">
-    <button>Add title</button>
-</form>
-
-<ul>
-<% titles.forEach(function(title){ %>
-    <li><%= title.name %></li>
-<% }); %> 
-</ul>
+<div class="ui main text container">
+    <div class="ui top attached segment">
+        <h1 class="ui header">Your watchlist:</h1>
+        
+        <form class="ui form" action="/title" method="POST">
+            <div class="fields">
+                <div class="six wide field">
+                    <input type="text" placeholder="type a name to add" name="title[name]" required>
+                </div>
+                <button class="ui icon teal button"><i class="add circle icon"></i></button>
+            </div>
+        </form>
+        
+        <ul class="ui list">
+        <% titles.forEach(function(title){ %>
+            <li><%= title.name %></li>
+        <% }); %> 
+        </ul>
+    </div>
+</div>
 
 <% include ../partials/footer %>

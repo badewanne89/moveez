@@ -19,11 +19,6 @@ function getTitles(req, res){
     })
 }
 
-//NEW GET /title to open form to enter new title for creation
-function newTitle(req, res){
-    res.render("title/new")
-}
-
 //CREATE POST /title to add a new title
 function postTitle(req, res){
     var newTitle = new Title(req.body.title)
@@ -43,4 +38,4 @@ function postTitle(req, res){
 }
 
 //export all functions
-module.exports = { getTitles, postTitle, newTitle };
+module.exports = { getTitles, postTitle };
