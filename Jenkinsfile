@@ -27,7 +27,8 @@ pipeline {
                 script {
                   //TODO
                     //load pipeline configuration from same path as Jenkinsfile
-                    config = load '/config/config.jenkins'
+                    def config = load '/config/config.jenkins'
+                    echo ${config.approver}
                     def package = load 'package.json'
                     //!set creates a long release name for archiving with job name, version, build number
                     // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
