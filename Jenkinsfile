@@ -11,18 +11,10 @@ pipeline {
     // This configures the agent, where the pipeline will be executed. The default should be `none` so
     // that `Approval` stage does not block an executor on the master node.
     agent {
-        node none
+        label "master"
     }
     stages {
         stage('INIT') {
-            agent {
-                node {
-                    //if not specified otherwise, everything runs on the Jenkins master
-                    label 'master'
-                    //create a custom workspace for every build to avoid interference due to concurrent builds
-                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
-                }
-            }
             steps {
                 script {
                     //load pipeline configuration from same path as Jenkinsfile
@@ -39,14 +31,6 @@ pipeline {
             }
         }
         stage('SCAN') {
-            agent {
-                node {
-                    //if not specified otherwise, everything runs on the Jenkins master
-                    label 'master'
-                    //create a custom workspace for every build to avoid interference due to concurrent builds
-                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
-                }
-            }
             steps {
                 parallel(
                     SONAR: {
@@ -71,14 +55,6 @@ pipeline {
             }
         }
         stage('BUILD') {
-            agent {
-                node {
-                    //if not specified otherwise, everything runs on the Jenkins master
-                    label 'master'
-                    //create a custom workspace for every build to avoid interference due to concurrent builds
-                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
-                }
-            }
             steps {
                 script {
                     //create docker image
@@ -89,14 +65,6 @@ pipeline {
             }
         }
         stage('UAT') {
-            agent {
-                node {
-                    //if not specified otherwise, everything runs on the Jenkins master
-                    label 'master'
-                    //create a custom workspace for every build to avoid interference due to concurrent builds
-                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
-                }
-            }
             steps {
                 parallel(
                     FUNCTIONAL: {
@@ -123,9 +91,6 @@ pipeline {
             }
         }
         stage('APPROVAL') {
-            agent {
-                node none
-            }
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
                 branch 'master'
@@ -140,14 +105,6 @@ pipeline {
             }
         }
         stage('PROD') {
-            agent {
-                node {
-                    //if not specified otherwise, everything runs on the Jenkins master
-                    label 'master'
-                    //create a custom workspace for every build to avoid interference due to concurrent builds
-                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
-                }
-            }
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
                 branch 'master'
