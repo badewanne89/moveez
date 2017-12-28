@@ -57,8 +57,11 @@ pipeline {
         stage('BUILD') {
             steps {
                 script {
-                    //create docker image
-                    def dockerImage = docker.build("${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
+                    //create docker image and push it to dockerhub
+		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
+			def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
+			dockerImage.push("latest")
+		    }
                 }
             }
         }
