@@ -117,7 +117,9 @@ pipeline {
             }
         }
         stage('APPROVAL') {
-            node none
+            agent {
+                node none
+            }
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
                 branch 'master'
