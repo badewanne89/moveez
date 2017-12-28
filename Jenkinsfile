@@ -30,7 +30,7 @@ pipeline {
                     //TODO def package = load 'package.json'
                     //!set creates a long release name for archiving with job name, version, build number
                     // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
-                    releaseName = "${env.JOB_NAME}_1.0.0_${env.BUILD_NUMBER}_${env.GIT_COMMIT}"
+                    releaseName = "${env.JOB_NAME}_1.0.0_${env.BUILD_NUMBER}"//_${env.GIT_COMMIT}"
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "1.0.0_${env.BUILD_NUMBER}"
                     mailParams = ['#BUILD_NAME': releaseName, '#LINK': "${env.JOB_DISPLAY_URL}"]
