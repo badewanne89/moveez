@@ -26,14 +26,15 @@ pipeline {
             steps {
                 script {
                     //load pipeline configuration from same path as Jenkinsfile
-                    def config = load '/config/config.jenkins'
+                    //def config = load '/config/config.jenkins'
                     //TODO def package = load 'package.json'
                     //!set creates a long release name for archiving with job name, version, build number
                     // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
-                    releaseName = "${env.JOB_NAME}_1.0.0_${env.BUILD_NUMBER}"//_${env.GIT_COMMIT}"
+                    //releaseName = "${env.JOB_NAME}_1.0.0_${env.BUILD_NUMBER}"//_${env.GIT_COMMIT}"
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
-                    currentBuild.displayName = "1.0.0_${env.BUILD_NUMBER}"
-                    mailParams = ['#BUILD_NAME': releaseName, '#LINK': "${env.JOB_DISPLAY_URL}"]
+                    //currentBuild.displayName = "1.0.0_${env.BUILD_NUMBER}"
+                    //mailParams = ['#BUILD_NAME': releaseName, '#LINK': "${env.JOB_DISPLAY_URL}"]
+                    echo "TODO"
                 }
             }
         }
@@ -174,11 +175,12 @@ pipeline {
         }
         always {
             //!delete workspace
-            node('master') {
-                dir("jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}") {
-                    deleteDir()
-                }
-            }
+            echo "TODO"
+            //node('master') {
+                //dir("jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}") {
+                    //deleteDir()
+                //}
+            //}
         }
     }
 }
