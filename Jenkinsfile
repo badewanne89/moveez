@@ -100,9 +100,9 @@ pipeline {
             steps {
                 //approval from product owner
                 //!Email to product owner as notification
-                sendMail(config.mail.approval, mailParams)
+                //sendMail(config.mail.approval, mailParams)
                 //!Prompt for approval
-                input(message:'Go Live?', ok: 'Fire', submitter: config.approver)
+                input(message:'Go Live?', ok: 'Fire', submitter: "schdief")
                 //destroy explorative environment
             }
         }
