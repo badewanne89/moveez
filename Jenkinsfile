@@ -1,11 +1,175 @@
+#!groovy
 pipeline {
-  agent { node { label 'master' } }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'cd app && npm install'
-        sh "cd app && npm test"
-      }
+    options {
+        //enable timestamps in console output
+        timestamps()
     }
-  }
+    triggers {
+        //polling SCM with cron syntax for new changes to trigger a build, default: every minute
+        pollSCM('* * * * *')
+    }
+    // This configures the agent, where the pipeline will be executed. The default should be `none` so
+    // that `Approval` stage does not block an executor on the master node.
+    agent {
+        node none
+    }
+    stages {
+        stage('INIT') {
+            agent {
+                node {
+                    //if not specified otherwise, everything runs on the Jenkins master
+                    label 'master'
+                    //create a custom workspace for every build to avoid interference due to concurrent builds
+                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+                }
+            }
+            steps {
+                script {
+                  //TODO
+                    //load pipeline configuration from same path as Jenkinsfile
+                    config = load '/config/config.jenkins'
+                    package = load 'package.json'
+                    //!set creates a long release name for archiving with job name, version, build number
+                    // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
+                    releaseName = "${env.JOB_NAME}_${package.version}_${env.BUILD_NUMBER}_${env.GIT_COMMIT}"
+                    //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
+                    currentBuild.displayName = "${package.version}_${env.BUILD_NUMBER}"
+                    mailParams = ['#BUILD_NAME': releaseName, '#LINK': "${env.JOB_DISPLAY_URL}"]
+                }
+            }
+        }
+        stage('SCAN') {
+            agent {
+                node {
+                    //if not specified otherwise, everything runs on the Jenkins master
+                    label 'master'
+                    //create a custom workspace for every build to avoid interference due to concurrent builds
+                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+                }
+            }
+            steps {
+                parallel(
+                    SONAR: {
+                        script{
+                            //!- unit/integration test
+                            sh "cd app && npm test"
+                            //!- Source Code Check with SonarQube
+                            //TODO
+                        }
+                    },
+                    SECURITY: {
+                        script {
+                            //TODO maybe with sonar as well
+                        }
+                    },
+                    OSLC: {
+                        //!- Open Source License Compliance Test
+                    }
+                )
+            }
+        }
+        stage('BUILD') {
+            agent {
+                node {
+                    //if not specified otherwise, everything runs on the Jenkins master
+                    label 'master'
+                    //create a custom workspace for every build to avoid interference due to concurrent builds
+                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+                }
+            }
+            steps {
+                script {
+                    //create docker image
+                    def customImage = docker.build("my-image:${env.BUILD_ID}")
+                    //customImage.push('latest')
+                }
+            }
+        }
+        stage('UAT') {
+            agent {
+                node {
+                    //if not specified otherwise, everything runs on the Jenkins master
+                    label 'master'
+                    //create a custom workspace for every build to avoid interference due to concurrent builds
+                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+                }
+            }
+            steps {
+                parallel(
+                    FUNCTIONAL: {
+                        script {
+                            //deploy environment for functional tests
+                            //start webdriver.io test
+                            //destroy environment for functional tests
+                        }
+                    },
+                    PERFORMANCE: {
+                        script {
+                            //deploy environment for performance tests
+                            //start octoperf test
+                            //destroy environment for performance tests
+                        }
+                    },
+                    EXPLORATIVE: {
+                        //deploy environment for explorative tests
+                    }
+                )
+            }
+        }
+        stage('APPROVAL') {
+            node none
+            when {
+                //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
+                branch 'master'
+            }
+            steps {
+                //approval from product owner
+                //!Email to product owner as notification
+                sendMail(config.mail.approval, mailParams)
+                //!Prompt for approval
+                input(message:'Go Live?', ok: 'Fire', submitter: config.approver)
+                //destroy explorative environment
+            }
+        }
+        stage('PROD') {
+            agent {
+                node {
+                    //if not specified otherwise, everything runs on the Jenkins master
+                    label 'master'
+                    //create a custom workspace for every build to avoid interference due to concurrent builds
+                    customWorkspace "jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}"
+                }
+            }
+            when {
+                //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
+                branch 'master'
+            }
+            steps {
+                // This step aborts builds if they reach this step after newer builds
+                milestone(ordinal: 0, label: 'PROD')
+                script {
+                    //lock PROD environment since you can only deploy once at a time
+                    lock(resource: "$JOB_NAME-prod_env"){
+                        //Deployment (per node)
+                        //- Flightcheck (per node)
+                        //- Check Monitoringevents and Logfiles (per node)
+                    }
+                }
+            }
+        }
+    }
+    post {
+        failure {
+            //!Notify team and abbort Change if needed
+            handleError(config.mail.error, mailParams)
+        }
+        always {
+            //!delete workspace
+            node('master') {
+                dir("jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}") {
+                    deleteDir()
+                }
+            }
+        }
+    }
 }

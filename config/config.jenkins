@@ -1,0 +1,21 @@
+#!groovy
+//configuration file for jenkinsfile
+[
+    approver: "schdief",
+    mail:[
+        error:[
+            to: 'schdief.law@gmail.com',
+            replyTo:'noreply@moveez.de',
+            from:'jenkins@moveez.de',
+            subject:'#BUILD_NAME failed',
+            body:'Sehr geehrte(r) Nutzer(in),\n\ndas Release #BUILD_NAME konnte nicht erfolgreich durchgeführt werden.\nBitte klicken Sie auf den folgenden Link:\n#LINK\n\nIhr Jenkins',
+        ],
+        approval:[
+            to: 'schdief.law@gmail.com',
+            replyTo: 'noreply@moveez.de',
+            from: 'jenkins@moveez.de',
+            subject: '#BUILD_NAME needs your approval',
+            body: 'Sehr geehrter Nutzer(in),\n\ndas Release #BUILD_NAME benötigt Ihre manuelle Freigabe, um weiter bearbeitet zu werden.\nBitte klicken Sie dazu auf den folgenden Link:\n#LINK\n\nVielen Dank und viele Grüße\n\nIhr Jenkins'
+        ]
+    ]
+]
