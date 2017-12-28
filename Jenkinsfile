@@ -17,16 +17,14 @@ pipeline {
         stage('INIT') {
             steps {
                 script {
-                    //load pipeline configuration from same path as Jenkinsfile
-                    //def config = load '/config/config.jenkins'
-                    //TODO def package = load 'package.json'
-                    //!set creates a long release name for archiving with job name, version, build number
+                    //load pipeline configuration
+                    config = load 'config/config.jenkins'
+                    packageJSON = readJSON file: 'package.json'
+                    //!create a long release name for archiving with job name, version, build number
                     // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
-                    //releaseName = "${env.JOB_NAME}_1.0.0_${env.BUILD_NUMBER}"//_${env.GIT_COMMIT}"
+                    releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.GIT_COMMIT}"
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
-                    //currentBuild.displayName = "1.0.0_${env.BUILD_NUMBER}"
-                    //mailParams = ['#BUILD_NAME': releaseName, '#LINK': "${env.JOB_DISPLAY_URL}"]
-                    
+                    currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
                     sh "npm install"
                 }
@@ -99,10 +97,7 @@ pipeline {
             }
             steps {
                 //approval from product owner
-                //!Email to product owner as notification
-                //sendMail(config.mail.approval, mailParams)
-                //!Prompt for approval
-                input(message:'Go Live?', ok: 'Fire', submitter: "schdief")
+                input(message:'Go Live?', ok: 'Fire', submitter: config.approver)
                 //destroy explorative environment
             }
         }
@@ -130,7 +125,6 @@ pipeline {
         failure {
             //!Notify team and abbort Change if needed
             //TODO
-            echo "oops"
         }
         always {
             //!delete workspace
