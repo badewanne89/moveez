@@ -56,6 +56,7 @@ pipeline {
                 //deploy docker image from dockerhub
                 //TODO login into private registry open
                 //az webapp create --resource-group moveez --plan moveezPlan --name ${releaseName} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}
+                echo "TODO"
             }
         }
         stage('APPROVAL') {
