@@ -30,17 +30,17 @@ pipeline {
                 }
             }
         }
-        stage('SCAN') {
+        stage('TEST') { //('SCAN') {
             steps {
                 parallel(
-                    SONAR: {
+                    INTEGRATION: { //SONAR: {
                         script{
                             //!- unit/integration test
                             sh "npm test"
                             //!- Source Code Check with SonarQube
                             //TODO
                         }
-                    },
+                    }/*,
                     SECURITY: {
                         script {
                             //TODO maybe with sonar as well
@@ -50,7 +50,7 @@ pipeline {
                     OSLC: {
                         //!- Open Source License Compliance Test
                         echo "TODO"
-                    }
+                    }*/
                 )
             }
         }
@@ -58,17 +58,17 @@ pipeline {
             steps {
                 script {
                     //create docker image and push it to dockerhub
-		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-			def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
-			dockerImage.push("latest")
-		    }
+        		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
+        			    def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
+        			    dockerImage.push("latest")
+        		    }
                 }
             }
         }
         stage('UAT') {
             steps {
                 parallel(
-                    FUNCTIONAL: {
+                    /*FUNCTIONAL: {
                         script {
                             //deploy environment for functional tests
                             echo "TODO"
@@ -83,7 +83,7 @@ pipeline {
                             echo "TODO"
                             //destroy environment for performance tests
                         }
-                    },
+                    },*/
                     EXPLORATIVE: {
                         //deploy environment for explorative tests
                         echo "TODO"
@@ -102,7 +102,7 @@ pipeline {
                 //destroy explorative environment
             }
         }
-        stage('PROD') {
+        /*stage('PROD') {
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
                 branch 'master'
@@ -120,7 +120,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
     post {
         failure {
