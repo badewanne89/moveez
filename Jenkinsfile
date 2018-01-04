@@ -30,28 +30,12 @@ pipeline {
                 }
             }
         }
-        stage('TEST') { //('SCAN') {
+        stage('TEST') {
             steps {
-                parallel(
-                    INTEGRATION: { //SONAR: {
-                        script{
-                            //!- unit/integration test
-                            sh "npm test"
-                            //!- Source Code Check with SonarQube
-                            //TODO
-                        }
-                    }/*,
-                    SECURITY: {
-                        script {
-                            //TODO maybe with sonar as well
-                            echo "TODO"
-                        }
-                    },
-                    OSLC: {
-                        //!- Open Source License Compliance Test
-                        echo "TODO"
-                    }*/
-                )
+                script{
+                    //!- unit/integration test
+                    sh "npm test"
+                }
             }
         }
         stage('BUILD') {
@@ -59,7 +43,7 @@ pipeline {
                 script {
                     //create docker image and push it to dockerhub
         		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-        			    def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "-f infra/dockerfile .")
+        			    def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}")
         			    dockerImage.push("latest")
         		    }
                 }
@@ -67,28 +51,11 @@ pipeline {
         }
         stage('UAT') {
             steps {
-                parallel(
-                    /*FUNCTIONAL: {
-                        script {
-                            //deploy environment for functional tests
-                            echo "TODO"
-                            //start webdriver.io test
-                            //destroy environment for functional tests
-                        }
-                    },
-                    PERFORMANCE: {
-                        script {
-                            //deploy environment for performance tests
-                            //start octoperf test
-                            echo "TODO"
-                            //destroy environment for performance tests
-                        }
-                    },*/
-                    EXPLORATIVE: {
-                        //deploy environment for explorative tests
-                        echo "TODO"
-                    }
-                )
+                //deploy environment for explorative tests
+                //create plan for webapp
+                //deploy docker image from dockerhub
+                //TODO login into private registry open
+                //az webapp create --resource-group moveez --plan moveezPlan --name ${releaseName} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}
             }
         }
         stage('APPROVAL') {
@@ -101,40 +68,6 @@ pipeline {
                 input(message:'Go Live?', ok: 'Fire', submitter: config.approver)
                 //destroy explorative environment
             }
-        }
-        /*stage('PROD') {
-            when {
-                //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
-                branch 'master'
-            }
-            steps {
-                // This step aborts builds if they reach this step after newer builds
-                milestone(ordinal: 0, label: 'PROD')
-                script {
-                    //lock PROD environment since you can only deploy once at a time
-                    lock(resource: "$JOB_NAME-prod_env"){
-                        echo "TODO"
-                        //Deployment (per node)
-                        //- Flightcheck (per node)
-                        //- Check Monitoringevents and Logfiles (per node)
-                    }
-                }
-            }
-        }*/
-    }
-    post {
-        failure {
-            //!Notify team and abbort Change if needed
-            echo "TODO"
-        }
-        always {
-            //!delete workspace
-            echo "TODO"
-            //node('master') {
-                //dir("jobs/${env.JOB_NAME}/${env.BUILD_NUMBER}") {
-                    //deleteDir()
-                //}
-            //}
         }
     }
 }
