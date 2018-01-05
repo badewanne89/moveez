@@ -52,10 +52,9 @@ pipeline {
         stage('UAT') {
             steps {
                 //deploy environment for explorative tests
-                //create plan for webapp
                 //deploy docker image from dockerhub
                 //TODO login into private registry open
-                //az webapp create --resource-group moveez --plan moveezPlan --name ${releaseName} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}
+                //az webapp create --resource-group moveez --plan moveezPlan --name ${packageJSON.name} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}
                 echo "TODO"
             }
         }
