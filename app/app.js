@@ -39,8 +39,10 @@ app.route("/title")
     .post(title.postTitle)
 
 //SERVER
-app.listen(process.env.PORT, process.env.IP, () => {
-    console.log("Moveez started on " + process.env.IP + ":" + process.env.PORT)
+const PORT = 8080
+const HOST = '0.0.0.0'
+app.listen(PORT, HOST, () => {
+    console.log("Moveez started on " + HOST + ":" + PORT)
     console.log("mode: " + process.env.NODE_ENV)
     console.log("db: " + dbConnectionString)
 })

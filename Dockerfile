@@ -1,6 +1,17 @@
 FROM node:latest
 LABEL maintainer "schdief.law@gmail.com"
-HEALTHCHECK --interval=5s\
-            --timeout=5s\
-            CMD curl http://127.0.0.1:8080 || exit 1
+
+# working directory for moveez
+WORKDIR /usr/src/app
+
+# install dependencies from package.json
+COPY package*.json ./
+RUN npm install
+
+# bundle app source
+COPY . .
+
 EXPOSE 8080
+
+# start moveez
+CMD [ "npm", "start" ]
