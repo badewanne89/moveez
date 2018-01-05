@@ -39,7 +39,8 @@ app.route("/title")
     .post(title.postTitle)
 
 //SERVER
-const PORT = 80
+//PORT is defined by environment variable or 8081
+const PORT = process.env.PORT || 8081
 const HOST = '0.0.0.0'
 app.listen(PORT, HOST, () => {
     console.log("Moveez started on " + HOST + ":" + PORT)
