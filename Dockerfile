@@ -11,7 +11,7 @@ RUN npm install
 # bundle app source
 COPY . .
 
-EXPOSE 8080
+EXPOSE 80
 
 # start moveez
 CMD [ "npm", "start" ]
