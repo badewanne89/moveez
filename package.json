@@ -4,7 +4,7 @@
   "description": "a webbased service to keep track of the movies you would like to watch",
   "main": "app.js",
   "scripts": {
-    "test": "sudo mocha 'test/integration/*.js' --timeout 20000 --full-trace",
+    "test": "mocha 'test/integration/*.js' --timeout 20000 --full-trace",
     "start": "export NODE_CONFIG_DIR='../config' && cd app && node app.js"
   },
   "repository": {

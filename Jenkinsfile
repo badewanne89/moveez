@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script{
                     //!- unit/integration test
-                    sh "npm test"
+                    sh "sudo npm test"
                 }
             }
         }
