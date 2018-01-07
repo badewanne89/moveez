@@ -51,7 +51,7 @@ pipeline {
         }
         stage('UAT') {
             steps {
-		parallel{
+		parallel(
 			'PERFORMANCE': {
                 		//deploy environment for performance test via docker image from dockerhub on azure webapp service
                 		azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "uat-${packageJSON.name}-perf", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
@@ -62,7 +62,7 @@ pipeline {
 				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                                 azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "uat-${packageJSON.name}-expl", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
 			}
-		}
+		)
             }
         }
         stage('APPROVAL') {
