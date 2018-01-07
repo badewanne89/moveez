@@ -56,7 +56,7 @@ pipeline {
                 		//deploy environment for performance test via docker image from dockerhub on azure webapp service
                 		azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
 				//run performance test using octoperf
-				octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRhHTQEI1dv8fiP1nn', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
+				octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
 			},
 			'EXPLORATIVE': {
 				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
