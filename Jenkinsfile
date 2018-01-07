@@ -51,11 +51,9 @@ pipeline {
         }
         stage('UAT') {
             steps {
-                //deploy environment for explorative tests
-                //deploy docker image from dockerhub
-                //TODO login into private registry open
-                //az webapp create --resource-group moveez --plan moveezPlan --name ${packageJSON.name} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}
-                echo "TODO"
+                //deploy environment for explorative tests via docker image from dockerhub on azure webapp service
+                az webapp create --resource-group moveez --plan moveezPlan --name ${packageJSON.name} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}
+                //TODO perform webdriverio test
             }
         }
         stage('APPROVAL') {
