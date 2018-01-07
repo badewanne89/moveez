@@ -54,6 +54,8 @@ pipeline {
                 //deploy environment for explorative tests via docker image from dockerhub on azure webapp service
                 azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
 		//TODO perform webdriverio test
+		//run performance test using octoperf
+		octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDOIxVuyJH_vau-VK-k', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
             }
         }
         stage('APPROVAL') {
