@@ -21,7 +21,7 @@ describe("Moveez integration tests", () => {
             .get("/")
             .end((err, res) => {
                 res.should.have.status(200)
-                res.body.should.have.property("message").eql("Welcome to moveez!")
+                res.body.should.have.property("message").eql("Welcome to mocha test!")
                 done()
             })
         })    
