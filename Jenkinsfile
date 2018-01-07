@@ -50,14 +50,10 @@ pipeline {
             }
         }
         stage('UAT') {
-	    environment {
-		AZURE_ACCOUNT = credentials("azureme")
-	    }
             steps {
                 //deploy environment for explorative tests via docker image from dockerhub on azure webapp service
-                sh "az login -u {$env.AZURE_ACCOUNT_USR} -p '{$env.AZURE_ACCOUNT_PSW}'"
-		sh "az webapp create --resource-group moveez --plan moveezPlan --name ${packageJSON.name} --deployment-container-image-name schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}"
-                //TODO perform webdriverio test
+                azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+		//TODO perform webdriverio test
             }
         }
         stage('APPROVAL') {
