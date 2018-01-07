@@ -32,7 +32,7 @@ app.use(express.static(__dirname + "/views/public"))
 
 //ROUTES
 //index
-app.get("/", (req, res) => res.json({message: "Welcome to moveez!"}))
+app.get("/", (req, res) => res.json({message: "Welcome to " + process.env.RELEASE + "!"}))
 //title RESTful routes
 app.route("/title")
     .get(title.getTitles)
@@ -43,7 +43,7 @@ app.route("/title")
 const PORT = process.env.PORT || 80
 const HOST = '0.0.0.0'
 app.listen(PORT, HOST, () => {
-    console.log("Moveez started on " + HOST + ":" + PORT)
+    console.log(process.env.RELEASE + " started on " + HOST + ":" + PORT)
     console.log("mode: " + process.env.NODE_ENV)
     console.log("db: " + dbConnectionString)
 })

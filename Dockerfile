@@ -1,6 +1,10 @@
 FROM node:latest
 LABEL maintainer "schdief.law@gmail.com"
 
+# making release name available for app to display
+ARG RELEASE
+ENV RELEASE ${RELEASE}
+
 # working directory for moveez
 WORKDIR /usr/src/app
 
