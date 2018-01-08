@@ -36,7 +36,7 @@ pipeline {
                     //!- unit/integration test
                     sh "npm test"
 		    //sonarqube scan
-		    def scannerHome = tool 'SonarQube Scanner 2.8'
+		    def scannerHome = tool 'sonarcloud'
 		    withSonarQubeEnv('sonarcloud') {
 		    	sh "${scannerHome}/bin/sonar-scanner"
 		    }
