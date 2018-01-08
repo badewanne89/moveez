@@ -1,5 +1,17 @@
 exports.config = {
     //
+    // =================
+    // Service Providers
+    // =================
+    // WebdriverIO supports Sauce Labs, Browserstack, and Testing Bot (other cl$
+    // should work too though). These services define specific user and key (or$
+    // values you need to put in here in order to connect to these services.
+    //
+    services: ['sauce'],
+    user: "schdief",
+    key: "9da5b5ae-9bc1-4e44-92dc-05a935016eb9",
+    sauceConnect: true,
+    //
     // ==================
     // Specify Test Files
     // ==================
