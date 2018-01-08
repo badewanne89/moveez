@@ -35,6 +35,11 @@ pipeline {
                 script{
                     //!- unit/integration test
                     sh "npm test"
+		    //sonarqube scan
+		    def scannerHome = tool 'SonarQube Scanner 2.8'
+		    withSonarQubeEnv('sonarcloud') {
+		    	sh "${scannerHome}/bin/sonar-scanner"
+		    }
                 }
             }
         }
