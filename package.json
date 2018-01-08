@@ -19,18 +19,26 @@
   "bugs": {
     "url": "https://github.com/schdief/moveez/issues"
   },
-  "homepage": "https://www.moveez.de",
+  "homepage": "http://www.moveez.de",
   "dependencies": {
     "body-parser": "^1.18.2",
     "config": "^1.29.0",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "mongoose": "^4.13.7",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "wdio-selenium-standalone-service": "0.0.9"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "wdio-cucumber-framework": "^1.0.3",
+    "wdio-spec-reporter": "^0.1.3",
+    "webdriverio": "^4.9.11"
   }
 }

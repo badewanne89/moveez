@@ -66,7 +66,13 @@ pipeline {
 			'EXPLORATIVE': {
 				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                                 azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "explorative", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-			}
+			},
+            'ACCEPTANCE': {
+                //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
+                                azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+                                //run acceptance test with cucumber and webdriverio
+                                sh "../../node_modules/.bin/wdio wdio.conf.js"
+            }
 		)
             }
         }
