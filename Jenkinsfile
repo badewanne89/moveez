@@ -38,7 +38,7 @@ pipeline {
 		    //sonarqube scan
 		    def scannerHome = tool 'sonarqube'
 		    withSonarQubeEnv('sonarcloud') {
-		    	sh "${scannerHome}/bin/sonar-scanner -X"
+		    	sh "${scannerHome}/bin/sonar-scanner"
 		    }
                 }
             }
@@ -71,7 +71,7 @@ pipeline {
                 //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
                                 azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
                                 //run acceptance test with cucumber and webdriverio
-                                sh "cd test/app/ && ../../node_modules/.bin/wdio wdio.conf.js"
+                                sh "cd ./test/app/ && ../../node_modules/.bin/wdio wdio.conf.js"
             }
 		)
             }
