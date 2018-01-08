@@ -38,7 +38,7 @@ pipeline {
 		    //sonarqube scan
 		    def scannerHome = tool 'sonarqube'
 		    withSonarQubeEnv('sonarcloud') {
-		    	sh "${scannerHome}/bin/sonar-scanner"
+		    	sh "${scannerHome}/bin/sonar-scanner -X"
 		    }
                 }
             }
