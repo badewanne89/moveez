@@ -4,7 +4,7 @@
   "description": "a webbased service to keep track of the movies you would like to watch",
   "main": "app.js",
   "scripts": {
-    "test": "export PORT='8081' && export RELEASE='mocha test' && mocha 'test/integration/*.js' --timeout 20000 --full-trace",
+    "test": "export PORT='8081' && export RELEASE='nyc mocha test' && mocha 'test/integration/*.js' --timeout 20000 --full-trace",
     "start": "export NODE_CONFIG_DIR='../config' && cd app && node app.js"
   },
   "repository": {
@@ -37,6 +37,7 @@
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
     "mocha": "^2.4.5",
+    "nyc": "^11.4.1",
     "wdio-cucumber-framework": "^1.0.3",
     "wdio-sauce-service": "^0.4.6",
     "wdio-spec-reporter": "^0.1.3",
