@@ -84,7 +84,8 @@ pipeline {
             steps {
                 //approval from product owner
                 input(message:'Go Live?', ok: 'Fire', submitter: config.approver)
-                //destroy explorative environment
+                //abort all older builds waiting for approval
+                milestone label: 'approval', ordinal: 1
             }
         }
     	stage('PROD') {
