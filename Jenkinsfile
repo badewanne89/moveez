@@ -35,11 +35,11 @@ pipeline {
                 script{
                     //!- unit/integration test
                     sh "npm test"
-		    //sonarqube scan
-		    def scannerHome = tool 'sonarqube'
-		    withSonarQubeEnv('sonarcloud') {
-		    	sh "${scannerHome}/bin/sonar-scanner"
-		    }
+		            //sonarqube scan
+		            def scannerHome = tool 'sonarqube'
+		            withSonarQubeEnv('sonarcloud') {
+		    	        sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=test/sonar-project.properties"
+		            }
                 }
             }
         }
@@ -47,33 +47,33 @@ pipeline {
             steps {
                 script {
                     //create docker image and push it to dockerhub
-       		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-        		def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
-        		dockerImage.push("latest")
-        	    }
+           		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
+                		def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
+                		dockerImage.push("latest")
+            	    }
                 }
             }
         }
         stage('UAT') {
             steps {
-		parallel(
-			'PERFORMANCE': {
-                		//deploy environment for performance test via docker image from dockerhub on azure webapp service
-                		azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-				//run performance test using octoperf
-				octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
-			},
-			'EXPLORATIVE': {
-				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
-                                azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "explorative", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-			},
-            'ACCEPTANCE': {
-                //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
-                                azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-                                //run acceptance test with cucumber and webdriverio
-                                sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
-            }
-		)
+        		parallel(
+        			'PERFORMANCE': {
+                        //deploy environment for performance test via docker image from dockerhub on azure webapp service
+                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+        				//run performance test using octoperf
+        				octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
+        			},
+        			'EXPLORATIVE': {
+        				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
+                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "explorative", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+        			},
+                    'ACCEPTANCE': {
+                        //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
+                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+                        //run acceptance test with cucumber and webdriverio
+                        sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
+                    }
+        		)
             }
         }
         stage('APPROVAL') {
@@ -87,16 +87,15 @@ pipeline {
                 //destroy explorative environment
             }
         }
-	stage('PROD') {
-		when {
-			//only commits to master should be deployed to production
-			branch 'master'
-		}
-		steps {
-			//deploy release to production via docker image from dockerhub on azure webapp service
-                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-    
-		}
-	}
+    	stage('PROD') {
+    		when {
+    			//only commits to master should be deployed to production
+    			branch 'master'
+    		}
+    		steps {
+    			//deploy release to production via docker image from dockerhub on azure webapp service
+                azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+    		}
+    	}
     }
 }
