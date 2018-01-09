@@ -88,7 +88,7 @@ pipeline {
                         //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
                         azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
                         //check the deployment
-                        httpRequest responseHandle: 'NONE', url: 'http://moveez.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
+                        httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
                         //run acceptance test with cucumber and webdriverio
                         sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
                     }
@@ -116,7 +116,7 @@ pipeline {
     			//deploy release to production via docker image from dockerhub on azure webapp service
                 azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
                 //check the deployment
-                sh "curl http://moveez.azurewebsites.net"
+                httpRequest responseHandle: 'NONE', url: 'http://moveez.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
     		}
     	}
     }
