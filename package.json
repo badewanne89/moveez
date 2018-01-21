@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "export PORT='8081' && export RELEASE='mocha test' && nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
-    "start": "export NODE_CONFIG_DIR='../config' && cd app && node app.js"
+    "start": "export NODE_CONFIG_DIR='../config' && cd app && node app.js",
+    "dev": "export PORT='8081' && export RELEASE='local dev build' && export NODE_CONFIG_DIR='../config' && cd app && node app.js"
   },
   "repository": {
     "type": "git",

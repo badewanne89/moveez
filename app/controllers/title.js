@@ -8,8 +8,8 @@ function getTitles(req, res){
         if(err) {
             res.send(err)
         } else {
-            //respond with JSON when integration testing, otherwise with HTML
-            if(process.env.NODE_ENV == "test"){
+            //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+            if(req.get('Accept') === "text/json"){
                 res.json(titles)
             } else {
                 console.log("metrics.getTitles")
@@ -26,8 +26,8 @@ function postTitle(req, res){
         if(err) {
             res.send(err)
         } else {
-            //respond with JSON when integration testing, otherwise with HTML
-            if(process.env.NODE_ENV == "test"){
+            //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+            if(req.get('Accept') === "text/json"){
                 res.json({message: "Title successfully added!", title})
             } else {
                 console.log("metrics.postTitle")
