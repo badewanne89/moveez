@@ -63,7 +63,7 @@ pipeline {
             	    }
                 }
             }
-        }
+        }/* deployment doesn't work, see: https://github.com/Microsoft/azure-app-service-plugin/issues/25
         stage('UAT') {
             steps {
         		parallel(
@@ -123,6 +123,6 @@ pipeline {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
                 }
             }
-    	}
+    	}*/
     }
 }
