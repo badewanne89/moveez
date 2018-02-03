@@ -10,10 +10,10 @@ var express = require("express"),
 
 //LOGGING
 //don't show log when it is test
-//if(process.env.NODE_ENV !== "test"){
+if(process.env.NODE_ENV !== "test"){
     //use morgan to log at command line with Apache style
     app.use(morgan("combined"))
-//}
+}
 
 //DATABASE
 var dbConnectionString = config.dbProtocol + "://" + config.dbUser + ":" + config.dbPassword + "@" + config.dbHost + ":" + config.dbPort + "/" + config.dbName

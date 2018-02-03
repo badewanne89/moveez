@@ -79,21 +79,34 @@ function updateTitle(req, res){
     if(process.env.NODE_ENV !== "test"){
         console.log("metrics.updateTitle")
     }
-    var query = Title.findByIdAndUpdate(req.params.id, req.body.title)
-    query.exec((err, updateTitle) => {
-        if(err) {
+    //check for name in body
+    if(req.body.title.name !== "") {
+        var query = Title.findByIdAndUpdate(req.params.id, req.body.title, {new: true})
+        query.exec((err, updatedTitle) => {
+            if(err) {
+                res
+                    .status(HttpStatus.NOT_FOUND)
+                    .send(err)
+            } else {
+                    //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+                    if(req.get('Accept') === "text/json"){
+                        res.json({message: "Title successfully updated!", updatedTitle})
+                    } else {
+                        res.redirect("/title")
+                    }
+            }
+        })
+    } else {
+        //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+        if(req.get('Accept') === "text/json"){
             res
-                .status(HttpStatus.NOT_FOUND)
-                .send(err)
+                .status(HttpStatus.BAD_REQUEST)
+                .send("You need to specify a name and it can't be empty!")
         } else {
-                //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-                if(req.get('Accept') === "text/json"){
-                    res.json({message: "Title successfully updated!", title})
-                } else {
-                    res.redirect("/title")
-                }
+            res.redirect("/title")
         }
-    })
+    }
+    
 }
 
 //export all functions

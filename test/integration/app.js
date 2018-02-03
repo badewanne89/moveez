@@ -10,21 +10,17 @@ var chai = require("chai"),
 chai.use(chaitHttp)
 
 describe("Moveez integration tests", () => {
-    
-    Title.collection.drop()
 
-    beforeEach((done) => {
+    before((done) => {
+        //clean database
+        Title.collection.drop()
+        //prepare database
         var newTitle = new Title({
             name: 'Inception'
         })
         newTitle.save({}, (err) => { 
            done()         
         })     
-    })
-
-    afterEach((done) => {
-        Title.collection.drop()
-        done()
     })
 
     describe("Index", () => {
@@ -120,15 +116,20 @@ describe("Moveez integration tests", () => {
                     .get("/title")
                     .set('Accept', 'text/json')
                     .end((err, res) => {
+                        var updateTitle = {
+                            title: {
+                                name:""
+                            }
+                        }
                         chai.request(app)
                             .put("/title/"+res.body[0]._id)
                             .set('Accept', 'text/json')
+                            .send(updateTitle)
                             .end((err, res) => {
-                                res.should.have.status(404)
+                                res.should.have.status(400)
                                 res.body.should.be.a('object')
-                                res.body.should.have.property('errors')
-                                res.body.errors.should.have.property('name')
-                                res.body.errors.name.should.have.property('kind').eql('required')
+                                res.should.have.property('text')
+                                res.text.should.be.equal("You need to specify a name and it can't be empty!")
                                 done()
                             })
                     }) 
@@ -138,21 +139,26 @@ describe("Moveez integration tests", () => {
                     .get("/title")
                     .set('Accept', 'text/json')
                     .end((err, res) => {
+                        var updateTitle = {
+                            title: {
+                                name:"Inception 2"
+                            }
+                        }
                         chai.request(app)
                             .put("/title/"+res.body[0]._id)
                             .set('Accept', 'text/json')
-                            .send({"name":"Inception 2"})
+                            .send(updateTitle)
                             .end((err, res) => {
-                                console.log(res)
                                 res.should.have.status(200)
                                 res.should.be.json
                                 res.body.should.be.a('object')
-                                res.body.should.have.property('UPDATED')
-                                res.body.UPDATED.should.be.a('object')
-                                res.body.UPDATED.should.have.property('name')
-                                res.body.UPDATED.should.have.property('_id')
-                                res.body.UPDATED.name.should.equal('Inception 2')
-                                res.body.should.have.property("message").eql("Title successfully updated!")
+                                res.body.should.have.property("message")
+                                res.body.message.should.be.equal("Title successfully updated!")
+                                res.body.should.have.property('updatedTitle')
+                                res.body.updatedTitle.should.be.a('object')
+                                res.body.updatedTitle.should.have.property('name')
+                                res.body.updatedTitle.should.have.property('_id')
+                                res.body.updatedTitle.name.should.equal('Inception 2')
                                 done()
                             })
                     })        
