@@ -56,28 +56,19 @@ function updateTitle(req, res){
     if(process.env.NODE_ENV !== "test"){
         console.log("metrics.updateTitle")
     }
-    var query = Title.find(req.title._id)
+    var query = Title.findByIdAndUpdate(req.params.id, req.body.title)
     query.exec((err, updateTitle) => {
         if(err) {
             res
                 .status(HttpStatus.NOT_FOUND)
                 .send(err)
         } else {
-            updateTitle.update((err, title) => {
-                if(err) {
-                    res
-                        .status(HttpStatus.NOT_FOUND)
-                        .send(err)
+                //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+                if(req.get('Accept') === "text/json"){
+                    res.json({message: "Title successfully updated!", title})
                 } else {
-                    //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-                    if(req.get('Accept') === "text/json"){
-                        res
-                            .json({message: "Title successfully updated!", title})
-                    } else {
-                        res.redirect("title")
-                    }
+                    res.redirect("/title")
                 }
-            })
         }
     })
 }

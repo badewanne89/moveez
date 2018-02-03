@@ -2,7 +2,7 @@
 
 <div class="ui main text container">
     <div class="ui top attached segment">
-        <h1 class="ui header">Your watchlist:</h1>
+        <h1 class="ui header">Your moveez watchlist</h1>
         
         <form class="ui form" action="/title" method="POST">
             <div class="fields">
@@ -12,12 +12,40 @@
                 <button class="ui icon teal button"><i class="add circle icon"></i></button>
             </div>
         </form>
-        
-        <ul class="ui list">
-        <% titles.forEach(function(title){ %>
-            <li><%= title.name %></li>
-        <% }); %> 
-        </ul>
+
+        <div class="ui list">
+        <% titles.forEach(function(title){ %>          
+            <div class="item">
+                <i class="film"></i>
+                <div class="content">
+                    <%= title.name %>
+                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray button"><i class="pencil icon"></i>
+                </div>
+            </div>
+        <% }); %>           
+        </div>
+
+        <div class="ui modal">
+            <i class="close icon"></i>
+            <div class="header">
+                Update Name for "<span id="modalOldName"></span>"
+            </div>
+            <div class="image content">
+                <form id="modalForm" class="ui form" method="POST" action="achim">
+                    <div class="description">
+                        <input id="modalInput" type="text" name="title[name]" required>
+                    </div>
+                    <div class="actions">
+                        <div class="ui black deny right labeled icon button">
+                            Abort
+                            <i class="close icon"></i>
+                        </div>
+                        <input type="submit" value="submit" form="modalForm" class="ui button teal">
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 </div>
 

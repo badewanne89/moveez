@@ -73,8 +73,8 @@ describe("Moveez integration tests", () => {
                     .set('Accept', 'text/json')
                     .end((err, res) => {
                         res.should.have.status(200)
-                        res.body.should.be.a('array');
-                        res.body.length.should.be.eql(0);
+                        res.body.should.be.a('array')
+                        res.body.length.should.be.eql(0)
                         done()
                 })
             })
@@ -82,16 +82,16 @@ describe("Moveez integration tests", () => {
                 var newTitle = new Title({name:"Inception"})
                 newTitle.save((err, title) => {          
                     chai.request(app)
-                    .get("/title")
-                    .set('Accept', 'text/json')
-                    .end((err, res) => {
-                        res.should.have.status(200)
-                        res.body.should.be.a('array');
-                        res.body.length.should.not.be.eql(0);
-                        res.body[0].should.have.property("name")
-                        res.body[0].name.should.be.eql("Inception")
-                        done()
-                    })
+                        .get("/title")
+                        .set('Accept', 'text/json')
+                        .end((err, res) => {
+                            res.should.have.status(200)
+                            res.body.should.be.a('array')
+                            res.body.length.should.not.be.eql(0)
+                            res.body[0].should.have.property("name")
+                            res.body[0].name.should.be.eql("Inception")
+                            done()
+                        })
                 })     
             })
         })
@@ -104,18 +104,19 @@ describe("Moveez integration tests", () => {
                         res.should.have.status(404)
                         res.body.should.be.a('object')
                         res.body.should.have.property('errors')
-                        res.body.errors.should.have.property('_id')
-                        res.body.errors._id.should.have.property('kind').eql('required')
+                        res.body.errors.should.have.property('name')
+                        res.body.errors.name.should.have.property('kind').eql('required')
                         done()
                 })     
             })
             it("it should not POST an update without name", (done) => {
                 var newTitle = new Title({name:"Inception"})
-                newTitle.save((err, title) => {          
-                        chai.request(app)
+                newTitle.save((err, title) => {  
+                    chai.request(app)
                         .post("/title/" + title._id)
                         .set('Accept', 'text/json')
                         .end((err, res) => {
+                            console.log(res.body)
                             res.should.have.status(404)
                             res.body.should.be.a('object')
                             res.body.should.have.property('errors')
@@ -125,20 +126,23 @@ describe("Moveez integration tests", () => {
                         })
                     })        
             })
-            it("it should POST an update without ID and name", (done) => {
+            it("it should POST an update with ID and name", (done) => {
                 var newTitle = new Title({name:"Inception"})
                 newTitle.save((err, title) => {          
+                    title.name = "Inception 2"
                     chai.request(app)
-                    .post("/title/" + title._id)
-                    .set('Accept', 'text/json')
-                    .end((err, res) => {
-                        res.should.have.status(200)
-                        res.body.should.be.a('array');
-                        res.body.length.should.not.be.eql(0);
-                        res.body[0].should.have.property("name")
-                        res.body[0].name.should.be.eql("Inception")
-                        done()
-                    })
+                        .post("/title/" + title._id)
+                        .set('Accept', 'text/json')
+                        .send(title)
+                        .end((err, res) => {
+                            console.log(res.body)
+                            res.should.have.status(200)
+                            res.body.should.be.a('array')
+                            res.body.length.should.not.be.eql(0)
+                            res.body[0].should.have.property("name")
+                            res.body[0].name.should.be.eql("Inception 2")
+                            done()
+                        })
                 })        
             })
         })

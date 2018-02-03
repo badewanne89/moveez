@@ -6,4 +6,7 @@ Future updates might include an own score calculated by the individual ratings o
 # Jenkins
 The pipeline requires the following configuration in Jenkins:
 - https://wiki.jenkins.io/display/JENKINS/Pipeline+Utility+Steps+Plugin
-- https://wiki.jenkins.io/display/JENKINS/NodeJS+Plugin (+ add a nodejs installation in jenkins tool config with "node-gyp" and "gcc" as global package)
+- https://wiki.jenkins.io/display/JENKINS/NodeJS+Plugin (+ add a nodejs installation in jenkins tool config name "node")
+- https://plugins.jenkins.io/timestamper
+
+You also need to define credentials for github named "github".
