@@ -13,6 +13,8 @@ pipeline {
     agent {
         label "master"
     }
+    //configure npm
+    tools {nodejs "node"}
     stages {
         stage('INIT') {
             steps {
@@ -40,16 +42,6 @@ pipeline {
 		            withSonarQubeEnv('sonarcloud') {
 		    	        sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=test/sonar-project.properties"
 		            }
-                    /* doesn't work, stays in "pending"
-                        //sonarqube quality gate
-                        timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
-                            def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
-                            if (qg.status != 'OK') {
-                                error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                            }
-                        }
-                    */
-                    echo "SKIP buildbreaker since it doesn't respond"
                 }
             }
         }
@@ -63,8 +55,8 @@ pipeline {
             	    }
                 }
             }
-        }/* deployment doesn't work, see: https://github.com/Microsoft/azure-app-service-plugin/issues/25
-        stage('UAT') {
+        }
+        /*stage('UAT') {
             steps {
         		parallel(
         			'PERFORMANCE': {
@@ -93,7 +85,7 @@ pipeline {
                             httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
                         }
                         //run acceptance test with cucumber and webdriverio
-                        sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
+                        //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
                     }
         		)
             }

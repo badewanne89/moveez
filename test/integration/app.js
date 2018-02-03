@@ -37,7 +37,7 @@ describe("Moveez integration tests", () => {
                     .set('Accept', 'text/json')
                     .send(body)
                     .end((err, res) => {
-                        res.should.have.status(200)
+                        res.should.have.status(404)
                         res.body.should.be.a('object')
                         res.body.should.have.property('errors')
                         res.body.errors.should.have.property('name')
@@ -56,7 +56,7 @@ describe("Moveez integration tests", () => {
                     .set('Accept', 'text/json')
                     .send(body)
                     .end((err, res) => {
-                        res.should.have.status(200)
+                        res.should.have.status(201)
                         res.body.should.be.a("object")
                         res.body.should.have.property("message").eql("Title successfully added!")
                         res.body.title.should.have.property("name")
@@ -79,10 +79,7 @@ describe("Moveez integration tests", () => {
                 })
             })
             it("it should GET the title from the list", (done) => {
-                var title = {
-                    name: "Inception"
-                }
-                var newTitle = new Title(title)
+                var newTitle = new Title({name:"Inception"})
                 newTitle.save((err, title) => {          
                     chai.request(app)
                     .get("/title")
@@ -96,6 +93,53 @@ describe("Moveez integration tests", () => {
                         done()
                     })
                 })     
+            })
+        })
+        describe("Update", () => {
+            it("it should not POST an update without ID", (done) => {
+                chai.request(app)
+                    .post("/title/")
+                    .set('Accept', 'text/json')
+                    .end((err, res) => {
+                        res.should.have.status(404)
+                        res.body.should.be.a('object')
+                        res.body.should.have.property('errors')
+                        res.body.errors.should.have.property('_id')
+                        res.body.errors._id.should.have.property('kind').eql('required')
+                        done()
+                })     
+            })
+            it("it should not POST an update without name", (done) => {
+                var newTitle = new Title({name:"Inception"})
+                newTitle.save((err, title) => {          
+                        chai.request(app)
+                        .post("/title/" + title._id)
+                        .set('Accept', 'text/json')
+                        .end((err, res) => {
+                            res.should.have.status(404)
+                            res.body.should.be.a('object')
+                            res.body.should.have.property('errors')
+                            res.body.errors.should.have.property('name')
+                            res.body.errors.name.should.have.property('kind').eql('required')
+                            done()
+                        })
+                    })        
+            })
+            it("it should POST an update without ID and name", (done) => {
+                var newTitle = new Title({name:"Inception"})
+                newTitle.save((err, title) => {          
+                    chai.request(app)
+                    .post("/title/" + title._id)
+                    .set('Accept', 'text/json')
+                    .end((err, res) => {
+                        res.should.have.status(200)
+                        res.body.should.be.a('array');
+                        res.body.length.should.not.be.eql(0);
+                        res.body[0].should.have.property("name")
+                        res.body[0].name.should.be.eql("Inception")
+                        done()
+                    })
+                })        
             })
         })
     })

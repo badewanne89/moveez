@@ -37,6 +37,8 @@ app.get("/", (req, res) => res.json({message: "Welcome to " + process.env.RELEAS
 app.route("/title")
     .get(title.getTitles)
     .post(title.postTitle)
+app.route("/title/:id")
+    .post(title.updateTitle)
 
 //SERVER
 //PORT is defined by environment variable or 80
