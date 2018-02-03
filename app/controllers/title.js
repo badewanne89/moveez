@@ -50,6 +50,29 @@ function getTitles(req, res){
     })
 }
 
+//READ GET /title/:id to retrieve a title
+function getTitle(req, res){
+    //metrics, but not during test
+    if(process.env.NODE_ENV !== "test"){
+        console.log("metrics.getTitle")
+    }
+    var query = Title.findById(req.params.id)
+    query.exec((err, title) => {
+        if(err) {
+            res
+                .status(HttpStatus.NOT_FOUND)
+                .send(err)
+        } else {
+            //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+            if(req.get('Accept') === "text/json"){
+                res.json(title)
+            } else {
+                res.redirect("/title")
+            }
+        }
+    })
+}
+
 //UPDATE PUT /title/:id to update a title
 function updateTitle(req, res){
     //metrics, but not during test
@@ -74,4 +97,4 @@ function updateTitle(req, res){
 }
 
 //export all functions
-module.exports = { getTitles, postTitle, updateTitle };
+module.exports = { getTitles, getTitle, postTitle, updateTitle };

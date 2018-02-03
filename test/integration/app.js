@@ -2,19 +2,31 @@ process.env.NODE_ENV = 'test'
 
 var chai = require("chai"),
     chaitHttp = require("chai-http"),
-    app = require("../../app/app.js"),
     should = chai.should(),
+    app = require("../../app/app.js"),
     mongoose = require("mongoose"),
     Title = require("../../app/models/title")
     
 chai.use(chaitHttp)
 
 describe("Moveez integration tests", () => {
+    
+    Title.collection.drop()
+
     beforeEach((done) => {
-        Title.remove({}, (err) => { 
+        var newTitle = new Title({
+            name: 'Inception'
+        })
+        newTitle.save({}, (err) => { 
            done()         
         })     
     })
+
+    afterEach((done) => {
+        Title.collection.drop()
+        done()
+    })
+
     describe("Index", () => {
         it("it should show the welcome message", (done) => {
             chai.request(app)
@@ -73,77 +85,77 @@ describe("Moveez integration tests", () => {
                     .set('Accept', 'text/json')
                     .end((err, res) => {
                         res.should.have.status(200)
+                        res.should.be.json;
                         res.body.should.be.a('array')
-                        res.body.length.should.be.eql(0)
+                        res.body[0].should.have.property('_id')
+                        res.body[0].should.have.property('name')
+                        res.body[0].name.should.equal('Inception')
                         done()
-                })
+                    })
             })
-            it("it should GET the title from the list", (done) => {
-                var newTitle = new Title({name:"Inception"})
+            it("it should GET a title", (done) => {
+                var newTitle = new Title({
+                    name:"Inception"
+                })
                 newTitle.save((err, title) => {          
                     chai.request(app)
-                        .get("/title")
+                        .get("/title/"+title.id)
                         .set('Accept', 'text/json')
                         .end((err, res) => {
                             res.should.have.status(200)
-                            res.body.should.be.a('array')
-                            res.body.length.should.not.be.eql(0)
-                            res.body[0].should.have.property("name")
-                            res.body[0].name.should.be.eql("Inception")
-                            done()
+                            res.should.be.json
+                            res.body.should.be.a('object')
+                            res.body.should.have.property('_id')
+                            res.body.should.have.property('name');
+                            res.body.name.should.equal('Inception');
+                            res.body._id.should.equal(title.id);
+                            done();
                         })
                 })     
             })
         })
         describe("Update", () => {
-            it("it should not POST an update without ID", (done) => {
+            it("it should not PUT an update without name", (done) => {
                 chai.request(app)
-                    .post("/title/")
+                    .get("/title")
                     .set('Accept', 'text/json')
                     .end((err, res) => {
-                        res.should.have.status(404)
-                        res.body.should.be.a('object')
-                        res.body.should.have.property('errors')
-                        res.body.errors.should.have.property('name')
-                        res.body.errors.name.should.have.property('kind').eql('required')
-                        done()
-                })     
+                        chai.request(app)
+                            .put("/title/"+res.body[0]._id)
+                            .set('Accept', 'text/json')
+                            .end((err, res) => {
+                                res.should.have.status(404)
+                                res.body.should.be.a('object')
+                                res.body.should.have.property('errors')
+                                res.body.errors.should.have.property('name')
+                                res.body.errors.name.should.have.property('kind').eql('required')
+                                done()
+                            })
+                    }) 
             })
-            it("it should not POST an update without name", (done) => {
-                var newTitle = new Title({name:"Inception"})
-                newTitle.save((err, title) => {  
-                    chai.request(app)
-                        .post("/title/" + title._id)
-                        .set('Accept', 'text/json')
-                        .end((err, res) => {
-                            console.log(res.body)
-                            res.should.have.status(404)
-                            res.body.should.be.a('object')
-                            res.body.should.have.property('errors')
-                            res.body.errors.should.have.property('name')
-                            res.body.errors.name.should.have.property('kind').eql('required')
-                            done()
-                        })
+            it("it should PUT an update with ID and name", (done) => {
+                chai.request(app)
+                    .get("/title")
+                    .set('Accept', 'text/json')
+                    .end((err, res) => {
+                        chai.request(app)
+                            .put("/title/"+res.body[0]._id)
+                            .set('Accept', 'text/json')
+                            .send({"name":"Inception 2"})
+                            .end((err, res) => {
+                                console.log(res)
+                                res.should.have.status(200)
+                                res.should.be.json
+                                res.body.should.be.a('object')
+                                res.body.should.have.property('UPDATED')
+                                res.body.UPDATED.should.be.a('object')
+                                res.body.UPDATED.should.have.property('name')
+                                res.body.UPDATED.should.have.property('_id')
+                                res.body.UPDATED.name.should.equal('Inception 2')
+                                res.body.should.have.property("message").eql("Title successfully updated!")
+                                done()
+                            })
                     })        
-            })
-            it("it should POST an update with ID and name", (done) => {
-                var newTitle = new Title({name:"Inception"})
-                newTitle.save((err, title) => {          
-                    title.name = "Inception 2"
-                    chai.request(app)
-                        .post("/title/" + title._id)
-                        .set('Accept', 'text/json')
-                        .send(title)
-                        .end((err, res) => {
-                            console.log(res.body)
-                            res.should.have.status(200)
-                            res.body.should.be.a('array')
-                            res.body.length.should.not.be.eql(0)
-                            res.body[0].should.have.property("name")
-                            res.body[0].name.should.be.eql("Inception 2")
-                            done()
-                        })
-                })        
             })
         })
     })

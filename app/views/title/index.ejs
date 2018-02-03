@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 
 <div class="ui main text container">
-    <div class="ui top attached segment">
+    <div class="ui top attached">
         <h1 class="ui header">Your moveez watchlist</h1>
         
         <form class="ui form" action="/title" method="POST">
@@ -19,7 +19,7 @@
                 <i class="film"></i>
                 <div class="content">
                     <%= title.name %>
-                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray button"><i class="pencil icon"></i>
+                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button"><i class="pencil icon"></i>
                 </div>
             </div>
         <% }); %>           
@@ -28,22 +28,22 @@
         <div class="ui modal">
             <i class="close icon"></i>
             <div class="header">
-                Update Name for "<span id="modalOldName"></span>"
+                <b>Update Name</b> for "<span id="modalOldName"></span>"
             </div>
             <div class="image content">
-                <form id="modalForm" class="ui form" method="POST" action="achim">
+                <form id="modalForm" class="ui form" method="POST" action="">
                     <div class="description">
                         <input id="modalInput" type="text" name="title[name]" required>
                     </div>
-                    <div class="actions">
-                        <div class="ui black deny right labeled icon button">
-                            Abort
-                            <i class="close icon"></i>
-                        </div>
-                        <input type="submit" value="submit" form="modalForm" class="ui button teal">
-                    </div>
-                </form>
             </div>
+            <div class="actions">
+                <div class="ui black deny right labeled icon button">
+                    Abort
+                    <i class="close icon"></i>
+                </div>
+                <input type="submit" value="Update" form="modalForm" class="ui button teal">
+            </div>
+                </form>
         </div>
 
     </div>

@@ -5,7 +5,7 @@ function prepareModal(name, id) {
     //set placeholder
     $('#modalInput').val(name);
     //set action to id of title
-    $('#modalForm').attr('action', '/title/' + id)
+    $('#modalForm').attr('action', '/title/' + id + '/?_method=PUT')
     //show modal
     $('.ui.modal').modal('show');
 }

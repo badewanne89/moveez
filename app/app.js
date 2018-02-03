@@ -5,14 +5,15 @@ var express = require("express"),
     title = require("./controllers/title"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
+    methodOverride = require("method-override"),
     config = require("config") //load database configuration from config file
 
 //LOGGING
 //don't show log when it is test
-if(process.env.NODE_ENV !== "test"){
+//if(process.env.NODE_ENV !== "test"){
     //use morgan to log at command line with Apache style
     app.use(morgan("combined"))
-}
+//}
 
 //DATABASE
 var dbConnectionString = config.dbProtocol + "://" + config.dbUser + ":" + config.dbPassword + "@" + config.dbHost + ":" + config.dbPort + "/" + config.dbName
@@ -26,6 +27,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.text())
 app.use(bodyParser.json({type: "application/json"}))
 
+//allow PUT in HTML Form action
+app.use(methodOverride("_method"))
+
 //VIEW
 app.set("view engine", "ejs")
 app.use(express.static(__dirname + "/views/public"))
@@ -38,7 +42,8 @@ app.route("/title")
     .get(title.getTitles)
     .post(title.postTitle)
 app.route("/title/:id")
-    .post(title.updateTitle)
+    .get(title.getTitle)
+    .put(title.updateTitle)
 
 //SERVER
 //PORT is defined by environment variable or 80
