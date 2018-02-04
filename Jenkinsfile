@@ -47,6 +47,7 @@ pipeline {
                 }
             }
         }
+        /*can't get docker to work in Jenkins on Mac "docker command not found"
         stage('BUILD') {
             steps {
                 script {
@@ -57,7 +58,7 @@ pipeline {
             	    }
                 }
             }
-        }
+        }*/
         /*stage('UAT') {
             steps {
         		parallel(
