@@ -22,3 +22,21 @@
                 </a>
             </div>
         </div>
+
+        <% if(success && success.length > 0) { %>
+            <div class="ui success icon message">
+                <i class="checkmark icon"></i>
+                <div class="header">
+                    <%= success %>
+                </div>
+            </div>
+        <% } %>
+
+        <% if(success && error.length > 0) { %>
+            <div class="ui error icon message">
+                <i class="warning icon"></i>
+                <div class="header">
+                    <%= error %>
+                </div>
+            </div>
+        <% } %>

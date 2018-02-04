@@ -2,14 +2,13 @@
 
 <div class="ui main text container">
     <div class="ui top attached">
-        <h1 class="ui header">Your moveez watchlist</h1>
         
         <form class="ui form" action="/title" method="POST">
             <div class="fields">
                 <div class="six wide field">
-                    <input type="text" placeholder="type a name to add" name="title[name]" required>
+                    <input type="text" placeholder="type a name to add it to your list" name="title[name]" required>
                 </div>
-                <button class="ui icon teal button"><i class="add circle icon"></i></button>
+                <button class="ui icon teal button" data-tooltip="Add a new title" data-inverted=""><i class="add circle icon"></i></button>
             </div>
         </form>
 
@@ -19,21 +18,22 @@
                 <i class="film"></i>
                 <div class="content">
                     <%= title.name %>
-                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button"><i class="pencil icon"></i>
+                    <button onclick="prepareUpdateModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
+                    <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                 </div>
             </div>
         <% }); %>           
         </div>
 
-        <div class="ui modal">
+        <div class="ui modal" id="updateModal">
             <i class="close icon"></i>
             <div class="header">
-                <b>Update Name</b> for "<span id="modalOldName"></span>"
+                <b>Update Name</b> for "<span id="updateModalOldName"></span>"
             </div>
             <div class="image content">
-                <form id="modalForm" class="ui form" method="POST" action="">
+                <form id="updateModalForm" class="ui form" method="POST" action="">
                     <div class="description">
-                        <input id="modalInput" type="text" name="title[name]" required>
+                        <input id="updateModalInput" type="text" name="title[name]" required>
                     </div>
             </div>
             <div class="actions">
@@ -41,9 +41,26 @@
                     Abort
                     <i class="close icon"></i>
                 </div>
-                <input type="submit" value="Update" form="modalForm" class="ui button teal">
+                <input type="submit" value="Update" form="updateModalForm" class="ui button teal">
             </div>
                 </form>
+        </div>
+
+
+        <div class="ui modal" id="deleteModal">
+            <i class="close icon"></i>
+            <div class="header">
+                Do you really want to <b>delete</b> "<span id="deleteModalName"></span>"?
+            </div>
+            <div class="actions">
+                <div class="ui black deny right labeled icon button">
+                    Nope, keep it!
+                    <i class="close icon"></i>
+                </div>
+                <form id="deleteModalForm" class="ui form delete" method="POST" action="">
+                    <input type="submit" value="Delete" form="deleteModalForm" class="ui red button" id="deleteModalButton"></button>
+                </form>
+            </div>
         </div>
 
     </div>
