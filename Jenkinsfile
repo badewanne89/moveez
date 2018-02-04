@@ -59,9 +59,9 @@ pipeline {
                 }
             }
         }*/
-        /*stage('UAT') {
+        stage('UAT') {
             steps {
-        		parallel(
+        		/*parallel(
         			'PERFORMANCE': {
                         //deploy environment for performance test via docker image from dockerhub on azure webapp service
                         azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
@@ -72,14 +72,17 @@ pipeline {
                         //run performance test using octoperf
                         octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
                     },
-        			'EXPLORATIVE': {
+        			'EXPLORATIVE': {*/
         				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
-                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "explorative", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+                        //create heroku app for this revision
+                        sh "heroku create ${releaseName}"
+                        //push code to heroku app to deploy
+                        sh "git push heroku master"
                         //check the deployment
                         retry(5) {
-                            httpRequest responseHandle: 'NONE', url: 'http://moveez-explorative.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
+                            httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
                         }
-                    },
+                    /*},
                     'ACCEPTANCE': {
                         //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
                         azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
