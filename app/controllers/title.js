@@ -11,14 +11,12 @@ function postTitle(req, res){
     var newTitle = new Title(req.body.title)
     newTitle.save((err, title) => {
         if(err) {
-            res
-                .status(HttpStatus.NOT_FOUND)
+            res.status(HttpStatus.NOT_FOUND)
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
             if(req.get('Accept') === "text/json"){
-                res
-                    .status(HttpStatus.CREATED)
+                res.status(HttpStatus.CREATED)
                     .json({message: "Title successfully added!", title})
             } else {
                 res.redirect("title")
@@ -36,8 +34,7 @@ function getTitles(req, res){
     var query = Title.find({})
     query.exec((err, titles) => {
         if(err) {
-            res
-                .status(HttpStatus.NOT_FOUND)
+            res.status(HttpStatus.NOT_FOUND)
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
@@ -59,8 +56,7 @@ function getTitle(req, res){
     var query = Title.findById(req.params.id)
     query.exec((err, title) => {
         if(err) {
-            res
-                .status(HttpStatus.NOT_FOUND)
+            res.status(HttpStatus.NOT_FOUND)
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
@@ -84,8 +80,7 @@ function updateTitle(req, res){
         var query = Title.findByIdAndUpdate(req.params.id, req.body.title, {new: true})
         query.exec((err, updatedTitle) => {
             if(err) {
-                res
-                    .status(HttpStatus.NOT_FOUND)
+                res.status(HttpStatus.NOT_FOUND)
                     .send(err)
             } else {
                     //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
@@ -99,15 +94,35 @@ function updateTitle(req, res){
     } else {
         //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
         if(req.get('Accept') === "text/json"){
-            res
-                .status(HttpStatus.BAD_REQUEST)
+            res.status(HttpStatus.BAD_REQUEST)
                 .send("You need to specify a name and it can't be empty!")
         } else {
             res.redirect("/title")
         }
     }
-    
+}
+
+//DELETE DELETE /title/:id to delete a title
+function deleteTitle(req, res){
+    //metrics, but not during test
+    if(process.env.NODE_ENV !== "test"){
+        console.log("metrics.deleteTitle")
+    }
+    var query = Title.findByIdAndRemove(req.params.id, req.body.title)
+    query.exec((err, deletedTitle) => {
+        if(err) {
+            res.status(HttpStatus.NOT_FOUND)
+                .send(err)
+        } else {
+            //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+            if(req.get('Accept') === "text/json"){
+                res.json({message: "Title successfully deleted!", deletedTitle})
+            } else {
+                res.redirect("/title")
+            } 
+        }
+    })
 }
 
 //export all functions
-module.exports = { getTitles, getTitle, postTitle, updateTitle };
+module.exports = { getTitles, getTitle, postTitle, updateTitle, deleteTitle };

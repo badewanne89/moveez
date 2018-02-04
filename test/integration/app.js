@@ -11,6 +11,7 @@ chai.use(chaitHttp)
 
 describe("Moveez integration tests", () => {
 
+    //TODO: should be beforeEach but then I'd need promises :S
     before((done) => {
         //clean database
         Title.collection.drop()
@@ -29,6 +30,7 @@ describe("Moveez integration tests", () => {
                 .get("/")
                 .end((err, res) => {
                     res.should.have.status(200)
+                    res.should.be.json
                     res.body.should.have.property("message").eql("Welcome to mocha test!")
                     done()
             })
@@ -46,6 +48,7 @@ describe("Moveez integration tests", () => {
                     .send(body)
                     .end((err, res) => {
                         res.should.have.status(404)
+                        res.should.be.json
                         res.body.should.be.a('object')
                         res.body.should.have.property('errors')
                         res.body.errors.should.have.property('name')
@@ -65,6 +68,7 @@ describe("Moveez integration tests", () => {
                     .send(body)
                     .end((err, res) => {
                         res.should.have.status(201)
+                        res.should.be.json
                         res.body.should.be.a("object")
                         res.body.should.have.property("message").eql("Title successfully added!")
                         res.body.title.should.have.property("name")
@@ -81,7 +85,7 @@ describe("Moveez integration tests", () => {
                     .set('Accept', 'text/json')
                     .end((err, res) => {
                         res.should.have.status(200)
-                        res.should.be.json;
+                        res.should.be.json
                         res.body.should.be.a('array')
                         res.body[0].should.have.property('_id')
                         res.body[0].should.have.property('name')
@@ -162,6 +166,31 @@ describe("Moveez integration tests", () => {
                                 done()
                             })
                     })        
+            })
+        })
+        describe("Delete", () => {
+            it("it should DELETE an title with ID", (done) => {
+                chai.request(app)
+                    .get("/title")
+                    .set("Accept", "text/json")
+                    .end((err, res) => {
+                        chai.request(app)
+                            .delete("/title/"+res.body[0]._id)
+                            .set("Accept", "text/json")
+                            .end((err, res) => {
+                                res.should.have.status(200)
+                                res.should.be.json
+                                res.should.be.a('object')
+                                res.body.should.have.property("message")
+                                res.body.message.should.be.equal("Title successfully deleted!")
+                                res.body.should.have.property('deletedTitle')
+                                res.body.deletedTitle.should.be.a('object')
+                                res.body.deletedTitle.should.have.property('name')
+                                res.body.deletedTitle.should.have.property('_id')
+                                res.body.deletedTitle.name.should.equal('Inception 2')
+                                done()
+                            })
+                    })
             })
         })
     })

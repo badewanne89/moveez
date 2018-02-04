@@ -44,6 +44,7 @@ app.route("/title")
 app.route("/title/:id")
     .get(title.getTitle)
     .put(title.updateTitle)
+    .delete(title.deleteTitle)
 
 //SERVER
 //PORT is defined by environment variable or 80
