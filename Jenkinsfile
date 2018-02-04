@@ -94,8 +94,8 @@ pipeline {
                         //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
                     }
         		)
-            }
-        }
+            */}
+        }/*
         stage('APPROVAL') {
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
