@@ -19,7 +19,10 @@
                 <i class="film"></i>
                 <div class="content">
                     <%= title.name %>
-                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button"><i class="pencil icon"></i>
+                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button"><i class="pencil icon"></i></button>
+                    <form class="delete" method="POST" action="/title/<%= title._id %>?_method=DELETE">
+                            <button class="ui icon black mini button"><i class="icon trash"></i></button>
+                    </form>
                 </div>
             </div>
         <% }); %>           
