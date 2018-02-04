@@ -19,6 +19,7 @@ function postTitle(req, res){
                 res.status(HttpStatus.CREATED)
                     .json({message: "Title successfully added!", title})
             } else {
+                req.flash("success", "You've added '" + title.name + "'' to your watchlist!")
                 res.redirect("title")
             }
         }
@@ -87,6 +88,7 @@ function updateTitle(req, res){
                     if(req.get('Accept') === "text/json"){
                         res.json({message: "Title successfully updated!", updatedTitle})
                     } else {
+                        req.flash("success", "You've changed the name to '" + updatedTitle.name + "'!")
                         res.redirect("/title")
                     }
             }
@@ -118,6 +120,7 @@ function deleteTitle(req, res){
             if(req.get('Accept') === "text/json"){
                 res.json({message: "Title successfully deleted!", deletedTitle})
             } else {
+                req.flash("success", "You've deleted '" + deletedTitle.name + "'' from your watchlist!")
                 res.redirect("/title")
             } 
         }

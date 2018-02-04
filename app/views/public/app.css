@@ -5,3 +5,7 @@
 .delete {
     display: inline;
 }
+
+.message {
+	z-index: 1;
+}
