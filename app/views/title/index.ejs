@@ -9,7 +9,7 @@
                 <div class="six wide field">
                     <input type="text" placeholder="type a name to add" name="title[name]" required>
                 </div>
-                <button class="ui icon teal button"><i class="add circle icon"></i></button>
+                <button class="ui icon teal button" data-tooltip="Add a new title" data-inverted=""><i class="add circle icon"></i></button>
             </div>
         </form>
 
@@ -19,9 +19,9 @@
                 <i class="film"></i>
                 <div class="content">
                     <%= title.name %>
-                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button"><i class="pencil icon"></i></button>
+                    <button onclick="prepareModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
                     <form class="delete" method="POST" action="/title/<%= title._id %>?_method=DELETE">
-                            <button class="ui icon black mini button"><i class="icon trash"></i></button>
+                            <button class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                     </form>
                 </div>
             </div>
