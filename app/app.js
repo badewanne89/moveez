@@ -6,6 +6,9 @@ var express = require("express"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
     methodOverride = require("method-override"),
+    flash = require("connect-flash"),
+    session = require('express-session'),
+    cookieParser = require('cookie-parser'),
     config = require("config") //load database configuration from config file
 
 //LOGGING
@@ -30,6 +33,16 @@ app.use(bodyParser.json({type: "application/json"}))
 //allow PUT in HTML Form action
 app.use(methodOverride("_method"))
 
+//enable flash messages
+app.use(cookieParser('secret'));
+app.use(session({cookie: { maxAge: 60000 }}));
+app.use(flash())
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success")
+    res.locals.error = req.flash("error")
+    next()
+})
+
 //VIEW
 app.set("view engine", "ejs")
 app.use(express.static(__dirname + "/views/public"))
@@ -44,6 +57,7 @@ app.route("/title")
 app.route("/title/:id")
     .get(title.getTitle)
     .put(title.updateTitle)
+    .delete(title.deleteTitle)
 
 //SERVER
 //PORT is defined by environment variable or 80
