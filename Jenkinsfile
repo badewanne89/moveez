@@ -11,7 +11,10 @@ pipeline {
     // This configures the agent, where the pipeline will be executed. The default should be `none` so
     // that `Approval` stage does not block an executor on the master node.
     agent {
-        label "master"
+        node {
+            label 'master'
+            customWorkspace '${env.BUILD_NUMBER}'
+        }
     }
     //configure npm
     tools {nodejs "node"}
