@@ -71,7 +71,7 @@ pipeline {
                         //create heroku app for this revision
                         sh "heroku create ${appName}-expl"
                         //push code to heroku app to deploy, need to define branch since heroku can only deploy master
-                        sh "git push heroku ${env.BRANCH_NAME}:master"
+                        sh "git push heroku +HEAD:master"
                         //check the deployment
                         retry(5) {
                             httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
