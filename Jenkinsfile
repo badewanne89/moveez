@@ -13,7 +13,7 @@ pipeline {
     agent {
         node {
             label 'master'
-            customWorkspace '${env.BUILD_NUMBER}'
+            customWorkspace "${env.BUILD_NUMBER}"
         }
     }
     //configure npm
