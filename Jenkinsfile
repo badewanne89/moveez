@@ -25,8 +25,9 @@ pipeline {
                     config = load 'config/config.jenkins'
                     packageJSON = readJSON file: 'package.json'
                     //!create a long release name for archiving with job name, version, build number
-                    // and commit id, e. g. PetClinic_1.3.1_12_e4655456j
-                    releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.GIT_COMMIT}"
+                    // and commit id, e. g. PetClinic_1.3.1_12_e46554z
+                    shortRev = env.GIT_COMMIT.take(7)
+                    releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
@@ -47,18 +48,6 @@ pipeline {
                 }
             }
         }
-        /*can't get docker to work in Jenkins on Mac "docker command not found"
-        stage('BUILD') {
-            steps {
-                script {
-                    //create docker image and push it to dockerhub
-           		    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-                		def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
-                		dockerImage.push("latest")
-            	    }
-                }
-            }
-        }*/
         stage('UAT') {
             steps {
         		/*parallel(
@@ -75,12 +64,15 @@ pipeline {
         			'EXPLORATIVE': {*/
         				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         //create heroku app for this revision
-                        sh "heroku create ${releaseName}"
-                        //push code to heroku app to deploy
-                        sh "git push heroku master"
-                        //check the deployment
-                        retry(5) {
-                            httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
+                        script{
+                            appName = releaseName.replace(".", "-")
+                            sh "heroku create ${appName}"
+                            //push code to heroku app to deploy
+                            sh "git push heroku master"
+                            //check the deployment
+                            retry(5) {
+                                httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
+                            }
                         }
                     /*},
                     'ACCEPTANCE': {

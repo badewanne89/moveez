@@ -9,7 +9,6 @@ The pipeline requires the following configuration in Jenkins:
 - https://wiki.jenkins.io/display/JENKINS/NodeJS+Plugin (+ add a nodejs installation in jenkins tool config named "node")
 - https://plugins.jenkins.io/timestamper
 - https://plugins.jenkins.io/sonar (+ add sonar runner installation in jenkins tool config named "sonarqube" + add a sonarqube server to manage jenkins named "sonarcloud")
-- add a credential for dockerhub named "dockerhub" + add a tool installation for docker named "docker"
-- (on Mac: allow jenkins to access var/run/docker.sock -> not enough, what is missing?)
+- add heroku key on jenkins server with "sudo su -s /bin/bash jenkins" and "heroku login"
 
 You also need to define credentials for github named "github" (ideally via Blue Ocean "add pipeline").
