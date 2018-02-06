@@ -28,6 +28,8 @@ pipeline {
                     // and commit id, e. g. PetClinic_1.3.1_12_e46554z
                     shortRev = env.GIT_COMMIT.take(7)
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
+                    //create an appname for heroku deployment
+                    appName = releaseName.replace(".", "-").replace("_", "-")
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
@@ -64,15 +66,12 @@ pipeline {
         			'EXPLORATIVE': {*/
         				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         //create heroku app for this revision
-                        script{
-                            appName = releaseName.replace(".", "-")
-                            sh "heroku create ${appName}"
-                            //push code to heroku app to deploy
-                            sh "git push heroku master"
-                            //check the deployment
-                            retry(5) {
-                                httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
-                            }
+                        sh "heroku create ${appName}"
+                        //push code to heroku app to deploy
+                        sh "git push heroku master"
+                        //check the deployment
+                        retry(5) {
+                            httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
                         }
                     /*},
                     'ACCEPTANCE': {
