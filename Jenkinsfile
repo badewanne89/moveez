@@ -30,6 +30,12 @@ pipeline {
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
                     //create an appname for heroku deployment
                     appName = releaseName.replace(".", "-").replace("_", "-")
+                    //to allow multibranching
+                    if(env.BRANCH != "master"){
+                        appName += env.BRANCH
+                    }
+                    //maximum length is 30, as parallel environments in UAT stage need 5 digit suffix, we have to cut it at 25
+                    appName = appName.take(25)
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
@@ -66,7 +72,7 @@ pipeline {
         			'EXPLORATIVE': {*/
         				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         //create heroku app for this revision
-                        sh "heroku create ${appName}"
+                        sh "heroku create ${appName}-expl"
                         //push code to heroku app to deploy
                         sh "git push heroku master"
                         //check the deployment
