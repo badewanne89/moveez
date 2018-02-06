@@ -28,14 +28,8 @@ pipeline {
                     // and commit id, e. g. PetClinic_1.3.1_12_e46554z
                     shortRev = env.GIT_COMMIT.take(7)
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
-                    //create an appname for heroku deployment
+                    //create an appname for heroku deployment - maximum 5 digits, as we'll add 5 more in UAT and maximum is 30
                     appName = releaseName.replace(".", "-").replace("_", "-")
-                    //to allow multibranching
-                    if(env.BRANCH != "master"){
-                        appName += env.BRANCH
-                    }
-                    //maximum length is 30, as parallel environments in UAT stage need 5 digit suffix, we have to cut it at 25
-                    appName = appName.take(25)
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
