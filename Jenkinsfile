@@ -28,8 +28,13 @@ pipeline {
                     config = load 'config/config.jenkins'
                     packageJSON = readJSON file: 'package.json'
                     //!create a long release name for archiving with job name, version, build number
-                    // and commit id, e. g. PetClinic_1.3.1_12_e46554z
-                    shortRev = env.GIT_COMMIT.take(7)
+                    //and commit id, e. g. PetClinic_1.3.1_12_e46554z
+                    //sometimes Jenkins doesn't know the commitid (null)
+                    if(env.GIT_COMMIT != null) {
+                        shortRev = env.GIT_COMMIT.take(7)
+                    } else {
+                        shortRev = sh script: 'git rev-parse HEAD', returnStdout: true
+                    }
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
                     //create an appname for heroku deployment - maximum 5 digits, as we'll add 5 more in UAT and maximum is 30
                     appName = releaseName.replace(".", "-").replace("_", "-")
