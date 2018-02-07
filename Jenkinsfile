@@ -53,6 +53,17 @@ pipeline {
                 }
             }
         }
+        stage('BUILD') {
+            steps {
+                script {
+                    //create docker image and push it to dockerhub
+                    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
+                        def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
+                        dockerImage.push("latest")
+                    }
+                }
+            }
+        }
         stage('UAT') {
             steps {
         		/*parallel(
@@ -69,13 +80,13 @@ pipeline {
         			'EXPLORATIVE': {*/
         				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         //create heroku app for this revision
-                        sh "heroku create ${appName}-expl"
+                        //sh "heroku create ${appName}-expl"
                         //push code to heroku app to deploy, need to define branch since heroku can only deploy master
-                        sh "git push heroku +HEAD:master"
+                        //sh "git push heroku +HEAD:master"
                         //check the deployment
-                        retry(5) {
-                            httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
-                        }
+                        //retry(5) {
+                            //httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
+                        //}
                     /*},
                     'ACCEPTANCE': {
                         //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
