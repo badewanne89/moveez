@@ -63,7 +63,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }/*
         stage('UAT') {
             steps {
         		/*parallel(
@@ -77,17 +77,17 @@ pipeline {
                         //run performance test using octoperf
                         octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
                     },
-        			'EXPLORATIVE': {*/
+        			'EXPLORATIVE': {
         				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         //create heroku app for this revision
-                        //sh "heroku create ${appName}-expl"
+                        sh "heroku create ${appName}-expl"
                         //push code to heroku app to deploy, need to define branch since heroku can only deploy master
-                        //sh "git push heroku +HEAD:master"
+                        sh "git push heroku +HEAD:master"
                         //check the deployment
-                        //retry(5) {
-                            //httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
-                        //}
-                    /*},
+                        retry(5) {
+                            httpRequest responseHandle: 'NONE', url: "http://${releaseName}.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
+                        }
+                    },
                     'ACCEPTANCE': {
                         //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
                         azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
@@ -99,8 +99,8 @@ pipeline {
                         //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
                     }
         		)
-            */}
-        }/*
+            }
+        }
         stage('APPROVAL') {
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
