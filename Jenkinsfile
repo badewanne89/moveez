@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     //checkout repository
-                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/schdief/moveez.git']]])
+                    //checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/schdief/moveez.git']]])
                     //load pipeline configuration
                     config = load 'config/config.jenkins'
                     packageJSON = readJSON file: 'package.json'
