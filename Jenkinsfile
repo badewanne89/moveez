@@ -33,6 +33,7 @@ pipeline {
                     if(env.GIT_COMMIT != null) {
                         shortRev = env.GIT_COMMIT.take(7)
                     } else {
+                        echo "WARN: couldn't get git revision from environment variable, using manual determination via git rev-parse HEAD"
                         shortRev = sh script: 'git rev-parse HEAD', returnStdout: true
                         shortRev = shortRev.take(7)
                     }
