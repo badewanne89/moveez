@@ -34,6 +34,7 @@ pipeline {
                         shortRev = env.GIT_COMMIT.take(7)
                     } else {
                         shortRev = sh script: 'git rev-parse HEAD', returnStdout: true
+                        shortRev = shortRev.take(7)
                     }
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
                     //create an appname for heroku deployment - maximum 5 digits, as we'll add 5 more in UAT and maximum is 30
