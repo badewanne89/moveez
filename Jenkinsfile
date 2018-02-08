@@ -86,16 +86,18 @@ pipeline {
                     },
         			'EXPLORATIVE': {
         				*///deploy environment for explorative test via docker image from dockerhub on azure webapp service
-                        //create heroku app for this revision
-                        sh "heroku create ${appName}-expl"
-                        //push code to heroku app to deploy
-                        docker.withRegistry("registry.heroku.com/${appName}-expl", 'heroku') {
-                            def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
-                            dockerImage.push("latest")
-                        }
-                        //check the deployment
-                        retry(5) {
-                            httpRequest responseHandle: 'NONE', url: "https://${appName}-expl.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
+                        script{
+                            //create heroku app for this revision
+                            sh "heroku create ${appName}-expl"
+                            //push code to heroku app to deploy
+                            docker.withRegistry("registry.heroku.com/${appName}-expl", 'heroku') {
+                                def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
+                                dockerImage.push("latest")
+                            }
+                            //check the deployment
+                            retry(5) {
+                                httpRequest responseHandle: 'NONE', url: "https://${appName}-expl.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
+                            }      
                         }
                     }/*,
                     'ACCEPTANCE': {
