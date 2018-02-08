@@ -88,10 +88,11 @@ pipeline {
         				*///deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         //create heroku app for this revision
                         sh "heroku create ${appName}-expl"
-                        //push code to heroku app to deploy, need to define branch since heroku can only deploy master
-                        sh "docker tag schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID} registry.heroku.com/${appName}-expl"
-                        sh "docker push registry.heroku.com/${appName}-expl"
-
+                        //push code to heroku app to deploy
+                        docker.withRegistry("registry.heroku.com/${appName}-expl", 'heroku') {
+                            def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
+                            dockerImage.push("latest")
+                        }
                         //check the deployment
                         retry(5) {
                             httpRequest responseHandle: 'NONE', url: "https://${appName}-expl.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
