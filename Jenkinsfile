@@ -108,7 +108,7 @@ pipeline {
                         //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
                     }
         		)
-            }
+            */}/*
         }
         stage('APPROVAL') {
             when {
