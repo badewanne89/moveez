@@ -5,6 +5,7 @@ Future updates might include an own score calculated by the individual ratings o
 
 # Development
 "npm run dev" to start app locally
+
 "npm test" to run integration tests locally
 
 # Stack
@@ -13,12 +14,16 @@ An Express.js app based on Node.js with MongoDB (mlab).
 # Jenkins
 The pipeline requires the following configuration in Jenkins:
 - https://wiki.jenkins.io/display/JENKINS/Pipeline+Utility+Steps+Plugin
-- https://wiki.jenkins.io/display/JENKINS/NodeJS+Plugin (+ add a nodejs installation in jenkins tool config named "node")
 - https://plugins.jenkins.io/timestamper
 - https://wiki.jenkins.io/display/JENKINS/HTTP+Request+Plugin
-- https://plugins.jenkins.io/sonar (+ add sonar runner installation in jenkins tool config named "sonarqube" + add a sonarqube server to manage jenkins named "sonarcloud")
-- https://wiki.jenkins.io/display/JENKINS/Azure+App+Service+Plugin (+ add microsoft azure service principal credentials named "azure", howto: https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
-- create azure app service instance: https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-custom-docker-image
-- add deployment slots for explorative, functional and explorative
+- https://wiki.jenkins.io/display/JENKINS/NodeJS+Plugin
+	+ add a nodejs installation in jenkins tool config named "node")
+- https://plugins.jenkins.io/sonar
+	+ add sonar runner installation in jenkins tool config named "sonarqube"
+	+ add a sonarqube server to manage jenkins named "sonarcloud"
+- https://wiki.jenkins.io/display/JENKINS/Azure+App+Service+Plugin
+	+ add microsoft azure service principal credentials named "azure", howto: https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest
+	+ create azure app service instance: https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-custom-docker-image
+	+ add deployment slots for explorative, functional and explorative
 
 You also need to define credentials for github named "github" (ideally via Blue Ocean "add pipeline").
