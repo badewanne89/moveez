@@ -38,8 +38,6 @@ pipeline {
                         shortRev = shortRev.take(7)
                     }
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
-                    //create an appname for heroku deployment - maximum 5 digits, as we'll add 5 more in UAT and maximum is 30
-                    appName = releaseName.replace(".", "-").replace("_", "-")
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
@@ -76,7 +74,7 @@ pipeline {
         		/*parallel(
         			'PERFORMANCE': {
                         //deploy environment for performance test via docker image from dockerhub on azure webapp service
-                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
                         //check the deployment
                         retry(5) {
                             httpRequest responseHandle: 'NONE', url: 'http://moveez-performance.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
@@ -87,22 +85,17 @@ pipeline {
         			'EXPLORATIVE': {
         				*///deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         script{
-                            //create heroku app for this revision
-                            sh "heroku create ${appName}-expl"
-                            //push code to heroku app to deploy
-                            docker.withRegistry("registry.heroku.com/${appName}-expl", 'heroku') {
-                                def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
-                                dockerImage.push("latest")
-                            }
+                            //deploy environment for performance test via docker image from dockerhub on azure webapp service
+                            azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "explorative", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
                             //check the deployment
                             retry(5) {
-                                httpRequest responseHandle: 'NONE', url: "https://${appName}-expl.herokuapp.com", validResponseCodes: '200', validResponseContent: 'Welcome'
-                            }      
+                                httpRequest responseHandle: 'NONE', url: 'http://moveez-explorative.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
+                            }
                         }
                     }/*,
                     'ACCEPTANCE': {
                         //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
-                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
                         //check the deployment
                         retry(5) {
                             httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
