@@ -60,8 +60,8 @@ app.route("/title/:id")
     .delete(title.deleteTitle)
 
 //SERVER
-//PORT is defined by environment variable or 80
-const PORT = process.env.PORT || 80
+//PORT is defined by environment variable or 443
+const PORT = process.env.PORT || 443
 const HOST = '0.0.0.0'
 app.listen(PORT, HOST, () => {
     console.log(process.env.RELEASE + " started on " + HOST + ":" + PORT)
