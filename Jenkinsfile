@@ -86,7 +86,7 @@ pipeline {
         				*///deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         script{
                             //deploy environment for performance test via docker image from dockerhub on azure webapp service
-                            azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "test", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub']
+                            azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "test", dockerImageName: "schdieflaw/${packageJSON.name}", skipDockerBuild: true, dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub']
                             //check the deployment
                             retry(5) {
                                 httpRequest responseHandle: 'NONE', url: 'http://test.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
