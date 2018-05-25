@@ -88,9 +88,11 @@ pipeline {
                         script{
                             //deploy environment for performance test via docker image from dockerhub on azure webapp service
                             azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "test", dockerImageName: "schdieflaw/${packageJSON.name}", skipDockerBuild: true, dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub']
+                            //give it time to pull the image and start the container
+                            sleep time: 5, unit: 'MINUTES'
                             //check the deployment
                             retry(5) {
-                                httpRequest responseHandle: 'NONE', url: 'http://test.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
+                                httpRequest responseHandle: 'NONE', url: 'https://test.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
                             }
                         }
                     }/*,
@@ -127,9 +129,11 @@ pipeline {
     		steps {
     			//deploy release to production via docker image from dockerhub on azure webapp service
                 azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
+                //give it time to pull the image and start the container
+                sleep time: 5, unit: 'MINUTES'
                 //check the deployment
                 retry(5) {
-                    httpRequest responseHandle: 'NONE', url: 'http://moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
+                    httpRequest responseHandle: 'NONE', url: 'https://moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
                 }
             }
     	}
