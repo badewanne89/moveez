@@ -15,7 +15,7 @@ RUN npm install
 # bundle app source
 COPY . .
 
-EXPOSE 80
+EXPOSE 443
 
 # start moveez
 CMD [ "npm", "start" ]
