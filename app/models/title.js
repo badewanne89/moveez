@@ -5,7 +5,9 @@ var mongoose = require("mongoose"),
 var TitleSchema = new Schema(
     {
         name: {type: String, required: true},
-        createdAt: {type: Date, default: Date.now}
+        createdAt: {type: Date, default: Date.now},
+        seen: {type: Boolean, default: false},
+        seenAt: {type: Date}
     }
 )
 
