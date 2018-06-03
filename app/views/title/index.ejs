@@ -17,7 +17,8 @@
             <div class="item">
                 <i class="film"></i>
                 <div class="content">
-                    <%= title.name %>
+                    <span class="<% if(title.seen) { %> seen <% } %>"><%= title.name %></span>
+                    <button onclick="checkMovieAsSeen('<%= title.id %>', '<%= title.name %>')" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
                     <button onclick="prepareUpdateModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
                     <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                 </div>
@@ -57,7 +58,7 @@
                     Nope, keep it!
                     <i class="close icon"></i>
                 </div>
-                <form id="deleteModalForm" class="ui form delete" method="POST" action="">
+                <form id="deleteModalForm" class="ui form inline" method="POST" action="">
                     <input type="submit" value="Delete" form="deleteModalForm" class="ui red button" id="deleteModalButton"></button>
                 </form>
             </div>

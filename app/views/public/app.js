@@ -10,7 +10,7 @@ function prepareUpdateModal(name, id) {
     $('#updateModal').modal('show')
 }
 
-//dialoge to delete a title
+//dialogue to delete a title
 function prepareDeleteModal(name, id) {
 	//set name of modal
 	$('#deleteModalName').text(name)
@@ -26,4 +26,18 @@ function prepareDeleteModal(name, id) {
 window.onload = function() {
     $('.success.message').fadeOut(2500)
     $('.error.message').fadeOut(2500)
+}
+
+//update a title as seen
+function checkMovieAsSeen(id, name) {
+    let form = document.createElement('form')
+    form.action = '/title/' + id + '/?_method=PUT'
+    form.method = 'POST'
+    form.innerHTML = '<input name="title[seen]" value="true"> <input name="title[seenOn]" value="' + Date.now() + '">'
+
+    // the form must be in the document to submit it, but should be invisible
+    form.hidden = true
+    document.body.append(form)
+
+    form.submit()
 }

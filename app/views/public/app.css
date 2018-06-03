@@ -2,8 +2,12 @@
     background-color: teal;
 }
 
-.delete {
+.inline {
     display: inline;
+}
+
+.seen {
+    text-decoration: line-through;
 }
 
 .hidden {
