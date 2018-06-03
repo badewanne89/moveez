@@ -16,8 +16,8 @@
         <% titles.forEach(function(title){ %>          
             <div class="item">
                 <i class="film"></i>
-                <div class="content <% if(title.seen) { %> seen <% } %>">
-                    <%= title.name %>
+                <div class="content">
+                    <span class="<% if(title.seen) { %> seen <% } %>"><%= title.name %></span>
                     <button onclick="checkMovieAsSeen('<%= title.id %>', '<%= title.name %>')" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
                     <button onclick="prepareUpdateModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
                     <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
