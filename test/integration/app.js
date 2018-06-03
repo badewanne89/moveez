@@ -167,6 +167,37 @@ describe("Moveez integration tests", () => {
                             })
                     })        
             })
+            it("it should mark a title as seen with PUT", (done) => {
+                chai.request(app)
+                    .get("/title")
+                    .set('Accept', 'text/json')
+                    .end((err, res) => {
+                        var date = Date.now()
+                        var updateTitle = {
+                            title: {
+                                seen: true,
+                                seenOn: date
+                            }
+                        }
+                        chai.request(app)
+                            .put("/title/"+res.body[0]._id)
+                            .set('Accept', 'text/json')
+                            .send(updateTitle)
+                            .end((err, res) => {
+                                res.should.have.status(200)
+                                res.should.be.json
+                                res.body.should.be.a('object')
+                                res.body.should.have.property("message")
+                                res.body.message.should.be.equal("Title successfully updated!")
+                                res.body.should.have.property('updatedTitle')
+                                res.body.updatedTitle.should.be.a('object')
+                                res.body.updatedTitle.should.have.property('seen')
+                                res.body.updatedTitle.should.have.property('seenOn')
+                                res.body.updatedTitle.seen.should.be.true
+                                done()
+                            })
+                    })
+            })
         })
         describe("Delete", () => {
             it("it should DELETE an title with ID", (done) => {
