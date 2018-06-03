@@ -33,9 +33,7 @@ function checkMovieAsSeen(id, name) {
     let form = document.createElement('form')
     form.action = '/title/' + id + '/?_method=PUT'
     form.method = 'POST'
-
-    form.innerHTML = '<input name="title[name]" value="' + name + '">'
-    form.innerHTML = '<input name="title[seen]" value="true">'
+    form.innerHTML = '<input name="title[seen]" value="true"> <input name="title[seenOn]" value="' + Date.now() + '">'
 
     // the form must be in the document to submit it, but should be invisible
     form.hidden = true
