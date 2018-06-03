@@ -88,7 +88,11 @@ function updateTitle(req, res){
                     if(req.get('Accept') === "text/json"){
                         res.json({message: "Title successfully updated!", updatedTitle})
                     } else {
-                        req.flash("success", "You've changed the name to '" + updatedTitle.name + "'!")
+                        if(req.body.title.seen) {
+                            req.flash("success", "You've marked '" + updatedTitle.name + "' as seen!")
+                        } else {
+                            req.flash("success", "You've changed the name to '" + updatedTitle.name + "'!")
+                        }
                         res.redirect("/title")
                     }
             }
@@ -102,36 +106,6 @@ function updateTitle(req, res){
             res.redirect("/title")
         }
     }
-}
-
-//SEEN POST /title/:id to check a movie as seen
-function seenTitle(req, res){
-    //metrics, but not during test
-    if(process.env.Node_ENV !== "test"){
-        console.log("metrics.seenTitle")
-    }
-    var seenTitle = new Title(req.body.title)
-    //change id to match old one
-    seenTitle._id = req.params.id
-    //mark title as seen
-    seenTitle.seen = true
-    //set seen date to now
-    seenTitle.seenAt = Date.now()
-    var query = Title.findByIdAndUpdate(req.params.id, seenTitle, {new: true})
-    query.exec((err, seenTitle) => {
-        if(err) {
-            res.status(HttpStatus.NOT_FOUND)
-                .send(err)
-        } else {
-            //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-            if(req.get('Accept') === "text/json"){
-                res.json({message: "Title successfully marked as seen!", updatedTitle})
-            } else {
-                req.flash("success", "You've marked '" + seenTitle.name + "' as seen!")
-                res.redirect("/title")
-            }
-        }
-    })
 }
 
 //DELETE DELETE /title/:id to delete a title
@@ -158,4 +132,4 @@ function deleteTitle(req, res){
 }
 
 //export all functions
-module.exports = { getTitles, getTitle, postTitle, updateTitle, deleteTitle, seenTitle };
+module.exports = { getTitles, getTitle, postTitle, updateTitle, deleteTitle };
