@@ -28,12 +28,16 @@ window.onload = function() {
     $('.error.message').fadeOut(2500)
 }
 
-//update a title as seen
-function checkMovieAsSeen(id, name) {
+//update a title as seen or unseen
+function toggleSeenStatus(id, name, seen) {
     let form = document.createElement('form')
     form.action = '/title/' + id + '/?_method=PUT'
     form.method = 'POST'
-    form.innerHTML = '<input name="title[seen]" value="true"> <input name="title[seenOn]" value="' + Date.now() + '">'
+    if(seen) {
+        form.innerHTML = '<input name="title[seen]" value="true"> <input name="title[seenOn]" value="' + Date.now() + '">'
+    } else {
+        form.innerHTML = '<input name="title[seen]" value="false">'
+    }
 
     // the form must be in the document to submit it, but should be invisible
     form.hidden = true
