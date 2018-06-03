@@ -63,7 +63,7 @@ pipeline {
                 script {
                     //create docker image and push it to dockerhub
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-                        def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
+                        def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}_alpha", "--build-arg RELEASE=${releaseName} .")
                         dockerImage.push("latest")
                         dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}")
                     }
