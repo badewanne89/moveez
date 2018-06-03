@@ -88,7 +88,16 @@ function updateTitle(req, res){
                     if(req.get('Accept') === "text/json"){
                         res.json({message: "Title successfully updated!", updatedTitle})
                     } else {
-                        req.flash("success", "You've changed the name to '" + updatedTitle.name + "'!")
+                        if(req.body.title.seen) {
+                            if(updatedTitle.seen === true)
+                            {
+                                req.flash("success", "You've marked '" + updatedTitle.name + "' as seen!")
+                            } else {
+                                req.flash("success", "You've marked '" + updatedTitle.name + "' as unseen!")
+                            }
+                        } else {
+                            req.flash("success", "You've changed the name to '" + updatedTitle.name + "'!")
+                        }
                         res.redirect("/title")
                     }
             }
