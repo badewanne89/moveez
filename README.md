@@ -4,6 +4,8 @@ Is a webbased service to keep track of the movies you would like to watch in fut
 Future updates might include an own score calculated by the individual ratings of all moveez-users.
 
 # Development
+"npm install" to install dependencies
+
 "npm run dev" to start app locally
 
 "npm test" to run integration tests locally
