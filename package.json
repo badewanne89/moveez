@@ -6,7 +6,7 @@
   "scripts": {
     "test": "ENV PORT='8081' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
     "start": "export NODE_CONFIG_DIR='../config' && cd app && node app.js",
-    "dev": "cd app && ENV PORT='8081' RELEASE='local dev build'  NODE_CONFIG_DIR='../config' node app.js"
+    "dev": "cd app && ENV PORT='8081' RELEASE='local dev build'  NODE_CONFIG_DIR='../config' nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -42,11 +42,12 @@
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
     "mocha": "^2.4.5",
+    "nodemon": "^1.18.4",
     "nyc": "^11.4.1",
     "wdio-cucumber-framework": "^1.0.3",
     "wdio-sauce-service": "^0.4.6",
+    "wdio-selenium-standalone-service": "0.0.9",
     "wdio-spec-reporter": "^0.1.3",
-    "webdriverio": "^4.9.11",
-    "wdio-selenium-standalone-service": "0.0.9"
+    "webdriverio": "^4.9.11"
   }
 }
