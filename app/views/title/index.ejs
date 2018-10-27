@@ -2,15 +2,40 @@
 
 <div class="ui main text container">
     <div class="ui top attached">
-        
-        <form class="ui form" action="/title" method="POST">
-            <div class="fields">
-                <div class="six wide field">
-                    <input type="text" placeholder="type a name to add it to your list" name="title[name]" required>
-                </div>
-                <button class="ui icon teal button" data-tooltip="Add a new title" data-inverted=""><i class="add circle icon"></i></button>
+
+        <div class="fields">
+            <div class="six wide field">
+                <input id="newTitle" type="text" placeholder="type a name to add it to your list" name="title[name]" required>
             </div>
-        </form>
+            <button onclick="duplicateCheck()" class="ui icon teal button" data-tooltip="Add a new title" data-inverted=""><i class="add circle icon"></i></button>
+        </div>
+
+            <div class="ui search focus">
+                <div class="ui icon input">
+                    <input class="search" type="text" placeholder="Colors..." autocomplete="off">
+                    <i class="search icon"></i>
+                </div>
+                <p class="results"></p>
+            </div>
+
+        <script>
+        	// Define API endpoints once globally
+        	$.fn.api.settings.api = {
+        	 	'search' : 'http://www.omdbapi.com/?s={value}&apikey=b50af808'
+        	};
+        	$('.search input')
+        	  .api({
+        		debug: true,
+        	    action: 'search',
+        		searchFullText: false,
+        	    stateContext: '.ui.input',
+        	    onSuccess: function(response) {
+                     $('.results').text(response.Search[0].Title)
+                     $('.results').show()
+                   },
+        	  })
+        	;
+        </script>
 
         <div class="ui list">
         <% titles.forEach(function(title){ %>          
@@ -63,8 +88,24 @@
                     Nope, keep it!
                     <i class="close icon"></i>
                 </div>
-                <form id="deleteModalForm" class="ui form inline" method="POST" action="">
+                <form id="deleteModalForm" class="ui form inline" method="POST" action="/title">
                     <input type="submit" value="Delete" form="deleteModalForm" class="ui red button" id="deleteModalButton"></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="ui modal" id="duplicateModal">
+            <i class="close icon"></i>
+            <div class="header">
+                You already have a similar movie in your list, do you still want to <b>add</b> "<span id="deleteModalName"></span>"?
+            </div>
+            <div class="actions">
+                <div class="ui black deny right labeled icon button">
+                    Nope, nevermind!
+                    <i class="close icon"></i>
+                </div>
+                <form id="duplicateModalForm" class="ui form inline" method="POST" action="title">
+                    <input type="submit" value="Add" form="duplicateModalForm" class="ui yellow button" id="duplicateModalButton"></button>
                 </form>
             </div>
         </div>

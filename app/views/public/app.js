@@ -39,9 +39,24 @@ function toggleSeenStatus(id, name, seen) {
         form.innerHTML = '<input name="title[seen]" value="false">'
     }
 
-    // the form must be in the document to submit it, but should be invisible
+    //the form must be in the document to submit it, but should be invisible
     form.hidden = true
     document.body.append(form)
 
     form.submit()
 }
+
+//suggestions when adding a new title
+$('.ui.search')
+  .search({
+    apiSettings: {
+      url: 'http://www.omdbapi.com/?t={query}&apikey=b50af808'
+    },
+    fields: {
+      results : 'items',
+      title   : 'name',
+      url     : 'html_url'
+    },
+    minCharacters : 3
+  })
+;

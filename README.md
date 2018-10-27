@@ -14,12 +14,60 @@ Future updates might include an own score calculated by the individual ratings o
 An Express.js app based on Node.js with MongoDB (mlab).
 
 # Jenkins
+We use Jenkins as our CI server. It is hosted at Hetzner Cloud based on CentOS 7 and can be visited here:
+http://95.216.189.36:8080/job/moveez/
+
+## Docker
+Docker-Setup: https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository
+sudo yum install -y yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum install docker-ce
+
+Docker Post-Install: https://docs.docker.com/install/linux/linux-postinstall/
+sudo systemctl enable docker
+
+## Jenkins-Image
+Build jenkins with Dockerfile:
+
+FROM jenkins/jenkins:lts
+LABEL maintainer "schdief.law@gmail.com"
+USER root
+RUN apt-get update && apt-get install g++ build-essential -y
+RUN /usr/local/bin/install-plugins.sh docker-slaves workflow-aggregator:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves blueocean:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves pipeline-utility-steps:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves http_request:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves nodejs:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves sonar:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves mailer:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves ssh-slaves:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves pipeline-stage-view:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves pipeline-github-lib:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves github-branch-source:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves github:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves git:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves timestamper:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves credentials-binding:latest
+USER jenkins
+
+docker build -t schdief/jenkins .
+
+Run jenkins in background
+sudo docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home schdief/jenkins
+
+## Jenkins-Config
 The pipeline requires the following configuration in Jenkins:
 - https://wiki.jenkins.io/display/JENKINS/Pipeline+Utility+Steps+Plugin
 - https://plugins.jenkins.io/timestamper
 - https://wiki.jenkins.io/display/JENKINS/HTTP+Request+Plugin
 - https://wiki.jenkins.io/display/JENKINS/NodeJS+Plugin
-	+ add a nodejs installation in jenkins tool config named "node")
+	+ add a nodejs installation in jenkins tool config named "node" (version 10.4 is needed)
 - https://plugins.jenkins.io/sonar
 	+ add sonar runner installation in jenkins tool config named "sonarqube"
 	+ add a sonarqube server to manage jenkins named "sonarcloud"
