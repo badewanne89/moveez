@@ -15,3 +15,7 @@
   opacity: 0;
   transition: visibility 0s 2s, opacity 2s linear;
 }
+
+.result:nth-of-type(odd) {
+    background: #e0e0e0;
+}

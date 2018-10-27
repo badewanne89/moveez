@@ -48,23 +48,29 @@ function toggleSeenStatus(id, name, seen) {
 
 //suggestions from IMDB for adding a new title
 //Define API endpoints once globally
-    $.fn.api.settings.api = {
-        'search' : 'http://www.omdbapi.com/?s={value}&apikey=b50af808'
-    };
-    $('.search input')
-      .api({
-        debug: true,
-        action: 'search',
-        searchFullText: false,
-        stateContext: '.ui.input',
-        onSuccess: function(response) {
-             if(response.Search.length > 0) {
-                 $('.results').html("")
-                 for(i = 0; response.Search.length > i; i++) {
-                    $('.results').append("<div><img src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"40px\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ") </div>")
-                 }
-                 $('.results').show()
+$.fn.api.settings.api = {
+    'search' : 'http://www.omdbapi.com/?s={value}&apikey=b50af808'
+};
+$('.search input')
+  .api({
+    debug: true,
+    action: 'search',
+    searchFullText: false,
+    stateContext: '.ui.input',
+    onSuccess: function(response) {
+         if(response.Search.length > 0) {
+             $('.results').html("")
+             for(i = 0; response.Search.length > i; i++) {
+                $('.results').append("<div class=\"result\" onclick=\"selectSuggestion('" + response.Search[i].Title + "')\"><img src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</div>")
              }
-        },
-      })
-    ;
+             $('.results').show()
+         }
+    },
+  })
+;
+
+//if a suggestion is clicked, put the title in the add input field and hide the suggestions
+function selectSuggestion(title) {
+    $('.search input').val(title)
+    $('.results').hide()
+}

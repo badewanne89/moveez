@@ -3,14 +3,16 @@
 <div class="ui main text container">
     <div class="ui top attached">
 
-        <div class="ui search focus">
-            <div class="ui icon input">
-                <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off">
-                <i class="search icon"></i>
+        <form class="ui form" action="/title" method="POST">
+            <div class="ui search focus">
+                <div class="ui icon input">
+                    <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off">
+                    <i class="search icon"></i>
+                </div>
+                <button class="ui icon teal button" data-tooltip="Add new title" data-inverted=""><i class="add circle icon"></i></button>
+                <div class="results"></div>
             </div>
-            <button onclick="duplicateCheck()" class="ui icon teal button" data-tooltip="Add a new title" data-inverted=""><i class="add circle icon"></i></button>
-            <div class="results"></div>
-        </div>
+        </form>
 
         <div class="ui list">
         <% titles.forEach(function(title){ %>          
