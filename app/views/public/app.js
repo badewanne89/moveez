@@ -61,7 +61,9 @@ $('.search input')
          if(response.Search.length > 0) {
              $('.results').html("")
              for(i = 0; response.Search.length > i; i++) {
-                $('.results').append("<div class=\"result\" onclick=\"selectSuggestion('" + response.Search[i].Title + "')\"><img src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</div>")
+                //TODO: get real rating!
+                imdbRating = 6.6
+                $('.results').append("<div class=\"suggestion\"><img src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</span><button onclick=\"addTitle('" + response.Search[i].Title + "', " + imdbRating + ", '" + response.Search[i].imdbID + "', '" + response.Search[i].Year + "')\" class=\"ui icon teal button\"><i class=\"add circle icon\"></i></button></div>")
              }
              $('.results').show()
          }
@@ -69,8 +71,17 @@ $('.search input')
   })
 ;
 
-//if a suggestion is clicked, put the title in the add input field and hide the suggestions
-function selectSuggestion(title) {
-    $('.search input').val(title)
-    $('.results').hide()
+//add a new title
+function addTitle(name, imdbRating, imdbID, year) {
+
+    let form = document.createElement('form')
+    form.action = '/title'
+    form.method = 'POST'
+    form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[imdbRating]" value="' + imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '">'
+
+    //the form must be in the document to submit it, but should be invisible
+    form.hidden = true
+    document.body.append(form)
+
+    form.submit()
 }

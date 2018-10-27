@@ -1,10 +1,10 @@
 {
     "dbProtocol": "mongodb",
-    "dbPort": "36709",
+    "dbPort": "17092",
     "dbName": "title_dev",
-    "dbHost": "ds036709.mlab.com",
+    "dbHost": "ds217092.mlab.com",
     "dbUser": "dev",
-    "dbPassword" : "dev",
+    "dbPassword" : "dev123",
     "dbConnectionOptions": {
         "useMongoClient": true
     }

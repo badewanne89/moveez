@@ -7,7 +7,11 @@ var TitleSchema = new Schema(
         name: {type: String, required: true},
         createdAt: {type: Date, default: Date.now},
         seen: {type: Boolean, default: false},
-        seenOn: {type: Date}
+        seenOn: {type: Date},
+        poster: {type: String},
+        imdbRating: {type: Number},
+        imdbID: {type: String},
+        year: {type: String}
     }
 )
 

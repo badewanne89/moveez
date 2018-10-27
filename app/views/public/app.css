@@ -16,6 +16,22 @@
   transition: visibility 0s 2s, opacity 2s linear;
 }
 
-.result:nth-of-type(odd) {
+.suggestion:nth-of-type(odd) {
     background: #e0e0e0;
+}
+
+.suggestion {
+    height: 50px;
+    padding: 1px;
+    overflow: hidden;
+}
+
+.suggestion:hover { background: teal; }
+
+#results {
+    width: auto;
+}
+
+.suggestionContent {
+    vertical-align: top;
 }
