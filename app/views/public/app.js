@@ -46,17 +46,25 @@ function toggleSeenStatus(id, name, seen) {
     form.submit()
 }
 
-//suggestions when adding a new title
-$('.ui.search')
-  .search({
-    apiSettings: {
-      url: 'http://www.omdbapi.com/?t={query}&apikey=b50af808'
-    },
-    fields: {
-      results : 'items',
-      title   : 'name',
-      url     : 'html_url'
-    },
-    minCharacters : 3
-  })
-;
+//suggestions from IMDB for adding a new title
+//Define API endpoints once globally
+    $.fn.api.settings.api = {
+        'search' : 'http://www.omdbapi.com/?s={value}&apikey=b50af808'
+    };
+    $('.search input')
+      .api({
+        debug: true,
+        action: 'search',
+        searchFullText: false,
+        stateContext: '.ui.input',
+        onSuccess: function(response) {
+             if(response.Search.length > 0) {
+                 $('.results').html("")
+                 for(i = 0; response.Search.length > i; i++) {
+                    $('.results').append("<div><img src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"40px\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ") </div>")
+                 }
+                 $('.results').show()
+             }
+        },
+      })
+    ;

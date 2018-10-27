@@ -3,39 +3,14 @@
 <div class="ui main text container">
     <div class="ui top attached">
 
-        <div class="fields">
-            <div class="six wide field">
-                <input id="newTitle" type="text" placeholder="type a name to add it to your list" name="title[name]" required>
+        <div class="ui search focus">
+            <div class="ui icon input">
+                <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off">
+                <i class="search icon"></i>
             </div>
             <button onclick="duplicateCheck()" class="ui icon teal button" data-tooltip="Add a new title" data-inverted=""><i class="add circle icon"></i></button>
+            <div class="results"></div>
         </div>
-
-            <div class="ui search focus">
-                <div class="ui icon input">
-                    <input class="search" type="text" placeholder="Colors..." autocomplete="off">
-                    <i class="search icon"></i>
-                </div>
-                <p class="results"></p>
-            </div>
-
-        <script>
-        	// Define API endpoints once globally
-        	$.fn.api.settings.api = {
-        	 	'search' : 'http://www.omdbapi.com/?s={value}&apikey=b50af808'
-        	};
-        	$('.search input')
-        	  .api({
-        		debug: true,
-        	    action: 'search',
-        		searchFullText: false,
-        	    stateContext: '.ui.input',
-        	    onSuccess: function(response) {
-                     $('.results').text(response.Search[0].Title)
-                     $('.results').show()
-                   },
-        	  })
-        	;
-        </script>
 
         <div class="ui list">
         <% titles.forEach(function(title){ %>          
