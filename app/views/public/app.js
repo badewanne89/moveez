@@ -1,15 +1,3 @@
-//dialogue to update a name
-function prepareUpdateModal(name, id) {
-    //set name of modal
-    $('#updateModalOldName').text(name)
-    //set placeholder
-    $('#updateModalInput').val(name)
-    //set action to id of title
-    $('#updateModalForm').attr('action', '/title/' + id + '/?_method=PUT')
-    //show update modal
-    $('#updateModal').modal('show')
-}
-
 //dialogue to delete a title
 function prepareDeleteModal(name, id) {
 	//set name of modal
@@ -61,9 +49,8 @@ $('.search input')
          if(response.Search.length > 0) {
              $('.results').html("")
              for(i = 0; response.Search.length > i; i++) {
-                //TODO: get add button right aligned
-                //TODO: get year in a second line with class description
-                $('.results').append("<div class=\"suggestion\"><img class=\"suggestionPoster\" src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</span><button onclick=\"addTitle('" + response.Search[i].Title + "', '" + response.Search[i].imdbID + "', '" + response.Search[i].Year + "', '" + response.Search[i].Poster + "')\" class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button></div>")
+                //TODO: get year in a second line and make title bold
+                $('.results').append("<div class=\"suggestion item\"><button onclick=\"addTitle('" + response.Search[i].Title + "', '" + response.Search[i].imdbID + "', '" + response.Search[i].Year + "', '" + response.Search[i].Poster + "')\" class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</span></div>")
              }
              $('.results').show()
          }

@@ -53,7 +53,7 @@
 }
 
 .description {
-    margin: 2px 0px 0px 0px;
+    margin: 4px 0px 0px 0px;
 }
 
 #imdb {
@@ -63,4 +63,16 @@
 #container {
     margin-left: 10px!important;
     width: auto;
+}
+
+.logo {
+    margin-right: 5px;
+}
+
+.title:nth-of-type(odd) {
+    background: #f7f7f7;
+}
+
+.buttons {
+    margin-top: 45px;
 }

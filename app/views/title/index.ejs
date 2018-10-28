@@ -12,63 +12,41 @@
         </div>
 
         <div class="ui list">
+        <% if(titles.length == 0) { %>
+            <div class="item title">
+                <br>
+                Seems like you haven't added any titles to your watchlist yet.
+                <br>
+                Start by typing in the search field above.
+                <br>
+                .
+            </div>
+        <% } %>
+
         <% titles.forEach(function(title){ %>          
-            <div class="item">
+            <div class="item title">
                 <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
                 <div class="content">
-                    <!--TODO: DRY!!!!-->
-                    <% if(title.seen) { %>
-                        <span class="seen"><%= title.name %></span>
-                        <div class="description">
-                            (<%= title.year %>)
-                        </div>
-                        <div class="description">
-                            <img id="imdb" class="ui image" height="24" width="24" src="https://unpkg.com/simple-icons@latest/icons/imdb.svg">
-                            <%= title.imdbRating %>
-                        </div>
-                        <div class="description">
+                    <span class=" <% if(title.seen) { %> seen  <% } else { %> unseen <% } %> "><%= title.name %></span>
+                    <div class="description">
+                        (<%= title.year %>)
+                    </div>
+                    <div class="description">
+                        <img id="imdb" class="ui image" height="24" width="24" src="https://unpkg.com/simple-icons@latest/icons/imdb.svg">
+                        <%= title.imdbRating %>
+                    </div>
+                    <div class="description buttons">
+                        <% if(title.seen) { %>
                             <button onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="eye slash icon"></i></button>
-                    <% } else { %>
-                        <span class="unseen"><%= title.name %></span>
-                        <div class="description">
-                            (<%= title.year %>)
-                        </div>
-                        <div class="description">
-                            <img id="imdb" class="ui image" height="24" width="24" src="https://unpkg.com/simple-icons@latest/icons/imdb.svg">
-                            <%= title.imdbRating %>
-                        </div>
-                        <div class="description">
+                        <% } else { %>
                             <button onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
-                    <% } %>
-                            <button onclick="prepareUpdateModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
-                            <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
-                        </div>
+                        <% } %>
+                        <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                    </div>
                 </div>
             </div>
         <% }); %>           
         </div>
-
-        <div class="ui modal" id="updateModal">
-            <i class="close icon"></i>
-            <div class="header">
-                <b>Update Name</b> for "<span id="updateModalOldName"></span>"
-            </div>
-            <div class="image content">
-                <form id="updateModalForm" class="ui form" method="POST" action="">
-                    <div class="description">
-                        <input id="updateModalInput" type="text" name="title[name]" required>
-                    </div>
-            </div>
-            <div class="actions">
-                <div class="ui black deny right labeled icon button">
-                    Abort
-                    <i class="close icon"></i>
-                </div>
-                <input type="submit" value="Update" form="updateModalForm" class="ui button teal">
-            </div>
-                </form>
-        </div>
-
 
         <div class="ui modal" id="deleteModal">
             <i class="close icon"></i>
