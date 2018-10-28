@@ -63,7 +63,9 @@ $('.search input')
              for(i = 0; response.Search.length > i; i++) {
                 //TODO: get real rating!
                 imdbRating = 6.6
-                $('.results').append("<div class=\"suggestion\"><img src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</span><button onclick=\"addTitle('" + response.Search[i].Title + "', " + imdbRating + ", '" + response.Search[i].imdbID + "', '" + response.Search[i].Year + "')\" class=\"ui icon teal button\"><i class=\"add circle icon\"></i></button></div>")
+                //TODO: get add button right aligned
+                //TODO: get year in a second line
+                $('.results').append("<div class=\"suggestion\"><img class=\"suggestionPoster\" src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</span><button onclick=\"addTitle('" + response.Search[i].Title + "', " + imdbRating + ", '" + response.Search[i].imdbID + "', '" + response.Search[i].Year + "', '" + response.Search[i].Poster + "')\" class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button></div>")
              }
              $('.results').show()
          }
@@ -72,16 +74,22 @@ $('.search input')
 ;
 
 //add a new title
-function addTitle(name, imdbRating, imdbID, year) {
+function addTitle(name, imdbRating, imdbID, year, poster) {
 
     let form = document.createElement('form')
     form.action = '/title'
     form.method = 'POST'
-    form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[imdbRating]" value="' + imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '">'
+    form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[imdbRating]" value="' + imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '"><input name="title[poster]" value="' + poster + '">'
 
     //the form must be in the document to submit it, but should be invisible
     form.hidden = true
     document.body.append(form)
 
     form.submit()
+}
+
+//TODO: fixme
+//hide suggestions when search field loses focus
+function hideSuggestions() {
+    //$('.results').hide()
 }

@@ -8,6 +8,10 @@
 
 .seen {
     text-decoration: line-through;
+    font-weight: bold;
+}
+.unseen {
+    font-weight: bold;
 }
 
 .hidden {
@@ -17,7 +21,7 @@
 }
 
 .suggestion:nth-of-type(odd) {
-    background: #e0e0e0;
+    background: #f7f7f7;
 }
 
 .suggestion {
@@ -26,7 +30,7 @@
     overflow: hidden;
 }
 
-.suggestion:hover { background: teal; }
+.suggestion:hover { background: #d5f3f3; }
 
 #results {
     width: auto;
@@ -34,4 +38,22 @@
 
 .suggestionContent {
     vertical-align: top;
+    margin: 0px 0px 0px 10px;
+}
+
+#add {
+    vertical-align: top;
+    margin: 6px 5px 0px 10px;
+}
+
+.suggestionPoster {
+    margin: 2px 0px 0px 5px;
+}
+
+.description {
+    margin: 2px 0px 0px 0px;
+}
+
+#imdb {
+    display: inline-block;
 }

@@ -5,7 +5,7 @@
 
         <div class="ui search focus">
             <div class="ui icon input">
-                <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off">
+                <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off" onblur="hideSuggestions()">
                 <i class="search icon"></i>
             </div>
             <div class="results" id="results"></div>
@@ -14,17 +14,35 @@
         <div class="ui list">
         <% titles.forEach(function(title){ %>          
             <div class="item">
-                <i class="film"></i>
+                <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
                 <div class="content">
+                    <!--TODO: DRY!!!!-->
                     <% if(title.seen) { %>
                         <span class="seen"><%= title.name %></span>
-                        <button onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="eye slash icon"></i></button>
+                        <div class="description">
+                            (<%= title.year %>)
+                        </div>
+                        <div class="description">
+                            <img id="imdb" class="ui image" height="24" width="24" src="https://unpkg.com/simple-icons@latest/icons/imdb.svg">
+                            <%= title.imdbRating %>
+                        </div>
+                        <div class="description">
+                            <button onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="eye slash icon"></i></button>
                     <% } else { %>
-                        <span><%= title.name %></span>
-                        <button onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
+                        <span class="unseen"><%= title.name %></span>
+                        <div class="description">
+                            (<%= title.year %>)
+                        </div>
+                        <div class="description">
+                            <img id="imdb" class="ui image" height="24" width="24" src="https://unpkg.com/simple-icons@latest/icons/imdb.svg">
+                            <%= title.imdbRating %>
+                        </div>
+                        <div class="description">
+                            <button onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
                     <% } %>
-                    <button onclick="prepareUpdateModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
-                    <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                            <button onclick="prepareUpdateModal('<%= title.name %>', '<%= title._id %>');" class="ui icon gray mini button" data-tooltip="Edit '<%= title.name %>'" data-inverted=""><i class="pencil icon"></i></button>
+                            <button onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                        </div>
                 </div>
             </div>
         <% }); %>           
