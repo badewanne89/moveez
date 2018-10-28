@@ -1,5 +1,7 @@
 #logo {
     background-color: teal;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .inline {
@@ -56,4 +58,9 @@
 
 #imdb {
     display: inline-block;
+}
+
+#container {
+    margin-left: 10px!important;
+    width: auto;
 }
