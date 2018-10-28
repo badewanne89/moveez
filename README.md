@@ -66,6 +66,10 @@ RUN /usr/local/bin/install-plugins.sh docker-slaves github:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves git:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves timestamper:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves credentials-binding:latest
+RUN curl -fsSL https://get.docker.com/ | sh
+RUN groupadd -g 985 docker-host
+RUN usermod -a -G docker-host jenkins
+RUN usermod -a -G docker jenkins
 USER jenkins
 
 docker build -t schdief/jenkins .
