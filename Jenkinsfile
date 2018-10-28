@@ -70,9 +70,9 @@ pipeline {
                 }
             }
         }
-        stage('UAT') {
+        /*stage('UAT') {
             steps {
-        		/*parallel(
+        		parallel(
         			'PERFORMANCE': {
                         //deploy environment for performance test via docker image from dockerhub on azure webapp service
                         azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
@@ -84,7 +84,7 @@ pipeline {
                         octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
                     },
         			'EXPLORATIVE': {
-        				*///deploy environment for explorative test via docker image from dockerhub on azure webapp service
+        				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
                         script{
                             //deploy environment for performance test via docker image from dockerhub on azure webapp service
                             azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "test", dockerImageName: "schdieflaw/${packageJSON.name}", skipDockerBuild: true, dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub']
@@ -96,7 +96,7 @@ pipeline {
                                 httpRequest responseHandle: 'NONE', url: 'http://test.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
                             }
                         }
-                    }/*,
+                    },
                     'ACCEPTANCE': {
                         //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
                         azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
@@ -108,7 +108,7 @@ pipeline {
                         //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
                     }
         		)
-            }*/
+            }
         }
         stage('APPROVAL') {
             when {
@@ -138,6 +138,6 @@ pipeline {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
                 }
             }
-    	}
+    	}*/
     }
 }

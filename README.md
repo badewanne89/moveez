@@ -16,7 +16,7 @@ We use Jenkins as our CI server. It is hosted at Hetzner Cloud based on CentOS 7
 http://95.216.189.36:8080/job/moveez/
 
 ## Docker
-[Docker-Setup|https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository]
+[Docker-Setup](https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository)
 ```
 sudo yum install -y yum-utils \
   device-mapper-persistent-data \
@@ -28,7 +28,8 @@ sudo yum-config-manager \
 
 sudo yum install docker-ce
 ```
-[Docker Post-Install|https://docs.docker.com/install/linux/linux-postinstall/]
+[Docker Post-Install](https://docs.docker.com/install/linux/linux-postinstall/)
+
 `sudo systemctl enable docker`
 
 ## Jenkins-Image
@@ -37,7 +38,19 @@ Build jenkins with Dockerfile:
 FROM jenkins/jenkins:lts
 LABEL maintainer "schdief.law@gmail.com"
 USER root
-RUN apt-get update && apt-get install g++ build-essential -y
+RUN apt-get update && apt-get install g++ build-essential -y && \
+apt-get -y install apt-transport-https \
+     ca-certificates \
+     curl \
+     gnupg2 \
+     software-properties-common && \
+curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
+add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+   $(lsb_release -cs) \
+   stable" && \
+apt-get update && \
+apt-get -y install docker-ce
 RUN /usr/local/bin/install-plugins.sh docker-slaves workflow-aggregator:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves blueocean:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves pipeline-utility-steps:latest
@@ -59,7 +72,7 @@ docker build -t schdief/jenkins .
 ```
 Run jenkins in background
 
-`sudo docker run -d -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home schdief/jenkins`
+`sudo docker run --privileged --name jenkins -d -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home schdief/jenkins`
 
 ## Jenkins-Config
 ### Plugins
