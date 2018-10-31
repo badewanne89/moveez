@@ -91,9 +91,8 @@ pipeline {
     		}
     		steps {
                 //TODO: find a graceful way without downtime
-                //TODO: crashes the build if prod is not running
                 //kill old prod
-                sh "docker kill ${packageJSON.name}_prod"
+                sh "docker rm ${packageJSON.name}_prod -f"
                 //deploy new prod environment via docker image from dockerhub on jenkins host
                 sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
