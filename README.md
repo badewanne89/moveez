@@ -14,7 +14,7 @@ Future updates might include an own score calculated by the individual ratings o
 An Express.js app based on Node.js with MongoDB (mlab) - in short MEN.
 
 # Jenkins
-We use Jenkins as our CI server. It is hosted at Hetzner Cloud based on CentOS 7 and can be visited here:
+We use Jenkins as our CI server with a Docker-outside-of-Docker approach, where Jenkins inside a container uses the docker hosts docker daemon. It is hosted at Hetzner Cloud based on CentOS 7 and can be visited here:
 http://95.216.189.36:8080/job/moveez/
 
 ## Docker
@@ -35,7 +35,7 @@ sudo yum install docker-ce
 `sudo systemctl enable docker`
 
 ## Jenkins-Image
-Build jenkins with Dockerfile:
+Build Jenkins with the following Dockerfile, but change the gid (here 994), to what it is on your docker host - find out with `getent group | grep "docker"`.
 ```
 FROM jenkins/jenkins:lts
 LABEL maintainer "schdief.law@gmail.com"
@@ -46,7 +46,7 @@ apt-get -y install apt-transport-https \
      curl \
      gnupg2 \
      software-properties-common && \
-curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
+curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey$
 add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
    $(lsb_release -cs) \
@@ -68,17 +68,15 @@ RUN /usr/local/bin/install-plugins.sh docker-slaves github:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves git:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves timestamper:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves credentials-binding:latest
-RUN curl -fsSL https://get.docker.com/ | sh
-RUN groupadd -g 985 docker-host
+RUN groupadd -g 994 docker-host
 RUN usermod -a -G docker-host jenkins
-RUN usermod -a -G docker jenkins
 USER jenkins
 
 docker build -t schdief/jenkins .
 ```
 Run jenkins in background
 
-`sudo docker run --privileged --name jenkins -d -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home schdief/jenkins`
+`sudo docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home schdief/jenkins`
 
 ## Jenkins-Config
 ### Plugins
