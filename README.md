@@ -3,19 +3,23 @@ Moveez is a service to keep track of the movies you would like to watch in futur
 
 Future updates might include an own score calculated by the individual ratings of all moveez-users.
 
+Visit us at http://moveez.de
+
 ![Screenshot](https://github.com/schdief/moveez/blob/master/screenshot.png)
 
 # Development
 * `npm install` to install dependencies
 * `npm run dev` to start app locally
 * `npm test` to run integration tests locally
+* http://uat.moveez.de is our test environment (currently needs an active build)
 
 # Stack
 An Express.js app based on Node.js with MongoDB (mlab) - in short MEN.
 
 # Jenkins
-We use Jenkins as our CI server with a Docker-outside-of-Docker approach, where Jenkins inside a container uses the docker hosts docker daemon. It is hosted at Hetzner Cloud based on CentOS 7 and can be visited here:
-http://95.216.189.36:8080/job/moveez/
+We use Jenkins as our CI server with a Docker outside of Docker (DooD) approach, where Jenkins runs inside a container and uses the docker hosts docker daemon.
+It is hosted at Hetzner Cloud based on CentOS 7 and can be visited here:
+http://jenkins.moveez.de/job/moveez/
 
 ## Docker
 [Docker-Setup](https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository)

@@ -71,13 +71,13 @@ pipeline {
         stage('UAT') {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                sh "docker run --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_alpha"
-                sh "docker ps"
+                sh "docker run -p 443:443 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_alpha"
+                //flightcheck the deployment
+                retry(5) {
+                    httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
+                }
+                //kill the container
                 sh "docker kill ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME}"
-                //check the deployment
-                //retry(5) {
-                //    httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
-                //}
                 //run acceptance test with cucumber and webdriverio
                 //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
             }
