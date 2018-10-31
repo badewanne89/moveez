@@ -22,8 +22,6 @@ pipeline {
         stage('INIT') {
             steps {
                 script {
-                    //checkout repository
-                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/schdief/moveez.git']]])
                     //load pipeline configuration
                     config = load 'config/config.jenkins'
                     packageJSON = readJSON file: 'package.json'
@@ -70,46 +68,19 @@ pipeline {
                 }
             }
         }
-        /*stage('UAT') {
+        stage('UAT') {
             steps {
-        		parallel(
-        			'PERFORMANCE': {
-                        //deploy environment for performance test via docker image from dockerhub on azure webapp service
-                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "performance", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-                        //check the deployment
-                        retry(5) {
-                            httpRequest responseHandle: 'NONE', url: 'http://moveez-performance.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
-                        }
-                        //run performance test using octoperf
-                        octoPerfTest credentialsId: 'octoperf', scenarioId: 'AWDRqMX0yJH_vau-VobL', stopConditions: [stopOnAlert(buildResult: 'UNSTABLE', severity: 'CRITICAL')]
-                    },
-        			'EXPLORATIVE': {
-        				//deploy environment for explorative test via docker image from dockerhub on azure webapp service
-                        script{
-                            //deploy environment for performance test via docker image from dockerhub on azure webapp service
-                            azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "test", dockerImageName: "schdieflaw/${packageJSON.name}", skipDockerBuild: true, dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub']
-                            //check the deployment
-                            retry(10) {
-                                //give it time to pull the image and start the container
-                                sleep time: 1, unit: 'MINUTES'
-                                //trying to access URL
-                                httpRequest responseHandle: 'NONE', url: 'http://test.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
-                            }
-                        }
-                    },
-                    'ACCEPTANCE': {
-                        //deploy environment for acceptance test via docker image from dockerhub on azure webapp service
-                        azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", slotName: "functional", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-                        //check the deployment
-                        retry(5) {
-                            httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
-                        }
-                        //run acceptance test with cucumber and webdriverio
-                        //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
-                    }
-        		)
+                //deploy environment for acceptance test via docker image from dockerhub on jenkins host
+                sh "docker run --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_alpha"
+                sh "docker ps"
+                //check the deployment
+                //retry(5) {
+                //    httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
+                //}
+                //run acceptance test with cucumber and webdriverio
+                //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
             }
-        }
+        }/*
         stage('APPROVAL') {
             when {
                 //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
