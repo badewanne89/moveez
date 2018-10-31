@@ -17,7 +17,9 @@ pipeline {
         }
     }
     //configure npm
-    tools {nodejs "node"}
+    tools {
+        nodejs "node"
+    }
     stages {
         stage('INIT') {
             steps {
@@ -62,8 +64,7 @@ pipeline {
                     //create docker image and push it to dockerhub
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
                         def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
-                        dockerImage.push("latest")
-                        dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_alpha")
+                        dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_rc")
                     }
                 }
             }
@@ -71,7 +72,8 @@ pipeline {
         stage('UAT') {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                sh "docker run -p 443:443 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_alpha"
+                //TODO: use somehow dynamic port to enable multiple parallel tests
+                sh "docker run -p 444:444 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_rc"
                 //flightcheck the deployment
                 retry(5) {
                     httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
@@ -81,18 +83,6 @@ pipeline {
                 //run acceptance test with cucumber and webdriverio
                 //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
             }
-        }/*
-        stage('APPROVAL') {
-            when {
-                //only commits to master should be deployed to production (this conditions needs a multi-branch-pipeline)
-                branch 'master'
-            }
-            steps {
-                //approval from product owner
-                input(message:'Go Live?', ok: 'Fire', submitter: config.approver)
-                //abort all older builds waiting for approval
-                milestone label: 'approval', ordinal: 1
-            }
         }
     	stage('PROD') {
     		when {
@@ -100,16 +90,17 @@ pipeline {
     			branch 'master'
     		}
     		steps {
-    			//deploy release to production via docker image from dockerhub on azure webapp service
-                azureWebAppPublish azureCredentialsId: 'azure', publishType: 'docker', resourceGroup: "moveezRG", appName: "${packageJSON.name}", dockerImageName: "schdieflaw/${packageJSON.name}", dockerImageTag: "${packageJSON.version}_${env.BUILD_ID}", skipDockerBuild: true, dockerRegistryEndpoint: [credentialsId: 'dockerhub', url: "https://registry.hub.docker.com"]
-                //check the deployment
-                retry(10) {
-                    //give it time to pull the image and start the container
-                    sleep time: 1, unit: 'MINUTES'
-                    //trying to access URL
+                //TODO: find a graceful way without downtime
+                //kill old prod
+                sh "docker kill ${packageJSON.name}_prod"
+                //deploy new prod environment via docker image from dockerhub on jenkins host
+                sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_rc"
+                //flightcheck the deployment
+                retry(5) {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
                 }
+                //TODO: tag docker image as latest
             }
-    	}*/
+    	}
     }
 }
