@@ -73,6 +73,7 @@ pipeline {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
                 sh "docker run --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_alpha"
                 sh "docker ps"
+                sh "docker kill --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}"
                 //check the deployment
                 //retry(5) {
                 //    httpRequest responseHandle: 'NONE', url: 'http://moveez-functional.azurewebsites.net', validResponseCodes: '200', validResponseContent: 'Welcome'
