@@ -71,12 +71,15 @@ RUN /usr/local/bin/install-plugins.sh docker-slaves credentials-binding:latest
 RUN groupadd -g 994 docker-host
 RUN usermod -a -G docker-host jenkins
 USER jenkins
-
-docker build -t schdief/jenkins .
 ```
+
+Start the build with: `docker build -t schdief/jenkins .`
+
 Run jenkins in background
 
-`sudo docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home schdief/jenkins`
+```
+sudo docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v jenkins_home:/var/jenkins_home schdief/jenkins
+```
 
 ## Jenkins-Config
 ### Plugins
