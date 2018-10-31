@@ -63,8 +63,8 @@ pipeline {
                 script {
                     //create docker image and push it to dockerhub
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-                        def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}", "--build-arg RELEASE=${releaseName} .")
-                        dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_rc")
+                        def dockerImage = docker.build("schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_ID}_${shortRev}", "--build-arg RELEASE=${releaseName} .")
+                        dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc")
                     }
                 }
             }
@@ -73,13 +73,13 @@ pipeline {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
                 //TODO: use somehow dynamic port to enable multiple parallel tests
-                sh "docker run -p 444:444 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_rc"
+                sh "docker run -p 444:443 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(5) {
                     httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
                 }
                 //kill the container
-                sh "docker kill ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${env.BRANCH_NAME}"
+                sh "docker kill ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
                 //run acceptance test with cucumber and webdriverio
                 //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
             }
@@ -91,10 +91,11 @@ pipeline {
     		}
     		steps {
                 //TODO: find a graceful way without downtime
+                //TODO: crashes the build if prod is not running
                 //kill old prod
                 sh "docker kill ${packageJSON.name}_prod"
                 //deploy new prod environment via docker image from dockerhub on jenkins host
-                sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_rc"
+                sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(5) {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
