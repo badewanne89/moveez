@@ -79,6 +79,7 @@ pipeline {
                     httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
                 }
                 //run acceptance test with cypress.io
+                sh "npm run uat"
                 //kill the container
                 //TODO: if pipeline fails, it might not get killed
                 sh "docker kill ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
