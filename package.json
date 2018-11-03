@@ -6,7 +6,8 @@
   "scripts": {
     "test": "PORT='8081' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
     "start": "export NODE_CONFIG_DIR='../config' && cd app && node app.js",
-    "dev": "cd app && ENV PORT='8081' RELEASE='local dev build'  NODE_CONFIG_DIR='../config' nodemon app.js"
+    "dev": "cd app && ENV PORT='8081' RELEASE='local dev build'  NODE_CONFIG_DIR='../config' nodemon app.js",
+    "cypress:open": "cypress open"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "babel-register": "^6.26.0",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
+    "cypress": "^3.1.0",
     "mocha": "^2.4.5",
     "nodemon": "^1.18.4",
     "nyc": "^11.4.1",

@@ -12,6 +12,7 @@ Visit us at http://moveez.de
 * `npm run dev` to start app locally
 * `npm test` to run integration tests locally
 * http://uat.moveez.de is our test environment (currently needs an active build)
+* `npm run cypress:open` to open cypress.io to manage acceptance tests
 
 # Stack
 An Express.js app based on Node.js with MongoDB (mlab) - in short MEN.

@@ -73,7 +73,7 @@ pipeline {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
                 //TODO: use somehow dynamic port to enable multiple parallel tests
-                sh "docker run -p 444:443 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
+                sh "docker run -p 444:443 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(5) {
                     httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: 'Welcome'
@@ -94,6 +94,7 @@ pipeline {
                 //kill old prod
                 sh "docker rm ${packageJSON.name}_prod -f"
                 //deploy new prod environment via docker image from dockerhub on jenkins host
+                //TODO: use prod db locally (not mlab)
                 sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(5) {

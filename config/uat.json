@@ -1,0 +1,7 @@
+{
+    "dbPort": "47290",
+    "dbName": "title_uat",
+    "dbHost": "ds247290.mlab.com",
+    "dbUser": "uat",
+    "dbPassword" : "uat123"
+}
