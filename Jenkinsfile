@@ -72,16 +72,16 @@ pipeline {
         stage('UAT') {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                //TODO: use somehow dynamic port to enable multiple parallel tests
-                sh "docker run -p 444:443 --name ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
+                //TODO: use loackable resources or somehow dynamic port to enable multiple parallel tests
+                sh "docker run -p 444:443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(5) {
                     httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
                 }
+                //run acceptance test with cypress.io
                 //kill the container
+                //TODO: if pipeline fails, it might not get killed
                 sh "docker kill ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
-                //run acceptance test with cucumber and webdriverio
-                //sh "cd ./test/acceptance && ../../node_modules/.bin/wdio wdio.conf.js"
             }
         }
     	stage('PROD') {
