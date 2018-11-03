@@ -81,7 +81,7 @@ pipeline {
                 //run acceptance test with cypress.io
                 //kill the container
                 //TODO: if pipeline fails, it might not get killed
-                sh "docker kill ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
+                sh "docker kill ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
             }
         }
     	stage('PROD') {
