@@ -73,10 +73,15 @@ pipeline {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
                 //TODO: use loackable resources or somehow dynamic port to enable multiple parallel tests
-                sh "docker run -p 444:443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
+                sh "docker run -p 443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
+                script {
+                    portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}").trim()
+                    index = portOutput.indexOf(":") + 1
+                    port = portOutput.drop(index)
+                }
                 //flightcheck the deployment
-                retry(5) {
-                    httpRequest responseHandle: 'NONE', url: 'http://95.216.189.36:444', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
+                retry(10) {
+                    httpRequest responseHandle: 'NONE', url: "http://95.216.189.36:${port}", validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
                 }
                 //run acceptance test with cypress.io
                 //sh "cypress run --record --key "
@@ -98,7 +103,7 @@ pipeline {
                 //TODO: use prod db locally (not mlab)
                 sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
-                retry(5) {
+                retry(10) {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.de', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
                 }
                 //TODO: tag docker image as latest
