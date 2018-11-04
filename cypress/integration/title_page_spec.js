@@ -4,12 +4,13 @@ describe('The Title Page', function() {
   it('successfully loads', function() {
     cy.visit('/title') // change URL to match your dev URL
   })
-  //TODO: check for welcome message
+  //TODO: check version
 })
 
 describe('Adding a Title', function() {
   it('is aided by a suggestion from iMDB when typing', function() {
     cy.get('#newTitle').type('Inception', {delay: 250})
+    cy.wait(250)
   })
   it('can be done by clicking +', function() {
       cy.get('#add').click()
