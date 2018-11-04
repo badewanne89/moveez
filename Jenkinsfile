@@ -70,39 +70,41 @@ pipeline {
             }
         }
         stage('UAT') {
-            stage('DEPLOY') {
-                steps {
-                    //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                    sh "docker run -p 443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
-                    script {
-                        portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}").trim()
-                        index = portOutput.indexOf(":") + 1
-                        port = portOutput.drop(index)
+            stages {
+                stage('DEPLOY') {
+                    steps {
+                        //deploy environment for acceptance test via docker image from dockerhub on jenkins host
+                        sh "docker run -p 443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
+                        script {
+                            portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}").trim()
+                            index = portOutput.indexOf(":") + 1
+                            port = portOutput.drop(index)
+                        }
+                        //flightcheck the deployment
+                        retry(10) {
+                            httpRequest responseHandle: 'NONE', url: "http://95.216.189.36:${port}", validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
+                        }
                     }
-                    //flightcheck the deployment
-                    retry(10) {
-                        httpRequest responseHandle: 'NONE', url: "http://95.216.189.36:${port}", validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
+                }
+                stage('CYPRESS') {
+                    agent {
+                        //this image provides everything needed to run Cypress
+                        docker 'cypress/base:10'
                     }
-                }
-            }
-            stage('CYPRESS') {
-                agent {
-                    //this image provides everything needed to run Cypress
-                    docker 'cypress/base:10'
-                }
-                environment {
-                    //we will be recording test results and video on Cypress dashboard
-                    //to record we need to set an environment variable for the credentials
-                    CYPRESS_RECORD_KEY = credentials('cypress')
-                    CYPRESS_baseUrl = "http://95.216.189.36:${port}"
-                }
-                steps {
-                    //install node dependencies and cypress binary
-                    sh 'npm ci'
-                    //check setup
-                    sh 'npm run cy:verify'
-                    // start test
-                    sh "npm run uat"
+                    environment {
+                        //we will be recording test results and video on Cypress dashboard
+                        //to record we need to set an environment variable for the credentials
+                        CYPRESS_RECORD_KEY = credentials('cypress')
+                        CYPRESS_baseUrl = "http://95.216.189.36:${port}"
+                    }
+                    steps {
+                        //install node dependencies and cypress binary
+                        sh 'npm ci'
+                        //check setup
+                        sh 'npm run cy:verify'
+                        // start test
+                        sh "npm run uat"
+                    }
                 }
             }
             post {
