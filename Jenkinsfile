@@ -40,6 +40,8 @@ pipeline {
                     releaseName = "${packageJSON.name}_${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}"
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
+                    //notify slack about start
+                    slackSend color: 'good', message: ":flugzeug_start: | ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} (<${env.BUILD_URL}|Open>)"
                     //install npm dependencies
                     sh "npm install"
                 }
@@ -138,7 +140,7 @@ pipeline {
         success {
             slackSend color: 'good', message: ":herz: | ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} (<${env.BUILD_URL}|Open>)"
         }
-        fail {
+        failure {
             slackSend color: 'warning', message: ":bumm: | ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} (<${env.BUILD_URL}|Open>)"
         }
     }
