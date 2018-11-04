@@ -9,7 +9,7 @@
     "dev": "cd app && PORT='8081' RELEASE='local dev build' NODE_CONFIG_DIR='../config' nodemon app.js",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
-    "uat": "cypress run --record"
+    "uat": "cypress run --record --browser chrome"
   },
 
   "repository": {
@@ -49,10 +49,5 @@
     "mocha": "^2.4.5",
     "nodemon": "^1.18.4",
     "nyc": "^11.4.1",
-    "wdio-cucumber-framework": "^1.0.3",
-    "wdio-sauce-service": "^0.4.6",
-    "wdio-selenium-standalone-service": "0.0.9",
-    "wdio-spec-reporter": "^0.1.3",
-    "webdriverio": "^4.9.11"
   }
 }
