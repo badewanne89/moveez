@@ -134,4 +134,12 @@ pipeline {
             }
     	}
     }
+    post {
+        success {
+            slackSend color: 'good', message: ":herz: | ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} (<${env.BUILD_URL}|Open>)"
+        }
+        fail {
+            slackSend color: 'warning', message: ":bumm: | ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} (<${env.BUILD_URL}|Open>)"
+        }
+    }
 }

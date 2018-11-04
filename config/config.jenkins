@@ -1,5 +1,7 @@
 #!groovy
 //configuration file for jenkinsfile
 [
-    approver: "schdief",
+
+        //TODO: use me and remove approver (obsolete)
+        approver: "schdief",
 ]
