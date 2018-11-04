@@ -41,7 +41,7 @@ pipeline {
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //install npm dependencies
-                    sh "npm ci"
+                    sh "npm install"
                 }
             }
         }
@@ -99,7 +99,7 @@ pipeline {
                     }
                     steps {
                         //install node dependencies and cypress binary
-                        sh 'npm ci'
+                        sh 'npm install'
                         //check setup
                         sh 'npm run cy:verify'
                         // start test
