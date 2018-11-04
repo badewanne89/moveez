@@ -72,7 +72,6 @@ pipeline {
         stage('UAT') {
             steps {
                 //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                //TODO: use loackable resources or somehow dynamic port to enable multiple parallel tests
                 sh "docker run -p 443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 script {
                     portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}").trim()
@@ -85,9 +84,12 @@ pipeline {
                 }
                 //run acceptance test with cypress.io
                 //sh "cypress run --record --key "
-                //kill the container
-                //TODO: if pipeline fails, it might not get killed
-                sh "docker kill ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
+            }
+            post {
+                always {
+                    //kill the container
+                    sh "docker kill ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} || true"
+                }
             }
         }
     	stage('PROD') {
@@ -98,7 +100,7 @@ pipeline {
     		steps {
                 //TODO: find a graceful way without downtime
                 //kill old prod
-                sh "docker rm ${packageJSON.name}_prod -f"
+                sh "docker rm ${packageJSON.name}_prod -f || true"
                 //deploy new prod environment via docker image from dockerhub on jenkins host
                 //TODO: use prod db locally (not mlab)
                 sh "docker run -p 443:443 --name ${packageJSON.name}_prod -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
