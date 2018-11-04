@@ -41,7 +41,7 @@ pipeline {
                     //!set Build name with unique identifier with version and build number id, e. g. "1.3.1_12"
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //notify slack about start
-                    slackSend color: 'good', message: ":rocket: | <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}>"
+                    slackSend color: 'good', message: ":rocket: <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}>"
                     //install npm dependencies
                     sh "npm install"
                 }
@@ -138,10 +138,10 @@ pipeline {
     }
     post {
         success {
-            slackSend color: 'good', message: ":heart: |  <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}>"
+            slackSend color: 'good', message: ":heart::heart::heart:  <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}>"
         }
         failure {
-            slackSend color: 'warning', message: ":boom: | <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}>"
+            slackSend color: 'danger', message: ":boom::boom::boom: <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}>"
         }
     }
 }
