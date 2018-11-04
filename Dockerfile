@@ -10,8 +10,7 @@ WORKDIR /usr/src/app
 
 # install dependencies from package.json
 COPY package*.json ./
-# TODO: only install prod deps not dev
-RUN npm install
+RUN npm install --only=prod
 
 # bundle app source
 # TODO: only use necessary stuff for image

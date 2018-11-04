@@ -76,10 +76,10 @@ pipeline {
                 sh "docker run -p 444:443 --name ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME} -e NODE_ENV='uat' -d schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(5) {
-                    httpRequest responseHandle: 'NONE', url: 'http://uat.moveez.de', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
+                    httpRequest responseHandle: 'NONE', url: 'http://95.216.189.36:444', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
                 }
                 //run acceptance test with cypress.io
-                sh "npm run uat"
+                //sh "cypress run --record --key "
                 //kill the container
                 //TODO: if pipeline fails, it might not get killed
                 sh "docker kill ${packageJSON.name}_uat_${packageJSON.version}_${env.BUILD_ID}_${shortRev}_${env.BRANCH_NAME}"
