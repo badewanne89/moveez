@@ -3,6 +3,7 @@ var express = require("express"),
     app = express(),
     morgan = require("morgan"),
     title = require("./controllers/title"),
+    landingPage = require("./controllers/landingPage"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
     methodOverride = require("method-override"),
@@ -51,7 +52,7 @@ app.use(express.static(__dirname + "/views/public"))
 
 //ROUTES
 //index
-app.get("/", (req, res) => res.json({message: "Welcome to " + process.env.RELEASE + "!"}))
+app.get("/", landingPage.landingPage);
 //title RESTful routes
 app.route("/title")
     .get(title.getTitles)
