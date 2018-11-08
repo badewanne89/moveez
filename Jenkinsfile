@@ -27,7 +27,40 @@ pipeline {
                     //load pipeline configuration
                     config = load 'config/config.jenkins'
                     //set names as variables
-                    createNames()
+                    echo "##### createNames #####"
+                    //derive app name from job name in jenkins
+                    //multibranch pipelines contain the branch name in env.JOB_NAME, we don't want that in our appName
+                    int jobNameDivider = env.JOB_NAME.indexOf("/")
+                    if (jobNameDivider > -1) {
+                        env.APP_NAME = env.JOB_NAME.take(jobNameDivider)
+                    }
+                    else {
+                        env.APP_NAME = env.JOB_NAME
+                    }
+                    //sometimes Jenkins doesn't know the commitid (null)
+                    if(env.GIT_COMMIT != null) {
+                        env.REVISION = env.GIT_COMMIT.take(7)
+                    } else {
+                        echo "WARN: couldn't get git revision from environment variable, using manual determination via git rev-parse HEAD"
+                        env.REVISION = sh script: 'git rev-parse HEAD', returnStdout: true
+                        env.REVISION = env.REVISION.take(7)
+                    }
+                    //get version number from package.json
+                    packageJSON = readJSON file: 'package.json'
+                    //build releasename
+                    env.RELEASE_NAME = "${env.APP_NAME}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
+                    //build tag
+                    env.DOCKER_IMAGE_NAME = "${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
+                    //set build display name
+                    currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
+                    //output names
+                    echo """
+                        |INFO: createNames derived the following names for your build:
+                        | APP_NAME: ${env.APP_NAME}
+                        | DOCKER_IMAGE_NAME: ${env.DOCKER_IMAGE_NAME}
+                        | RELEASE_NAME: ${env.RELEASE_NAME}
+                        | short REVISION: ${env.REVISION}
+                    """.stripMargin()
                     //notify slack about start
                     committer = sh(returnStdout: true, script: "git show -s --pretty=%an").trim()
                     slackSend color: 'good', message: ":rocket::rocket::rocket: \n <${env.BUILD_URL}|${env.RELEASE_NAME}> \n branch: `${env.BRANCH_NAME}` \n commit by: *${committer}*"
@@ -136,45 +169,4 @@ pipeline {
             deleteDir()
         }
     }
-}
-
-//creates an appname for reporting purposes
-//creates a long release name for archiving with job name, version, build number and short revision/commit id, e. g. PetClinic_1.3.1_12_e4655456j
-//sets a build name with unique identifier with version and build number id, e. g. "1.3.1_12"
-function createNames() {
-    echo "##### createNames #####"
-    //derive app name from job name in jenkins
-    //multibranch pipelines contain the branch name in env.JOB_NAME, we don't want that in our appName
-    int jobNameDivider = env.JOB_NAME.indexOf("/")
-    if (jobNameDivider > -1) {
-        env.APP_NAME = env.JOB_NAME.take(jobNameDivider)
-    }
-    else {
-        env.APP_NAME = env.JOB_NAME
-    }
-    //sometimes Jenkins doesn't know the commitid (null)
-    if(env.GIT_COMMIT != null) {
-        env.REVISION = env.GIT_COMMIT.take(7)
-    } else {
-        echo "WARN: couldn't get git revision from environment variable, using manual determination via git rev-parse HEAD"
-        env.REVISION = sh script: 'git rev-parse HEAD', returnStdout: true
-        env.REVISION = env.REVISION.take(7)
-    }
-    //get version number from package.json
-    packageJSON = readJSON file: 'package.json'
-    //build releasename
-    env.RELEASE_NAME = "${env.APP_NAME}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
-    //build tag
-    env.DOCKER_IMAGE_NAME = "${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
-    //set build display name
-    currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
-
-    //output names
-    echo """
-        |INFO: createNames derived the following names for your build:
-        | APP_NAME: ${env.APP_NAME}
-        | DOCKER_IMAGE_NAME: ${env.DOCKER_IMAGE_NAME}
-        | RELEASE_NAME: ${env.RELEASE_NAME}
-        | short REVISION: ${env.REVISION}
-    """.stripMargin()
 }
