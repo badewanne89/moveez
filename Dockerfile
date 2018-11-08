@@ -15,7 +15,6 @@ RUN npm install --only=prod
 # bundle app source
 COPY app app
 COPY config config
-COPY node_modules node_modules
 
 EXPOSE 443
 
