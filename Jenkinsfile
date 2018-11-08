@@ -67,7 +67,7 @@ pipeline {
                         //deploy environment for acceptance test via docker image from dockerhub on jenkins host
                         sh "docker run -p 443 --name ${packageJSON.name}_uat_${env.RELEASE_NAME} -e NODE_ENV='uat' -d ${env.DOCKER_IMAGE_NAME}_rc"
                         script {
-                            portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_$${env.RELEASE_NAME}").trim()
+                            portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${env.RELEASE_NAME}").trim()
                             index = portOutput.indexOf(":") + 1
                             port = portOutput.drop(index)
                         }
