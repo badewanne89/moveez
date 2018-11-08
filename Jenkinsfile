@@ -124,9 +124,11 @@ pipeline {
     		}
     		steps {
                 //TODO: find a graceful way without downtime
+                //kill old prod
+                sh "docker rm ${packageJSON.name}_prod -f || true"
                 //deploy new prod environment via docker image from dockerhub on jenkins host
                 //TODO: use prod db locally (not mlab)
-                sh "docker run --restart unless-stopped --rm -p 443:443 --name ${packageJSON.name}_prod -d --link mongodb schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
+                sh "docker run -p 443:443 --restart unless-stopped --name ${packageJSON.name}_prod -d --link mongodb schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${shortRev}_rc"
                 //flightcheck the deployment
                 retry(10) {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.de', validResponseCodes: '200', validResponseContent: "Welcome to ${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}!"
@@ -140,7 +142,7 @@ pipeline {
             slackSend color: 'good', message: ":heart::heart::heart: \n <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}> \n branch: `${env.BRANCH_NAME}`"
         }
         failure {
-            slackSend color: 'danger', message: ":boom::boom::boom: \n <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}> \n \n branch: `${env.BRANCH_NAME}`"
+            slackSend color: 'danger', message: ":boom::boom::boom: \n <${env.BUILD_URL}|${packageJSON.name}_${packageJSON.version}_${env.BUILD_ID}_${shortRev}> \n branch: `${env.BRANCH_NAME}`"
         }
     }
 }
