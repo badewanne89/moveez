@@ -87,7 +87,7 @@ pipeline {
                 script {
                     //create docker image and push it to dockerhub
                     docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-                        def dockerImage = docker.build("${env.DOCKER_IMAGE_NAME}", "--build-arg RELEASE=${releaseName} .")
+                        def dockerImage = docker.build("${env.DOCKER_IMAGE_NAME}", "--build-arg RELEASE=${env.RELEASE_NAME} .")
                         dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}_rc")
                     }
                 }
