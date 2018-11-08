@@ -104,3 +104,10 @@ The pipeline requires the following configuration in Jenkins:
 ### Credentials
 You also need to define credentials for github named "github" (ideally via Blue Ocean "add pipeline").
 Furthermore you need to define credentials for dockerhub named "dockerhub".
+
+# Database
+As already stated we are using MongoDB as our database. Our test databases are running on mlabs.com, our production database runs locally with docker.
+
+To start the production database use the following command:
+
+`sudo docker run -d --name mongodb --restart unless-stopped --host mongo -v mongodbdata:/data/db mongo --smallfiles`
