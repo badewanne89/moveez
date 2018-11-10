@@ -50,7 +50,7 @@ pipeline {
                     //build releasename
                     env.RELEASE_NAME = "${env.APP_NAME}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //build tag
-                    env.DOCKER_IMAGE_NAME = "${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
+                    env.DOCKER_IMAGE_NAME = "schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //set build display name
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //output names
