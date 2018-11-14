@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:alpine
 LABEL maintainer="schdief.law@gmail.com"
 
 # making release name available for app to display
