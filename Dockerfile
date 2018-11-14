@@ -13,8 +13,7 @@ COPY package*.json ./
 RUN npm install --only=prod
 
 # bundle app source
-COPY app app
-COPY config config
+COPY .
 
 EXPOSE 443
 

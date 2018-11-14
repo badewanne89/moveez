@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "PORT='8081' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
-    "start": "NODE_CONFIG_DIR='../config' && cd app && node app.js",
+    "start": "cd app && NODE_CONFIG_DIR='../config' node app.js",
     "dev": "cd app && PORT='8081' RELEASE='local dev build' NODE_CONFIG_DIR='../config' nodemon app.js",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
