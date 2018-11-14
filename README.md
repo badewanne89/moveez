@@ -110,4 +110,6 @@ As already stated we are using MongoDB as our database. Our test databases are r
 
 To start the production database use the following command:
 
-`sudo docker run -d --name mongodb --restart unless-stopped --host mongo -v mongodbdata:/data/db mongo --smallfiles`
+//TODO: change password
+
+`sudo docker run -e MONGO_INITDB_DATABASE=moveez_db_prod -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret --name mongodb --restart unless-stopped -d -p 27017:27017 -v mongodbdata:/data/db mongo --smallfiles`

@@ -1,9 +1,9 @@
-//https://github.com/lorenwest/node-config/wiki/Securing-Production-Config-Files
 {
     "dbProtocol": "mongodb",
     "dbPort": "27017",
     "dbName": "moveez_db_prod",
-    "dbHost": "",
-    "dbUser": "",
-    "dbPassword" : ""
+    "dbHost": "0.0.0.0",
+    //TODO: change credentials after test and hide with //https://github.com/lorenwest/node-config/wiki/Securing-Production-Config-Files
+    "dbUser": "admin",
+    "dbPassword" : "secret"
 }
