@@ -113,7 +113,7 @@ pipeline {
                 stage('CYPRESS') {
                     agent {
                         //this image provides everything needed to run Cypress
-                        docker 'cypress/browsers:chrome69'
+                        docker 'cypress/base:latest'
                     }
                     environment {
                         //we will be recording test results and video on Cypress dashboard
