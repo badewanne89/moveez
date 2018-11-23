@@ -4,6 +4,6 @@
     "dbName": "moveez_db_prod",
     "dbHost": "mongodb",
     //TODO: change credentials after test and hide with //https://github.com/lorenwest/node-config/wiki/Securing-Production-Config-Files
-    "dbUser": "admin",
+    "dbUser": "mongoadmin",
     "dbPassword" : "secret"
 }

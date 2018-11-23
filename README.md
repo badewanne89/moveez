@@ -107,6 +107,7 @@ Furthermore you need to define credentials for dockerhub named "dockerhub".
 
 # Database
 As already stated we are using MongoDB as our database. Our test databases are running on mlabs.com, our production database runs locally with docker.
+It is accessed via user-defined networking, defined with `docker network create -d bridge moveez_net`
 
 To start the production database use the following command:
 
