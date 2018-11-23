@@ -15,7 +15,7 @@ function postTitle(req, res){
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-            if(req.get('Accept') === "text/json"){
+            if(req.get('Accept') === "application/json"){
                 res.status(HttpStatus.CREATED)
                     .json({message: "Title successfully added!", title})
             } else {
@@ -39,7 +39,7 @@ function getTitles(req, res){
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-            if(req.get('Accept') === "text/json"){
+            if(req.get('Accept') === "application/json"){
                 res.json(titles)
             } else {
                 res.render("title/index", {titles: titles})
@@ -61,7 +61,7 @@ function getTitle(req, res){
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-            if(req.get('Accept') === "text/json"){
+            if(req.get('Accept') === "application/json"){
                 res.json(title)
             } else {
                 res.redirect("/title")
@@ -85,7 +85,7 @@ function updateTitle(req, res){
                     .send(err)
             } else {
                     //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-                    if(req.get('Accept') === "text/json"){
+                    if(req.get('Accept') === "application/json"){
                         res.json({message: "Title successfully updated!", updatedTitle})
                     } else {
                         if(req.body.title.seen) {
@@ -104,7 +104,7 @@ function updateTitle(req, res){
         })
     } else {
         //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-        if(req.get('Accept') === "text/json"){
+        if(req.get('Accept') === "application/json"){
             res.status(HttpStatus.BAD_REQUEST)
                 .send("You need to specify a name and it can't be empty!")
         } else {
@@ -126,7 +126,7 @@ function deleteTitle(req, res){
                 .send(err)
         } else {
             //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-            if(req.get('Accept') === "text/json"){
+            if(req.get('Accept') === "application/json"){
                 res.json({message: "Title successfully deleted!", deletedTitle})
             } else {
                 req.flash("success", "You've deleted '" + deletedTitle.name + "'' from your watchlist!")

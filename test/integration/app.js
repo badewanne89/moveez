@@ -3,9 +3,9 @@ process.env.NODE_ENV = 'test'
 var chai = require("chai"),
     chaitHttp = require("chai-http"),
     should = chai.should(),
-    app = require("../../app/app.js"),
+    app = require("../../src/app/app.js"),
     mongoose = require("mongoose"),
-    Title = require("../../app/models/title")
+    Title = require("../../src/app/models/title")
     
 chai.use(chaitHttp)
 
@@ -26,7 +26,7 @@ describe("Moveez integration tests", () => {
         it("it should show the welcome message", (done) => {
             chai.request(app)
                 .get("/")
-                .set('Accept', 'text/json')
+                .set('Accept', 'application/json')
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.should.be.json
@@ -43,7 +43,7 @@ describe("Moveez integration tests", () => {
                 }
                 chai.request(app)
                     .post('/title')
-                    .set('Accept', 'text/json')
+                    .set('Accept', 'application/json')
                     .send(body)
                     .end((err, res) => {
                         res.should.have.status(404)
@@ -63,7 +63,7 @@ describe("Moveez integration tests", () => {
                 }
                 chai.request(app)
                     .post("/title")
-                    .set('Accept', 'text/json')
+                    .set('Accept', 'application/json')
                     .send(body)
                     .end((err, res) => {
                         res.should.have.status(201)
@@ -81,7 +81,7 @@ describe("Moveez integration tests", () => {
             it("it should GET the title list sorted descending by creation date", (done) => {
                 chai.request(app)
                     .get("/title")
-                    .set('Accept', 'text/json')
+                    .set('Accept', 'application/json')
                     .end((err, res) => {
                         res.should.have.status(200)
                         res.should.be.json
@@ -102,7 +102,7 @@ describe("Moveez integration tests", () => {
                 newTitle.save((err, title) => {          
                     chai.request(app)
                         .get("/title/"+title.id)
-                        .set('Accept', 'text/json')
+                        .set('Accept', 'application/json')
                         .end((err, res) => {
                             res.should.have.status(200)
                             res.should.be.json
@@ -120,7 +120,7 @@ describe("Moveez integration tests", () => {
             it("it should not PUT an update without name", (done) => {
                 chai.request(app)
                     .get("/title")
-                    .set('Accept', 'text/json')
+                    .set('Accept', 'application/json')
                     .end((err, res) => {
                         var updateTitle = {
                             title: {
@@ -129,7 +129,7 @@ describe("Moveez integration tests", () => {
                         }
                         chai.request(app)
                             .put("/title/"+res.body[0]._id)
-                            .set('Accept', 'text/json')
+                            .set('Accept', 'application/json')
                             .send(updateTitle)
                             .end((err, res) => {
                                 res.should.have.status(400)
@@ -143,7 +143,7 @@ describe("Moveez integration tests", () => {
             it("it should PUT an update with ID and name", (done) => {
                 chai.request(app)
                     .get("/title")
-                    .set('Accept', 'text/json')
+                    .set('Accept', 'application/json')
                     .end((err, res) => {
                         var updateTitle = {
                             title: {
@@ -152,7 +152,7 @@ describe("Moveez integration tests", () => {
                         }
                         chai.request(app)
                             .put("/title/"+res.body[0]._id)
-                            .set('Accept', 'text/json')
+                            .set('Accept', 'application/json')
                             .send(updateTitle)
                             .end((err, res) => {
                                 res.should.have.status(200)
@@ -172,7 +172,7 @@ describe("Moveez integration tests", () => {
             it("it should mark a title as seen with PUT", (done) => {
                 chai.request(app)
                     .get("/title")
-                    .set('Accept', 'text/json')
+                    .set('Accept', 'application/json')
                     .end((err, res) => {
                         var date = Date.now()
                         var updateTitle = {
@@ -183,7 +183,7 @@ describe("Moveez integration tests", () => {
                         }
                         chai.request(app)
                             .put("/title/"+res.body[0]._id)
-                            .set('Accept', 'text/json')
+                            .set('Accept', 'application/json')
                             .send(updateTitle)
                             .end((err, res) => {
                                 res.should.have.status(200)
@@ -203,7 +203,7 @@ describe("Moveez integration tests", () => {
             it("it should mark a seen title as unseen with PUT", (done) => {
                             chai.request(app)
                                 .get("/title")
-                                .set('Accept', 'text/json')
+                                .set('Accept', 'application/json')
                                 .end((err, res) => {
                                     var date = Date.now()
                                     var updateTitle = {
@@ -214,7 +214,7 @@ describe("Moveez integration tests", () => {
                                     }
                                     chai.request(app)
                                         .put("/title/"+res.body[0]._id)
-                                        .set('Accept', 'text/json')
+                                        .set('Accept', 'application/json')
                                         .send(updateTitle)
                                         .end((err, res) => {
                                             res.should.have.status(200)
@@ -235,11 +235,11 @@ describe("Moveez integration tests", () => {
             it("it should DELETE an title with ID", (done) => {
                 chai.request(app)
                     .get("/title")
-                    .set("Accept", "text/json")
+                    .set("Accept", "application/json")
                     .end((err, res) => {
                         chai.request(app)
                             .delete("/title/"+res.body[0]._id)
-                            .set("Accept", "text/json")
+                            .set("Accept", "application/json")
                             .end((err, res) => {
                                 res.should.have.status(200)
                                 res.should.be.json
