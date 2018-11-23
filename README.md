@@ -111,6 +111,15 @@ It is accessed via user-defined networking, defined with `docker network create 
 
 To start the production database use the following command:
 
-//TODO: change password
+//TODO: change passwords!!!
+```
+sudo docker run -e MONGO_INITDB_DATABASE=moveez_db_prod -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret --network=moveez_net --name mongodb --restart unless-stopped -d -p 27017:27017 -v mongodbdata:/data/db mongo --smallfiles
+```
 
-`sudo docker run -e MONGO_INITDB_DATABASE=moveez_db_prod -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret --network=moveez_net --name mongodb --restart unless-stopped -d -p 27017:27017 -v mongodbdata:/data/db mongo --smallfiles`
+Initially create the database and the user for the application to access it with:
+```
+mongo --host mongodb://mongoadmin:secret@localhost:27017
+use moveez_db_prod
+db.createUser({ user: "moveez", pwd: "secret", roles: [{ role: "readWrite", db: "moveez_db_prod" }]})
+exit
+```
