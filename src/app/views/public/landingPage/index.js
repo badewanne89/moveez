@@ -1,9 +1,16 @@
-alert("jo");
-
 import React from "react";
 import ReactDOM from "react-dom";
 
+import sBackgroundImageUrl from "./welcome_background.png";
+
+
+const Background = ()=>{
+    return (
+        <div style={{width: "100%", height:"500px", backgroundImage:`url(${sBackgroundImageUrl})`, backgroundSize:"cover"}}/>
+    );
+}
+
 ReactDOM.render(
-    <h1>Hello, world!</h1>,
+    <Background/>,
     document.getElementById('reactRoot')
 )

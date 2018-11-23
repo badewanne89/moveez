@@ -14,7 +14,6 @@
     "cy:verify": "cypress verify",
     "uat": "cypress run"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/schdief/moveez.git"
@@ -55,6 +54,7 @@
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
     "cypress": "^3.1.0",
+    "file-loader": "^2.0.0",
     "mocha": "^2.4.5",
     "nodemon": "^1.18.4",
     "nyc": "^11.4.1",
