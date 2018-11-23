@@ -26,6 +26,7 @@ describe("Moveez integration tests", () => {
         it("it should show the welcome message", (done) => {
             chai.request(app)
                 .get("/")
+                .set('Accept', 'text/json')
                 .end((err, res) => {
                     res.should.have.status(200)
                     res.should.be.json
