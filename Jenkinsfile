@@ -109,7 +109,7 @@ pipeline {
                         }
                         //flightcheck the deployment
                         retry(10) {
-                            httpRequest responseHandle: 'NONE', url: "http://95.216.189.36:${port}", validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
+                            httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: "http://95.216.189.36:${port}", validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
                         }
                     }
                 }
@@ -157,7 +157,7 @@ pipeline {
                 //TODO: add more tests
                 //flightcheck the deployment
                 retry(10) {
-                    httpRequest responseHandle: 'NONE', url: 'http://moveez.de:443', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
+                    httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: 'http://moveez.de:443', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
                 }
                 //TODO: tag docker image as latest
             }
