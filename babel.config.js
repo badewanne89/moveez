@@ -18,4 +18,4 @@ const plugins = [
   // ["@babel/plugin-transform-modules-systemjs"]
 ]
   
-  module.exports = { presets, plugins };
+module.exports = { presets, plugins };

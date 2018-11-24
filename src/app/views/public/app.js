@@ -46,11 +46,11 @@ $('.search input')
     searchFullText: false,
     stateContext: '.ui.input',
     onSuccess: function(response) {
-         if(response.Search.length > 0) {
+         if(response.Response === "True") {
              $('.results').html("")
-             for(i = 0; response.Search.length > i; i++) {
+             for (let suggestion of response.Search) {
                 //TODO: get year in a second line and make title bold
-                $('.results').append("<div class=\"suggestion item\"><button onclick=\"addTitle('" + response.Search[i].Title + "', '" + response.Search[i].imdbID + "', '" + response.Search[i].Year + "', '" + response.Search[i].Poster + "')\" class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + response.Search[i].Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + response.Search[i].Title + " (" + response.Search[i].Year +  ")</span></div>")
+                $('.results').append("<div class=\"suggestion item\"><button onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\" class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + suggestion.Title + " (" + suggestion.Year +  ")</span></div>")
              }
              $('.results').show()
          }
@@ -68,9 +68,7 @@ function addTitle(name, imdbID, year, poster) {
     var ratingRequest = new XMLHttpRequest();
     ratingRequest.onreadystatechange = function() {
         if (ratingRequest.readyState == 4 && ratingRequest.status == 200) {
-            imdbRating = JSON.parse(ratingRequest.responseText).imdbRating
-
-            form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[imdbRating]" value="' + imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '"><input name="title[poster]" value="' + poster + '">'
+            form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[imdbRating]" value="' + JSON.parse(ratingRequest.responseText).imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '"><input name="title[poster]" value="' + poster + '">'
 
             //the form must be in the document to submit it, but should be invisible
             form.hidden = true

@@ -66,9 +66,11 @@ app.route("/title/:id")
 //PORT is defined by environment variable or 443
 const PORT = process.env.PORT || 443
 const HOST = '0.0.0.0'
+const MODE = process.env.NODE_ENV || "default"
+const RELEASE = process.env.RELEASE || "snapshot"
 app.listen(PORT, HOST, () => {
-    console.log(process.env.RELEASE + " started on " + HOST + ":" + PORT)
-    console.log("mode: " + process.env.NODE_ENV)
+    console.log(RELEASE + " started on " + HOST + ":" + PORT)
+    console.log("mode: " + MODE)
     console.log("db: " + dbConnectionString)
 })
 
