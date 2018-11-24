@@ -72,6 +72,7 @@ RUN /usr/local/bin/install-plugins.sh docker-slaves github:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves git:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves timestamper:latest
 RUN /usr/local/bin/install-plugins.sh docker-slaves credentials-binding:latest
+RUN /usr/local/bin/install-plugins.sh docker-slaves greenballs:latest
 RUN groupadd -g 994 docker-host
 RUN usermod -a -G docker-host jenkins
 USER jenkins
@@ -109,14 +110,12 @@ Furthermore you need to define credentials for dockerhub named "dockerhub".
 As already stated we are using MongoDB as our database. Our test databases are running on mlabs.com, our production database runs locally with docker.
 It is accessed via user-defined networking, defined with `docker network create -d bridge moveez_net`
 
-To start the production database use the following command:
-
-//TODO: change passwords!!!
+To start the production database use the following command and use different credentials:
 ```
 sudo docker run -e MONGO_INITDB_DATABASE=moveez_db_prod -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret --network=moveez_net --name mongodb --restart unless-stopped -d -p 27017:27017 -v mongodbdata:/data/db mongo --smallfiles
 ```
 
-Initially create the database and the user for the application to access it with:
+Initially create the database and the user for the application to access it with, but use different credentials:
 ```
 mongo --host mongodb://mongoadmin:secret@localhost:27017
 use moveez_db_prod

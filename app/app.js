@@ -19,7 +19,9 @@ if(process.env.NODE_ENV !== "test"){
 }
 
 //DATABASE
-var dbConnectionString = config.dbProtocol + "://" + config.dbUser + ":" + config.dbPassword + "@" + config.dbHost + ":" + config.dbPort + "/" + config.dbName
+const dbUser = process.env.DB_USER || config.dbUser
+const dbPass = process.env.DB_PASS || config.dbPassword
+var dbConnectionString = config.dbProtocol + "://" + dbUser + ":" + dbPassword + "@" + config.dbHost + ":" + config.dbPort + "/" + config.dbName
 mongoose.connect(dbConnectionString, config.dbConnectionOptions)
 var db = mongoose.connection
 db.on("error", console.error.bind(console, "connection error:"))

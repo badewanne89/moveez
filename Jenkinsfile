@@ -147,9 +147,10 @@ pipeline {
                 //TODO: find a graceful way without downtime
                 //kill old prod
                 sh "docker rm ${packageJSON.name}_prod -f || true"
-                //deploy new prod environment via docker image from dockerhub on jenkins host
-                //TODO: use prod db locally (not mlab) --link mongodb
-                sh "docker run -p 443:443 --restart unless-stopped --network=moveez_net --link mongodb --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                //deploy new prod environment via docker image from dockerhub on jenkins host, using credentials from Jenkins secret store
+                withCredentials([usernamePassword(credentialsId: 'moveez_db_prod', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]){
+                    sh "docker run -p 443:443 --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                }
                 //flightcheck the deployment
                 retry(10) {
                     httpRequest responseHandle: 'NONE', url: 'http://moveez.de:443', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
