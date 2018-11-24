@@ -103,8 +103,10 @@ The pipeline requires the following configuration in Jenkins:
 	+ add a deployment slot "test" for testing
 
 ### Credentials
-You also need to define credentials for github named "github" (ideally via Blue Ocean "add pipeline").
-Furthermore you need to define credentials for dockerhub named "dockerhub".
+You need to define some credentials for the pipeline to work:
+- For github named `github` (ideally via Blue Ocean "add pipeline").
+- Furthermore you need to define credentials for dockerhub named `dockerhub`.
+- For the production database access named `moveez_db_prod`.
 
 # Database
 As already stated we are using MongoDB as our database. Our test databases are running on mlabs.com, our production database runs locally with docker.
