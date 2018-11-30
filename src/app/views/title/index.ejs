@@ -3,49 +3,78 @@
 <div class="ui main text container" id="container">
     <div class="ui top attached">
 
-        <div class="ui search focus">
+        <div class="ui horizontal segments grid">
+          <div class="ui segment ten wide column">
+            <div class="ui search focus">
             <div class="ui icon input">
                 <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off" onblur="hideSuggestions()">
                 <i class="search icon"></i>
             </div>
             <div class="results" id="results"></div>
-        </div>
-
-        <div class="ui list">
-        <% if(titles.length == 0) { %>
-            <div class="item title">
-                <br>
-                Seems like you haven't added any titles to your watchlist yet.
-                <br>
-                Start by typing in the search field above.
-                <br>
-                .
             </div>
-        <% } %>
 
-        <% titles.forEach(function(title){ %>          
-            <div class="item title">
-                <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
-                <div class="content">
-                    <span id="titleName" class=" <% if(title.seen) { %> seen  <% } else { %> unseen <% } %> "><%= title.name %></span>
-                    <div class="description">
-                        (<%= title.year %>)
-                    </div>
-                    <div class="description">
-                        <img id="imdb" class="ui image" height="24" width="24" src="https://unpkg.com/simple-icons@latest/icons/imdb.svg">
-                        <%= title.imdbRating %>
-                    </div>
-                    <div class="description buttons">
-                        <% if(title.seen) { %>
-                            <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="eye slash icon"></i></button>
-                        <% } else { %>
-                            <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
-                        <% } %>
-                        <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
-                    </div>
+            <div class="ui list">
+            <% if(titles.filter(title=>!title.seen).length == 0) { %>
+                <div class="item title">
+                    <h1>😭</h1> Seems like you haven't added any titles to your watchlist yet or your list is empty.
+                    <br>
+                    Start by typing in the search field above.
                 </div>
+            <% } %>
+
+            <% titles.forEach(function(title){ %>
+                <% if(!title.seen) { %>
+                    <div class="item title">
+                        <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
+                        <div class="content">
+                            <%= title.name %>
+                            <div class="description">
+                                (<%= title.year %>)
+                            </div>
+                            <div class="description">
+                                <i class="imdb icon"></i>
+                                <%= title.imdbRating %>
+                            </div>
+                            <div class="description buttons">
+                                <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
+                                <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% }); %>
             </div>
-        <% }); %>           
+          </div>
+
+          <div class="ui segment history six wide column">
+            <h3><i class="tv icon"></i> Your Binge History</h3>
+
+            <div class="ui list">
+                <% if(titles.filter(title=>title.seen).length == 0) { %>
+                    <div class="item watchedtitle">
+                        <h1>😭</h1> Looks like you haven't recorded any binge session yet, shame on you!
+                        <br>
+                        Record a binge by clicking the checkmark button "watched".
+                    </div>
+                <% } %>
+
+                <% titles.forEach(function(title){ %>
+                    <% if(title.seen) { %>
+                        <div class="item">
+                            <img class="ui image" src="<%= title.poster %>" height="75px" width="50px">
+                            <div class="content">
+                                <%= title.name %>
+                                <div class="description buttons">
+                                    <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="eye slash icon"></i></button>
+                                    <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                <% }); %>
+                </div>
+
+          </div>
         </div>
 
         <div class="ui modal" id="deleteModal">

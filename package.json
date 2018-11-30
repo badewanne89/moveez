@@ -8,7 +8,7 @@
     "webpack": "webpack --config webpack.config.js",
     "test": "PORT='8081' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
     "start": "cd app && NODE_CONFIG_DIR='../config' node app.js",
-    "watch": "nodemon --watch ./src --exec npm run dev",
+    "watch": "nodemon -e js,ejs,css --watch ./src --exec npm run dev",
     "dev": "npm run babel && npm run webpack && cd ./dist/app && PORT='8081' NODE_CONFIG_DIR='../../config' node ./app.js",
     "cy:open": "cypress open",
     "cy:verify": "cypress verify",
