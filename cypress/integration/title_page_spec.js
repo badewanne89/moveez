@@ -1,4 +1,7 @@
-//TODO: clear all data before starting tests
+//reset database
+before(function () {
+  cy.resetDb()
+})
 
 describe('The Title Page', function() {
   it('successfully loads', function() {
@@ -34,13 +37,12 @@ describe('Marking a Title as seen', function() {
   it('can be done by clicking the checkmark symbol', function() {
       cy.get('#toggleSeenStatusButton').click()
   })
-  it('shows that the title is watched with a strike-through', function(){
-      cy.get('.content').should('contain', 'Inception')
-      cy.get('#titleName').should('have.class', 'seen')
+  it('shows the title in the binge history', function(){
+      cy.get('div.history.content.name').should('contain', 'Inception')
   })
-  it('can be undone by clicking the eye symbol', function(){
+  it('can be put back to the list by clicking the reload symbol', function(){
       cy.get('#toggleSeenStatusButton').click()
-      cy.get('#titleName').should('have.class', 'unseen')
+      cy.get('h4').should('contain', 'Inception')
   })
 })
 

@@ -41,6 +41,7 @@
 .suggestionContent {
     vertical-align: top;
     margin: 0px 0px 0px 10px;
+    display: inline-block;
 }
 
 #add {
@@ -53,7 +54,11 @@
 }
 
 .description {
-    margin: 4px 0px 0px 0px;
+    margin-top: 4px;
+}
+
+h4 {
+    margin-bottom: 0px;
 }
 
 #imdb {

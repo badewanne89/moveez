@@ -27,10 +27,8 @@
                     <div class="item title">
                         <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
                         <div class="content titleDetails">
-                            <%= title.name %>
-                            <div class="description">
-                                (<%= title.year %>)
-                            </div>
+                            <h4><%= title.name %></h4>
+                            (<%= title.year %>)
                             <div class="description">
                                 <i class="imdb icon"></i>
                                 <%= title.imdbRating %>
@@ -47,7 +45,7 @@
           </div>
 
           <div class="ui segment history six wide column">
-            <h3><i class="tv icon"></i> Your Binge History</h3>
+            <h3><i class="tv icon"></i> Binge History</h3>
 
             <div class="ui list">
                 <% if(titles.filter(title=>title.seen).length == 0) { %>
@@ -74,8 +72,13 @@
                         <% previousDate = title.seenOn %>
                         <div class="item">
                             <img class="ui image seenPoster" src="<%= title.poster %>" height="50px" width="30px">
-                            <div class="content">
-                                <%= title.name %>
+                            <div class="history content name">
+                                <% if(title.name.length > 27) { %>
+                                    <% name = title.name.substring(0, 27) + "..." %>
+                                <% } else { %>
+                                    <% name = title.name %>
+                                <% } %>
+                                <%= name %>
                                 <div class="description">
                                     <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="redo icon"></i></button>
                                     <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
@@ -92,7 +95,7 @@
         <div class="ui modal" id="deleteModal">
             <i class="close icon" id="abortDeleteIcon"></i>
             <div class="header">
-                Do you really want to <b>delete</b> "<span id="deleteModalName"></span>"?
+                Do you really want to <b>remove</b> "<span id="deleteModalName"></span>"?
             </div>
             <div class="actions">
                 <div class="ui black deny right labeled icon button" id="abortDeleteButton">
@@ -100,7 +103,7 @@
                     <i class="close icon"></i>
                 </div>
                 <form id="deleteModalForm" class="ui form inline" method="POST" action="/title">
-                    <input type="submit" value="Delete" form="deleteModalForm" class="ui red button" id="deleteModalButton"></button>
+                    <input type="submit" value="Remove" form="deleteModalForm" class="ui red button" id="deleteModalButton"></button>
                 </form>
             </div>
         </div>

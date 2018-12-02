@@ -49,8 +49,7 @@ $('.search input')
          if(response.Response === "True") {
              $('.results').html("")
              for (let suggestion of response.Search) {
-                //TODO: get year in a second line and make title bold
-                $('.results').append("<div class=\"suggestion item\"><button onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\" class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><span class=\"suggestionContent\">" + suggestion.Title + " (" + suggestion.Year +  ")</span></div>")
+                $('.results').append("<div class=\"suggestion item\" onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + suggestion.Title + "</h4>(" + suggestion.Year +  ")</div></div>")
              }
              $('.results').show()
          }
