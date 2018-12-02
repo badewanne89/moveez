@@ -26,7 +26,7 @@
                 <% if(!title.seen) { %>
                     <div class="item title">
                         <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
-                        <div class="content">
+                        <div class="content titleDetails">
                             <%= title.name %>
                             <div class="description">
                                 (<%= title.year %>)
@@ -35,9 +35,9 @@
                                 <i class="imdb icon"></i>
                                 <%= title.imdbRating %>
                             </div>
-                            <div class="description buttons">
+                            <div class="description titleButtons">
                                 <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
-                                <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                                <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -58,15 +58,27 @@
                     </div>
                 <% } %>
 
+                <% titles.sort(function(a, b) { %>
+                <%    a = new Date(a.seenOn); %>
+                <%    b = new Date(b.seenOn); %>
+                <%    return a>b ? -1 : a<b ? 1 : 0; %>
+                <% }); %>
+
+                <% previousDate = null %>
+
                 <% titles.forEach(function(title){ %>
                     <% if(title.seen) { %>
+                        <% if(!previousDate || (previousDate.toISOString().substring(0, 10) !== new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10))) { %>
+                            <h4> <%= new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10) %> </h4>
+                        <% } %>
+                        <% previousDate = title.seenOn %>
                         <div class="item">
-                            <img class="ui image" src="<%= title.poster %>" height="75px" width="50px">
+                            <img class="ui image seenPoster" src="<%= title.poster %>" height="50px" width="30px">
                             <div class="content">
                                 <%= title.name %>
-                                <div class="description buttons">
-                                    <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="eye slash icon"></i></button>
-                                    <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Delete '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                                <div class="description">
+                                    <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="redo icon"></i></button>
+                                    <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                                 </div>
                             </div>
                         </div>
