@@ -123,6 +123,7 @@ pipeline {
                         //to record we need to set an environment variable for the credentials
                         CYPRESS_RECORD_KEY = credentials('cypress')
                         CYPRESS_baseUrl = "http://95.216.189.36:${port}"
+                        CYPRESS_API_KEY= credentials('uat_db_api_key')
                     }
                     steps {
                         //install node dependencies and cypress binary
