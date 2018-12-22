@@ -2,7 +2,15 @@
 before(function () {
   cy.log("reset db")
   //clear all data before starting tests
-  cy.request('PUT', 'https://api.mlab.com/api/1/databases/title_uat/collections/titles?apiKey=' + Cypress.env('API_KEY'), '{}')
+  //cy.request('PUT', 'https://api.mlab.com/api/1/databases/title_uat/collections/titles?apiKey=' + Cypress.env('API_KEY'), {})
+  cy.request({
+    method: 'PUT',
+    url: 'https://api.mlab.com/api/1/databases/title_uat/collections/titles?apiKey=' + Cypress.env('API_KEY'),
+    body: {},
+    headers: {
+        'content-type': 'application/json'
+    }
+  })
 })
 
 describe('The Title Page', function() {
