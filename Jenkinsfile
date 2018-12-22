@@ -133,7 +133,7 @@ pipeline {
                     }
                     post {
                         failure {
-                            archiveArtifacts '/cypress/videos/title_page_spec.js.mp4'
+                            archiveArtifacts 'cypress/videos/title_page_spec.js.mp4'
                         }
                     }
                 }
