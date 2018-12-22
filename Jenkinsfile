@@ -24,8 +24,6 @@ pipeline {
         stage('INIT') {
             steps {
                 script {
-                    //load pipeline configuration
-                    config = load 'config/config.jenkins'
                     //set names as variables
                     echo "##### createNames #####"
                     //derive app name from job name in jenkins
@@ -132,6 +130,11 @@ pipeline {
                         sh 'npm run cy:verify'
                         // start test
                         sh "npm run uat"
+                    }
+                    post {
+                        failure {
+                            archiveArtifacts '/cypress/videos/title_page_spec.js.mp4'
+                        }
                     }
                 }
             }
