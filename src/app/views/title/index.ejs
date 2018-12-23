@@ -16,9 +16,9 @@
             <div class="ui list">
             <% if(titles.filter(title=>!title.seen).length == 0) { %>
                 <div class="item title">
-                    <h1>😭</h1> Seems like you haven't added any titles to your watchlist yet or your list is empty.
+                    <h1>😭</h1> Seems like you haven't added any titles to your watchlist yet or you've run out of binge material.
                     <br>
-                    Start by typing in the search field above.
+                    Look for your next binge by typing in the search field above.
                 </div>
             <% } %>
 
@@ -59,7 +59,7 @@
                 <% titles.sort(function(a, b) { %>
                 <%    a = new Date(a.seenOn); %>
                 <%    b = new Date(b.seenOn); %>
-                <%    return a>b ? -1 : a<b ? 1 : 0; %>
+                <%    return b - a; %>
                 <% }); %>
 
                 <% previousDate = null %>
