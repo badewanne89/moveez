@@ -41,6 +41,7 @@
 .suggestionContent {
     vertical-align: top;
     margin: 0px 0px 0px 10px;
+    display: inline-block;
 }
 
 #add {
@@ -53,7 +54,11 @@
 }
 
 .description {
-    margin: 4px 0px 0px 0px;
+    margin-top: 4px;
+}
+
+h4 {
+    margin-bottom: 0px;
 }
 
 #imdb {
@@ -69,10 +74,27 @@
     margin-right: 5px;
 }
 
-.title:nth-of-type(odd) {
+.title:nth-of-type(even) {
     background: #f7f7f7;
 }
 
-.buttons {
-    margin-top: 45px;
+.titleDetails {
+    height: 150px;
+}
+
+.history {
+    background: #f7f7f7!important;
+}
+
+i.imdb.icon {
+    font-size: 1.5em;
+}
+
+.titleButtons {
+    margin-top: 61px;
+}
+
+.seenPoster {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
 }
