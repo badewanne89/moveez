@@ -49,6 +49,8 @@ pipeline {
                     env.RELEASE_NAME = "${env.APP_NAME}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //build tag
                     env.DOCKER_IMAGE_NAME = "schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
+                    //version
+                    env.VERSION = "${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //set build display name
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //output names
@@ -58,6 +60,7 @@ pipeline {
                         | DOCKER_IMAGE_NAME: ${env.DOCKER_IMAGE_NAME}
                         | RELEASE_NAME: ${env.RELEASE_NAME}
                         | short REVISION: ${env.REVISION}
+                        | VERSION: ${env.VERSION}
                     """.stripMargin()
                     //notify slack about start
                     committer = sh(returnStdout: true, script: "git show -s --pretty=%an").trim()
@@ -100,7 +103,7 @@ pipeline {
                 stage('DEPLOY') {
                     steps {
                         //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                        sh "docker run -p 443 --log-driver=gelf --log-opt gelf-address=udp://0.0.0.0:12201 --log-opt tag=uat,${env.RELEASE_NAME} --name ${packageJSON.name}_uat_${env.RELEASE_NAME} -e NODE_ENV='uat' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                        sh "docker run -p 443 --log-driver=gelf --log-opt gelf-address=udp://0.0.0.0:12201 --log-opt tag=moveez --log-opt env=NODE_ENV --log-opt labels=version --label version=${env.VERSION} --name ${packageJSON.name}_uat_${env.RELEASE_NAME} -e NODE_ENV='uat' -d ${env.DOCKER_IMAGE_NAME}_rc"
                         script {
                             portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${env.RELEASE_NAME}").trim()
                             index = portOutput.indexOf(":") + 1
