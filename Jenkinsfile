@@ -71,6 +71,7 @@ pipeline {
             steps {
                 script{
                     //!- unit/integration test
+                    //TODO: need to change port of moveez, otherwise it will conflict with parallel integration tests
                     sh "npm test"
 		            //sonarqube scan
 		            def scannerHome = tool 'sonarqube'

@@ -191,15 +191,20 @@ services:
   # MongoDB: https://hub.docker.com/_/mongo/
   mongodb:
     image: mongo:3
-  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/5.6/docker.html
+  # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docker.html
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.12
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.1
     environment:
       - http.host=0.0.0.0
       - transport.host=localhost
       - network.host=0.0.0.0
-      # Disable X-Pack security: https://www.elastic.co/guide/en/elasticsearch/reference/5.6/security-settings.html#general-security-settings
+      # Disable X-Pack security: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/security-settings.html#general-security-settings
       - xpack.security.enabled=false
+      - xpack.watcher.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.security.audit.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.graph.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -208,13 +213,13 @@ services:
     mem_limit: 1g
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
-    image: graylog/graylog:3.0
+    image: graylog/graylog:2.5
     environment:
       # CHANGE ME!
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
-      # Password: admin
-      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_WEB_ENDPOINT_URI=http://0.0.0.0:9000/api
+      # Password: SECRET
+      - GRAYLOG_ROOT_PASSWORD_SHA2=SECRET
+      - GRAYLOG_WEB_ENDPOINT_URI=http://moveez.de:9000/api
     links:
       - mongodb:mongo
       - elasticsearch
