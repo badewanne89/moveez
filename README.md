@@ -255,6 +255,11 @@ services:
 ```
 
 # Run
+## Monitoring
+To monitor our services we are using uptime robot that can be visited here:
+https://uptimerobot.com/dashboard#mainDashboard
+
+## Local
 Most things are controlled via docker. To get an overview of the health of the services just run `docker ps`.
 
 | Service | Restart | Logs |
