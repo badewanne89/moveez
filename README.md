@@ -259,8 +259,8 @@ Most things are controlled via docker. To get an overview of the health of the s
 
 | Service | Restart | Logs |
 | ------- | ------- | ---- |
-| app     |`docker restart moveez_prod` | `docker logs moveez_prod` |
-| db      |`docker restart mongodb` | `docker logs mongodb` |
+| moveez  |`docker restart moveez_prod` | `docker logs moveez_prod` |
+| mongo   |`docker restart mongodb` | `docker logs mongodb` |
 | backup  | - | `cat /var/log/moveez_db_backup.log` |
 | graylog | `docker-compose restart` | `docker-compose logs` |
 | jenkins | `docker restart jenkins` | `docker logs jenkins` |
