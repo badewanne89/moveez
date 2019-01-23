@@ -151,19 +151,64 @@ pipeline {
     			branch 'master'
     		}
     		steps {
-                //TODO: change to blue/green
-                //kill old prod
-                sh "docker rm ${packageJSON.name}_prod -f || true"
-                //deploy new prod environment via docker image from dockerhub on jenkins host, using credentials from Jenkins secret store
-                withCredentials([usernamePassword(credentialsId: 'moveez_db_prod', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]){
-                    sh "docker run -p 443:443 --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                script {
+                    // Create new Deployment using the GitHub Deployment API
+                    def environment = "production"
+                    def ref = env.GIT_COMMIT
+                    def owner = "schdief"
+                    def repo = "moveez"
+                    def deployURL = "https://api.github.com/repos/${owner}/${repo}/deployments"
+                    def deployBody = '{"ref": "' + ref + '","environment": "' + environment + '","description": "' + env.RELEASE_NAME + '"}'
+
+                    // send request
+                    def response = httpRequest authentication: 'github', httpMode: 'POST', requestBody: deployBody, responseHandle: 'STRING', url: deployURL
+                    if (response.status != 201) {
+                        error("Deployment API Create Failed: " + response.status)
+                    }
+
+                    // Get the ID of the GitHub Deployment just created
+                    def responseJson = readJSON text: response.content
+                    def id = responseJson.id
+                    if (id == "") {
+                        error("Could not extract id from Deployment response")
+                    }
+
+                    //TODO: change to blue/green
+                    //kill old prod
+                    sh "docker rm ${packageJSON.name}_prod -f || true"
+                    //deploy new prod environment via docker image from dockerhub on jenkins host, using credentials from Jenkins secret store
+                    withCredentials([usernamePassword(credentialsId: 'moveez_db_prod', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]) {
+                        sh "docker run -p 443:443 --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                    }
+                    //TODO: add more tests
+                    //flightcheck the deployment
+                    retry(10) {
+                        httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: 'http://moveez.de:443', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
+                    }
+                    //TODO: tag docker image as latest
                 }
-                //TODO: add more tests
-                //flightcheck the deployment
-                retry(10) {
-                    httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: 'http://moveez.de:443', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
+            }
+            post {
+                failure {
+                    // Record new Deployment Status based on output
+                    def result = "failure"
+                    def deployStatusBody = '{"state": "' + result + '","target_url": "http://github.com/deploymentlogs"}'
+                    def deployStatusURL = "https://api.github.com/repos/${owner}/${repo}/deployments/${id}/statuses"
+                    def deployStatusResponse = httpRequest authentication: 'github', httpMode: 'POST', requestBody: deployStatusBody , responseHandle: 'STRING', url: deployStatusURL
+                    if(deployStatusResponse.status != 201) {
+                        error("Deployment Status API Update Failed: " + deployStatusResponse.status)
+                    }
                 }
-                //TODO: tag docker image as latest
+                success {
+                    // Record new Deployment Status based on output
+                    def result = "success"
+                    def deployStatusBody = '{"state": "' + result + '","target_url": "http://github.com/deploymentlogs"}'
+                    def deployStatusURL = "https://api.github.com/repos/${owner}/${repo}/deployments/${id}/statuses"
+                    def deployStatusResponse = httpRequest authentication: 'github', httpMode: 'POST', requestBody: deployStatusBody , responseHandle: 'STRING', url: deployStatusURL
+                    if(deployStatusResponse.status != 201) {
+                        error("Deployment Status API Update Failed: " + deployStatusResponse.status)
+                    }
+                }
             }
     	}
     }
