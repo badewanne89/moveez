@@ -156,7 +156,7 @@ pipeline {
                 sh "docker rm ${packageJSON.name}_prod -f || true"
                 //deploy new prod environment via docker image from dockerhub on jenkins host, using credentials from Jenkins secret store
                 withCredentials([usernamePassword(credentialsId: 'moveez_db_prod', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]){
-                    sh "docker run -p 443:443 --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                    sh "docker run -p 444:443 --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
                 }
                 //TODO: add more tests
                 //flightcheck the deployment
