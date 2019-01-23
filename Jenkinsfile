@@ -160,12 +160,12 @@ pipeline {
                 sh "docker rm ${packageJSON.name}_prod -f || true"
                 //deploy new prod environment via docker image from dockerhub on jenkins host, using credentials from Jenkins secret store
                 withCredentials([usernamePassword(credentialsId: 'moveez_db_prod', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]){
-                    sh "docker run -p 443:443 --log-driver=gelf --log-opt gelf-address=udp://0.0.0.0:12201 --log-opt tag=moveez --log-opt env=NODE_ENV --log-opt labels=version,branch --label version=${env.VERSION} --label branch=${env.GIT_BRANCH} --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                    sh "docker run -p 444:443 --log-driver=gelf --log-opt gelf-address=udp://0.0.0.0:12201 --log-opt tag=moveez --log-opt env=NODE_ENV --log-opt labels=version,branch --label version=${env.VERSION} --label branch=${env.GIT_BRANCH} --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
                 }
                 //TODO: add more tests
                 //flightcheck the deployment
                 retry(10) {
-                    httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: 'http://moveez.de:443', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
+                    httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: 'http://moveez.de:444', validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
                 }
                 //TODO: tag docker image as latest
             }
