@@ -49,6 +49,8 @@ pipeline {
                     env.RELEASE_NAME = "${env.APP_NAME}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //build tag
                     env.DOCKER_IMAGE_NAME = "schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
+                    //version
+                    env.VERSION = "${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //set build display name
                     currentBuild.displayName = "${packageJSON.version}_${env.BUILD_NUMBER}"
                     //output names
@@ -58,6 +60,7 @@ pipeline {
                         | DOCKER_IMAGE_NAME: ${env.DOCKER_IMAGE_NAME}
                         | RELEASE_NAME: ${env.RELEASE_NAME}
                         | short REVISION: ${env.REVISION}
+                        | VERSION: ${env.VERSION}
                     """.stripMargin()
                     //notify slack about start
                     committer = sh(returnStdout: true, script: "git show -s --pretty=%an").trim()
@@ -71,6 +74,7 @@ pipeline {
             steps {
                 script{
                     //!- unit/integration test
+                    //TODO: need to change port of moveez, otherwise it will conflict with parallel integration tests
                     sh "npm test"
 		            //sonarqube scan
 		            def scannerHome = tool 'sonarqube'
@@ -99,7 +103,7 @@ pipeline {
                 stage('DEPLOY') {
                     steps {
                         //deploy environment for acceptance test via docker image from dockerhub on jenkins host
-                        sh "docker run -p 443 --name ${packageJSON.name}_uat_${env.RELEASE_NAME} -e NODE_ENV='uat' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                        sh "docker run -p 443 --log-driver=gelf --log-opt gelf-address=udp://0.0.0.0:12201 --log-opt tag=moveez --log-opt env=NODE_ENV --log-opt labels=version,branch --label version=${env.VERSION} --label branch=${env.GIT_BRANCH} --name ${packageJSON.name}_uat_${env.RELEASE_NAME} -e NODE_ENV='uat' -d ${env.DOCKER_IMAGE_NAME}_rc"
                         script {
                             portOutput = sh(returnStdout: true, script: "docker port ${packageJSON.name}_uat_${env.RELEASE_NAME}").trim()
                             index = portOutput.indexOf(":") + 1
@@ -156,7 +160,7 @@ pipeline {
                 sh "docker rm ${packageJSON.name}_prod -f || true"
                 //deploy new prod environment via docker image from dockerhub on jenkins host, using credentials from Jenkins secret store
                 withCredentials([usernamePassword(credentialsId: 'moveez_db_prod', usernameVariable: 'DB_USER', passwordVariable: 'DB_PASS')]){
-                    sh "docker run -p 444:443 --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
+                    sh "docker run -p 444:443 --log-driver=gelf --log-opt gelf-address=udp://0.0.0.0:12201 --log-opt tag=moveez --log-opt env=NODE_ENV --log-opt labels=version,branch --label version=${env.VERSION} --label branch=${env.GIT_BRANCH} --restart unless-stopped --network=moveez_net --link mongodb -e DB_USER=${DB_USER} -e DB_PASS=${DB_PASS} --name ${packageJSON.name}_prod -e NODE_ENV='prod' -d ${env.DOCKER_IMAGE_NAME}_rc"
                 }
                 //TODO: add more tests
                 //flightcheck the deployment
