@@ -1,4 +1,6 @@
 # About
+[![Build Status](https://dev.azure.com/Schdieflaw0018/moveez/_apis/build/status/moveez?branchName=master)](https://dev.azure.com/Schdieflaw0018/moveez/_build/latest?definitionId=2&branchName=master)
+
 `Moveez` is a service to keep track of the movies you would like to watch in future. It shows you the ratings from sites like iMDB.com and Rottentomatoes.com.
 
 [Visit us](https://moveez.de)
