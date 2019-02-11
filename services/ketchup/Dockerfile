@@ -1,4 +1,4 @@
-FROM node
+FROM node:alpine
 LABEL maintainer="schdief.law@gmail.com"
 
 # making release name available for app to display
@@ -17,8 +17,9 @@ COPY . .
 
 EXPOSE 8080
 
+#TODO: install curl
 # add healtcheck for auto-repair
-HEALTHCHECK --interval=5m --timeout=10s --retries=5 CMD curl --silent --fail localhost:8080 || exit 1
+#HEALTHCHECK --interval=5m --timeout=10s --retries=5 CMD curl --silent --fail localhost:8080 || exit 1
 
 # start moveez
 CMD [ "npm", "start" ]

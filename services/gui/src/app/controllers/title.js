@@ -15,10 +15,12 @@ function postTitle(req, res){
 
     //TODO: use dynamic name and port for ketchup-service
     //TODO: switch to https (self-signed)
-    //TODO: check tomatoURL upfront, if empty skip and save -1, which should be displayed as -
-
+    //TODO: check tomatoURL upfront, if empty skip ketchup request
     //get path of tomatoURL
-    var path = req.body.title.tomatoURL.substring(req.body.title.tomatoURL.indexOf("m/")+4);
+    var path
+    if(req.body.title.tomatoURL){
+        path = req.body.title.tomatoURL.substring(req.body.title.tomatoURL.indexOf("m/")+4)
+    }
 
     superagent.get('http://localhost:8083/' + path)
         .end((err, response) => {
