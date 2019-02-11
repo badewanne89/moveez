@@ -11,7 +11,9 @@ var TitleSchema = new Schema(
         poster: {type: String},
         imdbRating: {type: Number},
         imdbID: {type: String},
-        year: {type: String}
+        year: {type: String},
+        tomatoUserRating: {type: Number},
+        tomatoURL: {type: String}
     }
 )
 

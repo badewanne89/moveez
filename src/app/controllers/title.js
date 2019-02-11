@@ -2,28 +2,50 @@ var Title = require("../models/title"),
     mongoose = require("mongoose"),
     HttpStatus = require("http-status-codes")
 
+const superagent = require('superagent')
+
 //CREATE POST /title to add a new title
 function postTitle(req, res){
     //metrics, but not during test
     if(process.env.NODE_ENV !== "test"){
         console.log("metrics.postTitle")
     }
+
     var newTitle = new Title(req.body.title)
-    newTitle.save((err, title) => {
-        if(err) {
-            res.status(HttpStatus.NOT_FOUND)
-                .send(err)
-        } else {
-            //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
-            if(req.get('Accept') === "application/json"){
-                res.status(HttpStatus.CREATED)
-                    .json({message: "Title successfully added!", title})
+
+    //TODO: use dynamic name and port for ketchup-service
+    //TODO: switch to https (self-signed)
+    //TODO: check tomatoURL upfront, if empty skip and save -1, which should be displayed as -
+
+    //get path of tomatoURL
+    var path = req.body.title.tomatoURL.substring(req.body.title.tomatoURL.indexOf("m/")+4);
+
+    superagent.get('http://localhost:8083/' + path)
+        .end((err, response) => {
+            if (err) {
+                console.log("WAR: 🍅 KETCHUP failed us 😭, assuming there is no rating")
+                newTitle.tomatoUserRating = -1
             } else {
-                req.flash("success", "You've added '" + title.name + "'' to your watchlist!")
-                res.redirect("title")
+                newTitle.tomatoUserRating = response.body.tomatoUserRating
             }
+
+            newTitle.save((err, title) => {
+                if(err) {
+                    res.status(HttpStatus.NOT_FOUND)
+                      .send(err)
+                } else {
+                    //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
+                    if(req.get('Accept') === "application/json"){
+                        res.status(HttpStatus.CREATED)
+                          .json({message: "Title successfully added!", title})
+                    } else {
+                        req.flash("success", "You've added '" + title.name + "'' to your watchlist!")
+                        res.redirect("title")
+                    }
+                }
+            })
         }
-    })
+    );
 }
 
 //READ GET /title to retrieve all titles

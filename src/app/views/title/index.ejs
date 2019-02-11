@@ -32,6 +32,12 @@
                             <div class="description">
                                 <i class="imdb icon"></i>
                                 <%= title.imdbRating %>
+                                <i class="tomato icon"></i>
+                                <% if(title.tomatoUserRating === -1) { %>
+                                    - %
+                                <% } else { %>
+                                    <%= title.tomatoUserRating %> %
+                                <% } %>
                             </div>
                             <div class="description titleButtons">
                                 <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>

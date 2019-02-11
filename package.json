@@ -1,7 +1,7 @@
 {
   "name": "moveez",
   "version": "1.0.0",
-  "description": "a webbased service to keep track of the movies you would like to watch",
+  "description": "manage your binge!",
   "main": "app.js",
   "scripts": {
     "babel": "babel ./src --out-dir ./dist --copy-files",
@@ -29,6 +29,7 @@
   "homepage": "http://www.moveez.de",
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "ajv": "^6.9.1",
     "body-parser": "^1.18.2",
     "config": "^1.29.0",
     "connect-flash": "^0.1.1",

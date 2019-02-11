@@ -69,6 +69,7 @@ const HOST = '0.0.0.0'
 const MODE = process.env.NODE_ENV || "default"
 const RELEASE = process.env.RELEASE || "snapshot"
 app.listen(PORT, HOST, () => {
+    console.log("🍿🍿🍿 MOVEEZ - manage your binge!")
     console.log(RELEASE + " started on " + HOST + ":" + PORT)
     console.log("mode: " + MODE)
     console.log("db: " + dbConnectionString)

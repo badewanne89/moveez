@@ -67,8 +67,7 @@ function addTitle(name, imdbID, year, poster) {
     var ratingRequest = new XMLHttpRequest();
     ratingRequest.onreadystatechange = function() {
         if (ratingRequest.readyState == 4 && ratingRequest.status == 200) {
-            form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[imdbRating]" value="' + JSON.parse(ratingRequest.responseText).imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '"><input name="title[poster]" value="' + poster + '">'
-
+            form.innerHTML = '<input name="title[name]" value="' + name + '"><input name="title[tomatoURL]" value="' + JSON.parse(ratingRequest.responseText).tomatoURL + '"><input name="title[imdbRating]" value="' + JSON.parse(ratingRequest.responseText).imdbRating + '"><input name="title[imdbID]" value="' + imdbID + '"><input name="title[year]" value="' + year + '"><input name="title[poster]" value="' + poster + '">'
             //the form must be in the document to submit it, but should be invisible
             form.hidden = true
             document.body.append(form)
@@ -77,7 +76,7 @@ function addTitle(name, imdbID, year, poster) {
         }
     }
 
-    ratingRequest.open("GET", "http://www.omdbapi.com/?i=" + imdbID + "&apikey=b50af808")
+    ratingRequest.open("GET", "http://www.omdbapi.com/?i=" + imdbID + "&apikey=b50af808&tomatoes=true")
     ratingRequest.send()
 }
 
