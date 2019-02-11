@@ -1,5 +1,6 @@
 FROM node:alpine
 LABEL maintainer="schdief.law@gmail.com"
+LABEL app="moveez"
 
 # making release name available for app to display
 ARG RELEASE
