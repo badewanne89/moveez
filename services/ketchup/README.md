@@ -1,4 +1,4 @@
-#Ketchup
+# Ketchup
 The service `ketchup` fetches data provided by [Rotten Tomatoes](rottentomatoes.com) like user ratings and provides them 
 via an API to `moveez`.
 
@@ -14,6 +14,6 @@ It is a separate microservice for obvious reasons:
 - upgradability
 
 ## Development
-- `npm run dev` to start it locally with port 8082
+- `npm run dev` to start it locally with port 8083
 - `npm start` to start it in production with port 8080
 - `npm test` to run integration tests with mocha
