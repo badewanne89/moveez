@@ -5,7 +5,7 @@
   "main": "ketchup.js",
   "scripts": {
     "dev": "PORT='8083' node ketchup.js",
-    "test": "PORT='8083' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
+    "test": "PORT='8083' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace --exit",
     "start": "node ketchup.js"
   },
   "repository": {
