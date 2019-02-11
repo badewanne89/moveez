@@ -1,9 +1,12 @@
 # About
-`Moveez` is a service to keep track of the movies you would like to watch in future. It shows you the ratings from sites like iMDB and Rottentomato and learns from your watching habbits. It even alerts you when a movie is running in cinema or is available on a VoD-plattform of your choice. Furthermore you can browse your list by ratings, release date or genre.
+`Moveez` is a service to keep track of the movies you would like to watch in future. It shows you the ratings from sites like iMDB.com and Rottentomatoes.com.
 
-Future updates might include an own score calculated by the individual ratings of all moveez-users.
+[Visit us](https://moveez.de)
 
-Visit us at http://moveez.de
+Future updates might include:
+- It even alerts you when a movie is running in cinema or is available on a VoD-plattform of your choice.
+- Furthermore you can browse your list by ratings, release date or genre.
+- an own score calculated by the individual ratings of all moveez-users.
 
 ![Screenshot](https://github.com/schdief/moveez/blob/master/screenshot.png)
 
@@ -14,7 +17,8 @@ Visit us at http://moveez.de
 * `npm run cy:open` to open cypress.io to manage acceptance tests
 
 # Stack
-An Express.js app based on Node.js with MongoDB (mlab) - in short MEN.
+This app consists of multiple microservices, all based on [Express](https://expressjs.com/). They can be found in the `services` directory.
+
 
 ## Jenkins
 We use Jenkins as our CI server with a Docker outside of Docker (DooD) approach, where Jenkins runs inside a container and uses the docker hosts docker daemon.

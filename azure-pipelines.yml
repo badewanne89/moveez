@@ -2,6 +2,7 @@ resources:
 - repo: self
 
 jobs:
+
 - job: Job_1
   displayName: gui
   condition: succeeded()
@@ -29,7 +30,7 @@ jobs:
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
-      workingDirectory: services/gui
+      dockerFile: services/gui/Dockerfile
 
   - task: Docker@0
     displayName: 'Push an image'
@@ -37,7 +38,6 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
-      workingDirectory: services/gui
 
 
 - job: Job_2
@@ -67,7 +67,7 @@ jobs:
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
-      workingDirectory: services/ketchup
+      dockerFile: services/ketchup/Dockerfile
 
   - task: Docker@0
     displayName: 'Push an image'
@@ -75,4 +75,3 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
-      workingDirectory: services/ketchup
