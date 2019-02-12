@@ -31,6 +31,8 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       dockerFile: services/gui/Dockerfile
+      imageName: 'schdieflaw:$(Build.BuildId)'
+      workingDirectory: services/gui
 
   - task: Docker@0
     displayName: 'Push an image'
@@ -38,6 +40,8 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
+      imageName: 'schdieflaw:$(Build.BuildId)'
+      workingDirectory: services/gui
 
 
 - job: Job_2
@@ -68,6 +72,8 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       dockerFile: services/ketchup/Dockerfile
+      imageName: 'schdieflaw:$(Build.BuildId)'
+      workingDirectory: services/ketchup
 
   - task: Docker@0
     displayName: 'Push an image'
@@ -75,3 +81,5 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
+      imageName: 'schdieflaw:$(Build.BuildId)'
+      workingDirectory: services/ketchup
