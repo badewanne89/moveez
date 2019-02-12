@@ -7,4 +7,4 @@ services:
   ketchup:
     image: "schdieflaw/ketchup:rc"
     ports:
-    - "8080:8080"
+    - "9080:8080"
