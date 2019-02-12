@@ -8,7 +8,12 @@ jobs:
   condition: succeeded()
   pool:
     vmImage: Hosted Ubuntu 1604
-    demands: npm
+    demands:
+    - npm
+    - java
+
+  variables:
+    dockerhubRepo: 'schdieflaw'
 
   steps:
   - task: Npm@1
@@ -25,13 +30,27 @@ jobs:
       verbose: false
       customCommand: test
 
+  - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+    displayName: 'Prepare analysis on SonarCloud'
+    inputs:
+      SonarCloud: azuredevops
+      organization: 'schdief-github'
+      scannerMode: CLI
+      configFile: 'services/gui/test/sonar-project.properties'
+
+  - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+    displayName: 'Run Code Analysis'
+
+  - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
+    displayName: 'Publish Quality Gate Result'
+
   - task: Docker@0
     displayName: 'Build an image'
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       dockerFile: services/gui/Dockerfile
-      imageName: 'schdieflaw:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/moveez:$(Build.BuildId)'
       workingDirectory: services/gui
 
   - task: Docker@0
@@ -40,7 +59,7 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
-      imageName: 'schdieflaw:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/moveez:$(Build.BuildId)'
       workingDirectory: services/gui
 
 
@@ -49,7 +68,12 @@ jobs:
   condition: succeeded()
   pool:
     vmImage: Hosted Ubuntu 1604
-    demands: npm
+    demands:
+    - npm
+    - java
+
+  variables:
+    dockerhubRepo: 'schdieflaw'
 
   steps:
   - task: Npm@1
@@ -66,13 +90,27 @@ jobs:
       verbose: false
       customCommand: test
 
+  - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+    displayName: 'Prepare analysis on SonarCloud'
+    inputs:
+      SonarCloud: azuredevops
+      organization: 'schdief-github'
+      scannerMode: CLI
+      configFile: 'services/ketchup/test/sonar-project.properties'
+
+  - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+    displayName: 'Run Code Analysis'
+
+  - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
+    displayName: 'Publish Quality Gate Result'
+
   - task: Docker@0
     displayName: 'Build an image'
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       dockerFile: services/ketchup/Dockerfile
-      imageName: 'schdieflaw:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/ketchup:$(Build.BuildId)'
       workingDirectory: services/ketchup
 
   - task: Docker@0
@@ -81,5 +119,5 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
-      imageName: 'schdieflaw:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/ketchup:$(Build.BuildId)'
       workingDirectory: services/ketchup
