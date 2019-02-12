@@ -4,7 +4,7 @@
   "description": "manage your binge!",
   "main": "app.js",
   "scripts": {
-    "babel": "babel ./src --out-dir ./dist --copy-files",
+    "babel": "babel src --out-dir dist --copy-files",
     "webpack": "webpack --config webpack.config.js",
     "test": "PORT='8081' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace",
     "start": "cd app && NODE_CONFIG_DIR='../config' node app.js",
