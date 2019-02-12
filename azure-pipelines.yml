@@ -17,13 +17,13 @@ jobs:
 
   steps:
   - task: Npm@1
-    displayName: 'npm install'
+    displayName: 'Install Dependencies'
     inputs:
       workingDir: services/gui
       verbose: false
 
   - task: Npm@1
-    displayName: 'npm test'
+    displayName: 'Integration Test'
     inputs:
       command: custom
       workingDir: services/gui
@@ -36,7 +36,10 @@ jobs:
       SonarCloud: azuredevops
       organization: 'schdief-github'
       scannerMode: CLI
-      configFile: 'services/gui/test/sonar-project.properties'
+      configMode: manual
+      cliProjectKey: 'schdief:moveez'
+      cliProjectName: moveez
+      cliSources: services/gui/src/app
 
   - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
@@ -44,8 +47,24 @@ jobs:
   - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
     displayName: 'Publish Quality Gate Result'
 
+  - task: Npm@1
+    displayName: Babel
+    inputs:
+      command: custom
+      workingDir: services/gui/package.json
+      verbose: false
+      customCommand: 'run babel'
+
+  - task: Npm@1
+    displayName: Webpack
+    inputs:
+      command: custom
+      workingDir: services/gui/package.json
+      verbose: false
+      customCommand: 'run webpack'
+
   - task: Docker@0
-    displayName: 'Build an image'
+    displayName: 'Build Docker Image'
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
@@ -54,7 +73,7 @@ jobs:
       workingDirectory: services/gui
 
   - task: Docker@0
-    displayName: 'Push an image'
+    displayName: 'Push Docker Image'
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
@@ -77,13 +96,13 @@ jobs:
 
   steps:
   - task: Npm@1
-    displayName: 'npm install'
+    displayName: 'Install Dependencies'
     inputs:
       workingDir: services/ketchup
       verbose: false
 
   - task: Npm@1
-    displayName: 'npm test'
+    displayName: 'Integration Test'
     inputs:
       command: custom
       workingDir: services/ketchup
@@ -96,16 +115,21 @@ jobs:
       SonarCloud: azuredevops
       organization: 'schdief-github'
       scannerMode: CLI
-      configFile: 'services/ketchup/test/sonar-project.properties'
+      configMode: manual
+      cliProjectKey: 'schdief:ketchup'
+      cliProjectName: ketchup
+      cliSources: services/ketchup/ketchup.js
 
   - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
+    continueOnError: true
 
   - task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
     displayName: 'Publish Quality Gate Result'
+    continueOnError: true
 
   - task: Docker@0
-    displayName: 'Build an image'
+    displayName: 'Build Docker Image'
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
@@ -114,7 +138,7 @@ jobs:
       workingDirectory: services/ketchup
 
   - task: Docker@0
-    displayName: 'Push an image'
+    displayName: 'Push Docker Image'
     inputs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
