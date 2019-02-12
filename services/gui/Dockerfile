@@ -13,6 +13,12 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --only=prod
 
+# debug
+RUN ls
+
+# debug
+RUN cd src
+
 # run babel and webpack to produce dist dir
 RUN npm run babel && npm run webpack
 
