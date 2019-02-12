@@ -105,9 +105,6 @@ pipeline {
                     steps {
                         script {
                             dir('services/gui'){
-                                //run babel and webpack to produce dist dir
-                                sh "npm run babel"
-                                sh "npm run webpack"
                                 //create docker image and push it to dockerhub
                                 docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
                                     def dockerImage = docker.build("${env.DOCKER_IMAGE_NAME}", "--build-arg RELEASE=${env.RELEASE_NAME} .")

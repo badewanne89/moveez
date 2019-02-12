@@ -13,10 +13,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --only=prod
 
+# run babel and webpack to produce dist dir
+RUN npm run babel && npm run webpack
+
 # bundle app source
 COPY . .
 
-RUN ls
+# move app folder
 RUN mv dist/app app
 
 EXPOSE 443
