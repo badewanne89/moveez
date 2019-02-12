@@ -51,7 +51,7 @@ jobs:
     displayName: Babel
     inputs:
       command: custom
-      workingDir: services/gui/package.json
+      workingDir: services/gui
       verbose: false
       customCommand: 'run babel'
 
@@ -59,7 +59,7 @@ jobs:
     displayName: Webpack
     inputs:
       command: custom
-      workingDir: services/gui/package.json
+      workingDir: services/gui
       verbose: false
       customCommand: 'run webpack'
 
@@ -69,7 +69,7 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       dockerFile: services/gui/Dockerfile
-      imageName: '$(dockerhubRepo)/moveez:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/moveez:$(Build.BuildNumber).$(Build.BuildId).$(Build.SourceVersion)'
       workingDirectory: services/gui
 
   - task: Docker@0
@@ -78,7 +78,7 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
-      imageName: '$(dockerhubRepo)/moveez:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/moveez:$(Build.BuildNumber).$(Build.BuildId).$(Build.SourceVersion)'
       workingDirectory: services/gui
 
 
@@ -134,7 +134,7 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       dockerFile: services/ketchup/Dockerfile
-      imageName: '$(dockerhubRepo)/ketchup:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/ketchup:$(Build.BuildNumber).$(Build.BuildId).$(Build.SourceVersion)'
       workingDirectory: services/ketchup
 
   - task: Docker@0
@@ -143,5 +143,5 @@ jobs:
       containerregistrytype: 'Container Registry'
       dockerRegistryConnection: dockerhub
       action: 'Push an image'
-      imageName: '$(dockerhubRepo)/ketchup:$(Build.BuildId)'
+      imageName: '$(dockerhubRepo)/ketchup:$(Build.BuildNumber).$(Build.BuildId).$(Build.SourceVersion)'
       workingDirectory: services/ketchup
