@@ -3,8 +3,8 @@ services:
   gui:
     image: "schdieflaw/moveez"
     ports:
-     - ":443"
+     - "4443:443"
   ketchup:
     image: "schdieflaw/ketchup"
     ports:
-    - ":8080"
+    - "8080:8080"
