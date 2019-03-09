@@ -36,12 +36,14 @@ app.get('/:id', function (req, res) {
                 } else {
                     //parse HTML for tomatoUserRating
                     var $ = cheerio.load(response.text)
-                    tomatoUserRatingRaw = $("div.meter-value").find("span").text()
+                    tomatoUserRatingRaw = $("span.mop-ratings-wrap__percentage--audience").text()
                     //check whether rating could be found
                     indexOfPercentageCharacter = tomatoUserRatingRaw.indexOf("%")
                     if(indexOfPercentageCharacter != -1) {
                         //cut off % of rating
                         tomatoUserRating = tomatoUserRatingRaw.substring(0, indexOfPercentageCharacter)
+                        //cut off leading linebreak and spaces
+                        tomatoUserRating = tomatoUserRating.substring(41)
                         //TODO: check whether rating can be - or N/A or similar and act
                         //respond with rating
                         console.log("INF: Got it! ✌️  Rating is: " + tomatoUserRating + " for " + req.params.id)
