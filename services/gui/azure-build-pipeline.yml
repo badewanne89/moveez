@@ -17,7 +17,7 @@ variables:
   # define 4 more variables: tenantId, registryName, registryLogin and registryPassword in the build pipeline in UI
 
 steps:
-- bash: docker build -f $(system.defaultWorkingDirectory)/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildId) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/$(projectName)
+- bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildId) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/$(projectName)
   displayName: 'docker build'
 
 - bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
