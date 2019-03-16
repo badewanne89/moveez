@@ -1,6 +1,4 @@
 FROM node:alpine as test
-LABEL maintainer="schdief.law@gmail.com"
-LABEL service="moveezcore"
 
 # install dependencies (without cypress)
 COPY package*.json ./
@@ -15,8 +13,6 @@ RUN npm test
 # TODO: add sonarqube
 
 FROM node:alpine as build
-LABEL maintainer="schdief.law@gmail.com"
-LABEL service="moveez"
 
 # TODO: reuse dependencies to speed up build
 # install dependencies (without cypress)
@@ -30,11 +26,11 @@ COPY . .
 RUN npm run babel
 RUN npm run webpack
 
-RUN ls
+RUN cd dist && ls
 
 FROM node:alpine AS final
 LABEL maintainer="schdief.law@gmail.com"
-LABEL service="moveez"
+LABEL service="moveezcore"
 
 # making release name available for app to display
 ARG RELEASE
