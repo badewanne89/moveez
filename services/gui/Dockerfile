@@ -1,6 +1,32 @@
-FROM node:alpine
+FROM node:alpine as test
 LABEL maintainer="schdief.law@gmail.com"
-LABEL app="moveez"
+LABEL service="moveez"
+
+# install dependencies
+COPY package*.json ./
+RUN npm install
+
+# run integration test with mocha
+RUN npm test
+
+# TODO: add sonarqube
+
+FROM node:alpine as build
+LABEL maintainer="schdief.law@gmail.com"
+LABEL service="moveez"
+
+# TODO: reuse dependencies to speed up build
+# install dependencies
+COPY package*.json ./
+RUN npm install
+
+# build frontend javascript (react)
+RUN npm run babel
+RUN npm run webpack
+
+FROM node:alpine AS final
+LABEL maintainer="schdief.law@gmail.com"
+LABEL service="moveez"
 
 # making release name available for app to display
 ARG RELEASE
@@ -16,8 +42,8 @@ RUN npm install --only=prod
 # bundle app source
 COPY . .
 
-# move app folder
-RUN mv dist/app app
+# get frontend javascript (react) from previos stage
+COPY -from=build dist/app app/
 
 EXPOSE 443
 
