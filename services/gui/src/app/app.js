@@ -63,8 +63,8 @@ app.route("/title/:id")
     .delete(title.deleteTitle)
 
 //SERVER
-//PORT is defined by environment variable or 443
-const PORT = process.env.PORT || 443
+//PORT is defined by environment variable or 8080
+const PORT = process.env.PORT || 8080
 const HOST = '0.0.0.0'
 const MODE = process.env.NODE_ENV || "default"
 const RELEASE = process.env.RELEASE || "snapshot"

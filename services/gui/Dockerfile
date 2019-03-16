@@ -48,7 +48,7 @@ COPY . .
 # get frontend javascript (react) from previos stage
 COPY --from=build dist/app app
 
-EXPOSE 443
+EXPOSE 8080
 
 #TODO: install curl
 # add healtcheck for auto-repair

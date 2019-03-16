@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: moveez/gui
   tag: stable
   pullPolicy: IfNotPresent
 
@@ -13,8 +13,10 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: ClusterIP
-  port: 80
+  name: gui
+  type: NodePort
+  internalPort: 8080
+  externalPort: 8080
 
 ingress:
   enabled: false
@@ -35,12 +37,12 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 nodeSelector: {}
 
