@@ -2,9 +2,9 @@ FROM node:alpine as test
 LABEL maintainer="schdief.law@gmail.com"
 LABEL service="moveez"
 
-# install dependencies
+# install dependencies (without cypress)
 COPY package*.json ./
-RUN npm install
+RUN npm install --no-optional
 
 # run integration test with mocha
 RUN npm test
@@ -16,9 +16,9 @@ LABEL maintainer="schdief.law@gmail.com"
 LABEL service="moveez"
 
 # TODO: reuse dependencies to speed up build
-# install dependencies
+# install dependencies (without cypress)
 COPY package*.json ./
-RUN npm install
+RUN npm install --no-optional
 
 # build frontend javascript (react)
 RUN npm run babel
