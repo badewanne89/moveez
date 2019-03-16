@@ -1,10 +1,13 @@
 FROM node:alpine as test
 LABEL maintainer="schdief.law@gmail.com"
-LABEL service="moveez"
+LABEL service="moveezcore"
 
 # install dependencies (without cypress)
 COPY package*.json ./
 RUN npm install --no-optional
+
+# bundle app source
+COPY . .
 
 # run integration test with mocha
 RUN npm test
@@ -19,6 +22,9 @@ LABEL service="moveez"
 # install dependencies (without cypress)
 COPY package*.json ./
 RUN npm install --no-optional
+
+# bundle app source
+COPY . .
 
 # build frontend javascript (react)
 RUN npm run babel
