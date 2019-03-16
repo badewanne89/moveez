@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "moveezgui.fullname" . }}
+  name: {{ include "gui.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "moveezgui.name" . }}
-    helm.sh/chart: {{ include "moveezgui.chart" . }}
+    app.kubernetes.io/name: {{ include "gui.name" . }}
+    helm.sh/chart: {{ include "gui.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "moveezgui.name" . }}
+    app.kubernetes.io/name: {{ include "gui.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

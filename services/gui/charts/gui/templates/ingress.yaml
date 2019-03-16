@@ -1,12 +1,12 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "moveezgui.fullname" . -}}
+{{- $fullName := include "gui.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "moveezgui.name" . }}
-    helm.sh/chart: {{ include "moveezgui.chart" . }}
+    app.kubernetes.io/name: {{ include "gui.name" . }}
+    helm.sh/chart: {{ include "gui.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.ingress.annotations }}
