@@ -30,6 +30,8 @@ COPY . .
 RUN npm run babel
 RUN npm run webpack
 
+RUN ls
+
 FROM node:alpine AS final
 LABEL maintainer="schdief.law@gmail.com"
 LABEL service="moveez"
@@ -43,7 +45,7 @@ WORKDIR /usr/src/app
 
 # install dependencies from package.json, but no dev
 COPY package*.json ./
-RUN npm install --only=prod
+RUN npm install --only=prod --no-optional
 
 # bundle app source
 COPY . .
