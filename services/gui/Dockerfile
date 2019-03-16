@@ -26,8 +26,6 @@ COPY . .
 RUN npm run babel
 RUN npm run webpack
 
-RUN cd dist && ls
-
 FROM node:alpine AS final
 LABEL maintainer="schdief.law@gmail.com"
 LABEL service="moveezcore"
@@ -44,11 +42,11 @@ COPY package*.json ./
 RUN npm install --only=prod --no-optional
 
 # bundle app source
+# TODO: remove unncessary files like test directory
 COPY . .
 
 # get frontend javascript (react) from previos stage
-RUN mkdir app
-COPY -from=build dist/app app/
+COPY --from=build dist/app app
 
 EXPOSE 443
 
