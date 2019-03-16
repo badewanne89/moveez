@@ -11,7 +11,7 @@ trigger:
     - services/gui/
 
 variables:
-  projectName: moveezgui
+  projectName: gui
   registryServerName: '$(registryName).azurecr.io'
   imageName: '$(projectName)'
   # define 4 more variables: tenantId, registryName, registryLogin and registryPassword in the build pipeline in UI
@@ -34,12 +34,12 @@ steps:
   inputs:
     helmVersion: 2.12.3
 
-- bash: helm package --version $(build.buildId) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/moveez$(projectName)
+- bash: helm package --version $(build.buildId) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)
   displayName: 'helm package'
   
 - bash: az login --service-principal -u $(registryLogin) -p $(registryPassword) -t $(tenantId)
   displayName: 'az login'
 
-- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/moveez$(projectName)-$(build.buildId).tgz
+- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
   displayName: 'az acr helm push'
   #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
