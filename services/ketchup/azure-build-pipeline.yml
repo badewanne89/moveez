@@ -8,7 +8,7 @@ trigger:
     - refs/heads/*
   paths:
     include: 
-    - services/$(projectName)/
+    - services/ketchup/
 
 variables:
   registryServerName: '$(registryName).azurecr.io'
