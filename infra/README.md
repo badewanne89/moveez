@@ -17,7 +17,7 @@ az acr create -n $acr -g $rg -l $location --sku Basic
 ## AKS (takes about 10mins to perform)
 ```
 name=moveez
-az aks create -l $location -n $name -g $rg --generate-ssh-keys -k 1.12.6 -c 1
+az aks create -l $location -n $name -g $rg --generate-ssh-keys -k 1.12.6 -c 1 --node-vm-size Standard_B2s
 az aks get-credentials -n $name -g $rg
 ```
 
