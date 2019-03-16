@@ -1,3 +1,17 @@
+FROM node:alpine as test
+
+# install dependencies
+COPY package*.json ./
+RUN npm install
+
+# bundle app source
+COPY . .
+
+# run integration test with mocha
+RUN npm test
+
+# TODO: add sonarqube
+
 FROM node:alpine
 LABEL maintainer="schdief.law@gmail.com"
 LABEL app="ketchup"
