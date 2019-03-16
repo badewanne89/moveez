@@ -28,7 +28,7 @@ RUN npm run webpack
 
 FROM node:alpine AS final
 LABEL maintainer="schdief.law@gmail.com"
-LABEL service="moveezcore"
+LABEL service="moveezgui"
 
 # making release name available for app to display
 ARG RELEASE
