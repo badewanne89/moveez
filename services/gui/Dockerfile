@@ -47,7 +47,7 @@ RUN npm install --only=prod --no-optional
 COPY . .
 
 # get frontend javascript (react) from previos stage
-COPY -from=build dist/app app/
+COPY -from=build dist/app ./
 
 EXPOSE 443
 
