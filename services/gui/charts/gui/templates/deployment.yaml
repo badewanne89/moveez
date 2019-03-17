@@ -1,31 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "fullname" . }}
+  name: gui-deploy
   labels:
-    app: {{ template "fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    app: gui
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 2
   selector:
     matchLabels:
-      app: {{ template "fullname" . }}
+      app: gui
   template:
     metadata:
       labels:
-        app: {{ template "fullname" . }}
+        app: gui
     spec:
-{{ if .Values.image.useImagePullSecrets }}
-      imagePullSecrets:
-        - name: {{ .Chart.Name }}-acr-secret
-{{ end }}
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+      - name: gui
+        image: moveez.azurecr.io/gui
         ports:
-        - containerPort: {{ .Values.service.internalPort }}
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
+        - containerPort: 8080
