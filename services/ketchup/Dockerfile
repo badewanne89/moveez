@@ -30,7 +30,7 @@ RUN npm install --only=prod
 # bundle app source
 COPY . .
 
-EXPOSE 8080
+EXPOSE 80
 
 #TODO: install curl
 # add healtcheck for auto-repair
