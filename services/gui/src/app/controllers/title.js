@@ -22,7 +22,7 @@ function postTitle(req, res){
         path = req.body.title.tomatoURL.substring(req.body.title.tomatoURL.indexOf("m/")+4)
     }
 
-    superagent.get('http://localhost:8083/' + path)
+    superagent.get('http://ketchup-13-rottentomato-uat/' + path)
         .end((err, response) => {
             if (err) {
                 console.log("WAR: 🍅 KETCHUP failed us 😭, assuming there is no rating")
