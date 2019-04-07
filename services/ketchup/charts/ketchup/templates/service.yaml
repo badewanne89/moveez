@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: ketchup-service
+  name: ketchup-13-rottentomato
 spec:
   selector:
-    app: ketchup
+    app: ketchup-13-rottentomato
   ports:
   - protocol: TCP
     port: 80

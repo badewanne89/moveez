@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ketchup-deploy
+  name: ketchup-13-rottentomato
   labels:
-    app: ketchup
+    app: ketchup-13-rottentomato
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: ketchup
+      app: ketchup-13-rottentomato
   template:
     metadata:
       labels:
-        app: ketchup
+        app: ketchup-13-rottentomato
     spec:
       containers:
-      - name: ketchup
+      - name: ketchup-13-rottentomato
         image: moveez.azurecr.io/ketchup
         ports:
         - containerPort: 80

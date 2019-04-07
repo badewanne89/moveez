@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: gui-service
+  name: gui-13-rottentomato
 spec:
   selector:
-    app: gui
+    app: gui-13-rottentomato
   ports:
   - protocol: TCP
     port: 80
