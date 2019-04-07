@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gui-13-rottentomato
+  name: gui-13-rottentomato-uat
   labels:
-    app: gui-13-rottentomato
+    app: gui-13-rottentomato-uat
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: gui-13-rottentomato
+      app: gui-13-rottentomato-uat
   template:
     metadata:
       labels:
-        app: gui-13-rottentomato
+        app: gui-13-rottentomato-uat
     spec:
       containers:
-      - name: gui-13-rottentomato
+      - name: gui-13-rottentomato-uat
         image: moveez.azurecr.io/gui
         ports:
         - containerPort: 80
