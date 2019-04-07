@@ -59,7 +59,7 @@ app.get('/:id', function (req, res) {
             }
         )
     } else {
-        error = "ERR: URL missing"
+        error = "ERR: URL missing 😭"
         console.log(error)
         res.status(HttpStatus.EXPECTATION_FAILED)
         res.send(error)
