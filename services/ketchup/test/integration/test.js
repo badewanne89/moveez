@@ -13,7 +13,7 @@ describe("Ketchup integration tests", () => {
             .get("/")
             .end((err, res) => {
                 res.should.have.status(417)
-                res.text.should.equal("ERR: URL missing")
+                res.text.should.equal("ERR: URL missing 😭")
                 done()
         })
     })
