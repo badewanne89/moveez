@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ketchup-ingress
+spec:
+  rules:
+    - host: moveez-moveez-0848c7-3a83d173.hcp.westeurope.azmk8s.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ketchup-service
+              servicePort: 80

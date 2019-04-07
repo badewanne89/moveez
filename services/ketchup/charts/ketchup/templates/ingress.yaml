@@ -1,13 +1,23 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ketchup-ingress
+  name: ketchup.13-rottentomato
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+    certmanager.k8s.io/acme-challenge-type: dns01
+    certmanager.k8s.io/acme-dns01-provider: azure-dns
 spec:
+  tls:
+  - hosts:
+    - ketchup.13-rottentomato.moveez.de
+    secretName: wildcard
   rules:
-    - host: moveez-moveez-0848c7-3a83d173.hcp.westeurope.azmk8s.io
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: ketchup-service
-              servicePort: 80
+  - host: ketchup.13-rottentomato.moveez.de
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ketchup-service
+          servicePort: 80

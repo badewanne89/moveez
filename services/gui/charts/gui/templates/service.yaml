@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gui-service
+spec:
+  selector:
+    app: gui
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
