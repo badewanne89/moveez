@@ -25,7 +25,8 @@ function postTitle(req, res){
     superagent.get('http://ketchup-13-rottentomato-uat/' + path)
         .end((err, response) => {
             if (err) {
-                console.log("WAR: 🍅 KETCHUP failed us 😭, assuming there is no rating")
+                console.log("WAR: 🍅 KETCHUP failed us (details following) 😭, assuming there is no rating")
+                console.log(err)
                 newTitle.tomatoUserRating = -1
             } else {
                 newTitle.tomatoUserRating = response.body.tomatoUserRating
