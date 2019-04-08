@@ -17,5 +17,6 @@ spec:
       containers:
       - name: ketchup-13-rottentomato-uat
         image: moveez.azurecr.io/ketchup
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 80

@@ -17,5 +17,6 @@ spec:
       containers:
       - name: gui-13-rottentomato-uat
         image: moveez.azurecr.io/gui
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 80
