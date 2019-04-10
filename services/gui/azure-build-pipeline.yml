@@ -16,14 +16,14 @@ variables:
   # define 5 more variables: projectName, tenantId, registryName, registryLogin and registryPassword in the build pipeline in UI
 
 steps:
-- bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildNumber)_$(build.sourceBranch) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
+- bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildNumber)_$(build.sourceBranchName) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
   displayName: 'docker build'
 
 - bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
   displayName: 'docker login'
 
 - bash: |
-    docker push $(registryServerName)/$(imageName):$(build.buildNumber)_$(build.sourceBranch)
+    docker push $(registryServerName)/$(imageName):$(build.buildNumber)_$(build.sourceBranchName)
     docker push $(registryServerName)/$(imageName):latest
   displayName: 'docker push'
   #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
@@ -33,12 +33,12 @@ steps:
   inputs:
     helmVersion: 2.12.3
 
-- bash: helm package --version $(build.buildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranch)
+- bash: helm package --version $(build.buildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
   displayName: 'helm package'
   
 - bash: az login --service-principal -u $(registryLogin) -p $(registryPassword) -t $(tenantId)
   displayName: 'az login'
 
-- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranch)-$(build.buildNumber).tgz
+- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.buildNumber).tgz
   displayName: 'az acr helm push'
   #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
