@@ -3,7 +3,7 @@
 
 `Moveez` is a service to keep track of the movies you would like to watch in future. It shows you the ratings from sites like iMDB.com and Rottentomatoes.com.
 
-[Visit us](https://moveez.de)
+[Visit us](https://www.moveez.de)
 
 Future updates might include:
 - It even alerts you when a movie is running in cinema or is available on a VoD-plattform of your choice.
@@ -21,29 +21,8 @@ Future updates might include:
 ## Azure DevOps
 We have switched from Jenkins to Azure DevOps. You can find the workspace [here](https://dev.azure.com/Schdieflaw0018/moveez/).
 Within Azure DevOps we are using Azure Pipelines to build and release moveez.
-* The build configuration is done via GUI, but can also be found in `azure-pipelines.yml`.
-* The release is done via `docker-compose.yml` on a private agent hosted on our Hetzner server.
-
-### Azure Private Agent Configuration
-The installation guide can be found [here](https://dev.azure.com/Schdieflaw0018/moveez/_settings/agentqueues).
-1. create a user for the agent `adduser azureagent`.
-2. define a password for the user `passwd azureagent`.
-3. Switch to this user with `su azureagent`.
-4. Create a folder and cd into it with `mkdir azureagent && cd azureagent`
-5. Download the agent software with `wget https://vstsagentpackage.azureedge.net/agent/2.146.0/vsts-agent-linux-x64-2.146.0.tar.gz`
-6. unzip the agent `tar zxvf vsts-agent-linux-x64-2.146.0.tar.gz`
-7. swtich to root `su root`
-8. install dependencies `./bin/installdependencies.sh`
-9. switch to azureagent `su azureagent`
-10. configure the agent `./config.sh`
-11. say `no` to EULA, since we are not using TFSV repos
-12. create a user token as described [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#authenticate-with-a-personal-access-token-pat)
-13. Server-URL: `https://dev.azure.com/Schdieflaw0018`
-14. Authentifizierungstyp: `PAT` (just press ENTER, nothing to type) and enter the created token from step 12
-15. Agent-Pool: `default` (just press ENTER, nothing to type)
-16. Agent-Name: `hetzner_moveez`
-17. Arbeitsordner: `_work` (just press ENTER, nothing to type)
-18. enable the agent to run as a systemd service like described [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/v2-linux?view=azure-devops#run-as-a-systemd-service)
+* The build configuration is done `azure-pipelines.yml` per service.
+* The release is currently configured in GUI due to lack of support.
 
 # Stack
 This app consists of multiple microservices, all based on [Express](https://expressjs.com/). They can be found in the `services` directory.
