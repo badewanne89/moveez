@@ -33,6 +33,9 @@ steps:
   inputs:
     helmVersion: 2.12.3
 
+- bash: sed -i 's/ketchup/ketchup_$(build.sourceBranchName)/g' $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)/Chart.yaml
+  displayName: 'update Chart.yaml with branch name'
+
 - bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)
   displayName: 'helm package'
   
