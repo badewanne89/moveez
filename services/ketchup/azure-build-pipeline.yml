@@ -36,6 +36,9 @@ steps:
 - bash: sed -i 's/ketchup/ketchup_$(build.sourceBranchName)/g' $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)/Chart.yaml
   displayName: 'update Chart.yaml with branch name'
 
+- bash: mv $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
+  displayName: 'renaming chart folder to match Chart.yaml name'
+
 - bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)
   displayName: 'helm package'
   
