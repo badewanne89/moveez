@@ -39,6 +39,6 @@ steps:
 - bash: az login --service-principal -u $(registryLogin) -p $(registryPassword) -t $(tenantId)
   displayName: 'az login'
 
-- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.buildNumber).tgz
+- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildNumber).tgz
   displayName: 'az acr helm push'
   #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
