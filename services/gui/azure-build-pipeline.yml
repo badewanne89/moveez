@@ -39,11 +39,8 @@ steps:
 - bash: mv $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
   displayName: 'renaming chart folder to match Chart.yaml name'
 
-- bash: helm package --version $(build.buildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)
+- bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
   displayName: 'helm package'
-  
-- bash: az login --service-principal -u $(registryLogin) -p $(registryPassword) -t $(tenantId)
-  displayName: 'az login'
 
 - bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildNumber).tgz
   displayName: 'az acr helm push'
