@@ -33,12 +33,18 @@ steps:
   inputs:
     helmVersion: 2.12.3
 
+- bash: sed -i 's/ketchup/ketchup_$(build.sourceBranchName)/g' $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)/Chart.yaml
+  displayName: 'update Chart.yaml with branch name'
+
+- bash: mv $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
+  displayName: 'renaming chart folder to match Chart.yaml name'
+
 - bash: helm package --version $(build.buildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)
   displayName: 'helm package'
   
 - bash: az login --service-principal -u $(registryLogin) -p $(registryPassword) -t $(tenantId)
   displayName: 'az login'
 
-- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildNumber).tgz
+- bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildNumber).tgz
   displayName: 'az acr helm push'
   #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
