@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: ketchup-13-rottentomato-uat
+  name: ketchup-{{ .Values.branchName }}-uat
 spec:
   selector:
-    app: ketchup-13-rottentomato-uat
+    app: ketchup-{{ .Values.branchName }}-uat
   ports:
   - protocol: TCP
     port: 80

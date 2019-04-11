@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ketchup-13-rottentomato-uat
+  name: ketchup-{{ .Values.branchName }}-uat
   labels:
-    app: ketchup-13-rottentomato-uat
+    app: ketchup-{{ .Values.branchName }}-uat
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: ketchup-13-rottentomato-uat
+      app: ketchup-{{ .Values.branchName }}-uat
   template:
     metadata:
       labels:
-        app: ketchup-13-rottentomato-uat
+        app: ketchup-{{ .Values.branchName }}-uat
     spec:
       containers:
-      - name: ketchup-13-rottentomato-uat
+      - name: ketchup-{{ .Values.branchName }}-uat
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
