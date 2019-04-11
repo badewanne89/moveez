@@ -42,12 +42,6 @@ steps:
 - bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
   displayName: 'helm package'
   
-- bash: az login --service-principal -u $(registryLogin) -p $(registryPassword) -t $(tenantId)
-  displayName: 'az login'
-
-- bash: az acr helm list -n moveez
-  displayName: 'debug az'
-
-- bash: az acr helm push -n $(registryName) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz
+- bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz
   displayName: 'az acr helm push'
   #condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
