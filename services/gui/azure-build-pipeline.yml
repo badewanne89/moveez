@@ -31,9 +31,9 @@ steps:
 - task: HelmInstaller@0
   displayName: 'Install Helm'
   inputs:
-    helmVersion: 2.12.3
+    helmVersion: 2.13.0
 
-- bash: sed -i 's/ketchup/ketchup_$(build.sourceBranchName)/g' $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)/Chart.yaml
+- bash: sed -i 's/$(projectName)/$(projectName)_$(build.sourceBranchName)/g' $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)/Chart.yaml
   displayName: 'update Chart.yaml with branch name'
 
 - bash: mv $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
