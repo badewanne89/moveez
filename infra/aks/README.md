@@ -88,6 +88,9 @@ az network public-ip update --ids $PUBLICIPID --dns-name $DNSNAME
 #### Add domain to Azure DNS
 Now we let Azure DNS manage our DNSing. Therefore we create an Azure DNS service and change the NX records of our domain to Azure's as described [here](http://www.reimling.eu/2018/01/einrichtung-und-konfiguration-von-azure-dns/).
 
+#### Deploy ingress for www.moveez.de
+To activate www.moveez.de we need to deploy a special ingress. Use the ingress.yaml within this folder and apply it with `kubectl apply -f ingress.yaml`
+
 #### Add an A record to DNS pointing to the Ingress Controller's public IP
 In your Azure DNS click "+ record set" and type in `www` with a TTL of 1 hour.
 
