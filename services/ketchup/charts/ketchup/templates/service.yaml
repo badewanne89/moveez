@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: ketchup-{{ .Values.branchName }}-uat
+  name: ketchup-{{ template "branchName" . }}-{{ .Values.stage }}
 spec:
   selector:
-    app: ketchup-{{ .Values.branchName }}-uat
+    app: ketchup-{{ template "branchName" . }}-{{ .Values.stage }}
   ports:
   - protocol: TCP
     port: 80

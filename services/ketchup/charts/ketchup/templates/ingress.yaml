@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ketchup-{{ .Values.branchName }}-uat
+  name: ketchup-{{ template "branchName" . }}-{{ .Values.stage }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: 'false'
     kubernetes.io/ingress.class: nginx
@@ -11,13 +11,13 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ketchup-{{ .Values.branchName }}-uat.moveez.de
+    - ketchup-{{ template "branchName" . }}-{{ .Values.stage }}.moveez.de
     secretName: wildcard
   rules:
-  - host: ketchup-{{ .Values.branchName }}-uat.moveez.de
+  - host: ketchup-{{ template "branchName" . }}-{{ .Values.stage }}.moveez.de
     http:
       paths:
       - path: /
         backend:
-          serviceName: ketchup-{{ .Values.branchName }}-uat
+          serviceName: ketchup-{{ template "branchName" . }}-{{ .Values.stage }}
           servicePort: 80

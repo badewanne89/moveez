@@ -1,6 +1,6 @@
 {{/* vim: set filetype=mustache: */}}
 {{/*
-Expand the name of the chart.
+Replace underscores for DNS compatibility.
 */}}
 {{- define "branchName" -}}
 {{- .Values.branchName | replace "_" "-" -}}
