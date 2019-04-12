@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ketchup-{{ .Values.branchName }}-uat
+  name: ketchup-{{ template "branchName" . }}-uat
   labels:
     app: ketchup-{{ .Values.branchName }}-uat
 spec:
