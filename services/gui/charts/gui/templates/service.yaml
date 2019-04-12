@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: gui-13-rottentomato-uat
+  name: gui-{{ template "branchName" . }}-{{ .Values.stage }}
 spec:
   selector:
-    app: gui-13-rottentomato-uat
+    app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
   ports:
   - protocol: TCP
     port: 80

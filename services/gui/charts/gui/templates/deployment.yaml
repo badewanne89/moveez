@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gui-13-rottentomato-uat
+  name: gui-{{ template "branchName" . }}-{{ .Values.stage }}
   labels:
-    app: gui-13-rottentomato-uat
+    app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: gui-13-rottentomato-uat
+      app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
   template:
     metadata:
       labels:
-        app: gui-13-rottentomato-uat
+        app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
     spec:
       containers:
-      - name: gui-13-rottentomato-uat
+      - name: gui-{{ template "branchName" . }}-{{ .Values.stage }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

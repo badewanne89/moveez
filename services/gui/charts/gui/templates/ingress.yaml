@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: gui-13-rottentomato-uat
+  name: gui-{{ template "branchName" . }}-{{ .Values.stage }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: 'false'
     kubernetes.io/ingress.class: nginx
@@ -11,13 +11,13 @@ metadata:
 spec:
   tls:
   - hosts:
-    - gui-13-rottentomato-uat.moveez.de
+    - gui-{{ template "branchName" . }}-{{ .Values.stage }}.moveez.de
     secretName: wildcard
   rules:
-  - host: gui-13-rottentomato-uat.moveez.de
+  - host: gui-{{ template "branchName" . }}-{{ .Values.stage }}.moveez.de
     http:
       paths:
       - path: /
         backend:
-          serviceName: gui-13-rottentomato-uat
+          serviceName: gui-{{ template "branchName" . }}-{{ .Values.stage }}
           servicePort: 80
