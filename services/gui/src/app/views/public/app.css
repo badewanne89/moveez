@@ -1,0 +1,109 @@
+#logo {
+    background-color: teal;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.inline {
+    display: inline;
+}
+
+.seen {
+    text-decoration: line-through;
+    font-weight: bold;
+}
+.unseen {
+    font-weight: bold;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.suggestion:nth-of-type(odd) {
+    background: #f7f7f7;
+}
+
+.suggestion {
+    height: 50px;
+    padding: 1px;
+    overflow: hidden;
+}
+
+.suggestion:hover { background: #d5f3f3; }
+
+#results {
+    width: auto;
+}
+
+.suggestionContent {
+    vertical-align: top;
+    margin: 0px 0px 0px 10px;
+    display: inline-block;
+}
+
+#add {
+    vertical-align: top;
+    margin: 6px 5px 0px 10px;
+}
+
+.suggestionPoster {
+    margin: 2px 0px 0px 5px;
+}
+
+.description {
+    margin-top: 4px;
+}
+
+h4 {
+    margin-bottom: 0px;
+}
+
+#imdb {
+    display: inline-block;
+}
+
+#container {
+    margin-left: 10px!important;
+    width: auto;
+}
+
+.logo {
+    margin-right: 5px;
+}
+
+.title:nth-of-type(even) {
+    background: #f7f7f7;
+}
+
+.titleDetails {
+    height: 150px;
+}
+
+.history {
+    background: #f7f7f7!important;
+}
+
+i.imdb.icon {
+    font-size: 1.5em;
+}
+
+.titleButtons {
+    margin-top: 61px;
+}
+
+.seenPoster {
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+}
+
+.tomato {
+    background: url(rottentomato.png) no-repeat;
+    background-size: cover;
+}
+
+#inline {
+    display:inline;
+}

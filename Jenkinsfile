@@ -44,11 +44,13 @@ pipeline {
                         env.REVISION = env.REVISION.take(7)
                     }
                     //get version number from package.json
-                    packageJSON = readJSON file: 'package.json'
+                    packageJSON = readJSON file: 'services/gui/package.json'
+                    ketchupPackageJSON = readJSON file: 'services/ketchup/package.json'
                     //build releasename
                     env.RELEASE_NAME = "${env.APP_NAME}_${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //build tag
                     env.DOCKER_IMAGE_NAME = "schdieflaw/${packageJSON.name}:${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
+                    env.KETCHUP_DOCKER_IMAGE_NAME = "schdieflaw/${ketchupPackageJSON.name}:${ketchupPackageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //version
                     env.VERSION = "${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}"
                     //set build display name
@@ -71,32 +73,61 @@ pipeline {
             }
         }
         stage('TEST') {
-            steps {
-                script{
-                    //!- unit/integration test
-                    //TODO: need to change port of moveez, otherwise it will conflict with parallel integration tests
-                    sh "npm test"
-		            //sonarqube scan
-		            def scannerHome = tool 'sonarqube'
-		            withSonarQubeEnv('sonarcloud') {
-		    	        sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=test/sonar-project.properties"
-		            }
-                }
-            }
-        }
-        stage('BUILD') {
-            steps {
-                script {
-                    //run babel and webpack to produce dist dir
-                    sh "npm run babel"
-                    sh "npm run webpack"
-                    //create docker image and push it to dockerhub
-                    docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
-                        def dockerImage = docker.build("${env.DOCKER_IMAGE_NAME}", "--build-arg RELEASE=${env.RELEASE_NAME} .")
-                        dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}_rc")
+            parallel(
+                stage('GUI') {
+                    steps {
+                        script{
+                            //!- unit/integration test
+                            //TODO: need to change port of moveez, otherwise it will conflict with parallel integration tests
+                            sh "cd services/gui && npm test"
+                            //sonarqube scan
+                            def scannerHome = tool 'sonarqube'
+                            withSonarQubeEnv('sonarcloud') {
+                                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=test/sonar-project.properties"
+                            }
+                        }
+                    }
+                },
+                stage('KETCHUP') {
+                    steps {
+                        script{
+                            //!- unit/integration test
+                            //TODO: need to change port of ketchup, otherwise it will conflict with parallel integration tests
+                            sh "cd services/ketchup && npm test"
+                        }
                     }
                 }
-            }
+            )
+        }
+        stage('BUILD') {
+            parallel(
+                stage('GUI') {
+                    steps {
+                        script {
+                            dir('services/gui'){
+                                //create docker image and push it to dockerhub
+                                docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
+                                    def dockerImage = docker.build("${env.DOCKER_IMAGE_NAME}", "--build-arg RELEASE=${env.RELEASE_NAME} .")
+                                    dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}_rc")
+                                }
+                            }
+                        }
+                    }
+                },
+                stage('KETCHUP') {
+                    steps {
+                        script {
+                            dir('services/ketchup'){
+                                //create docker image and push it to dockerhub
+                                docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub') {
+                                    def dockerImage = docker.build("${env.DOCKER_IMAGE_NAME}", "--build-arg RELEASE=${env.RELEASE_NAME} .")
+                                    dockerImage.push("${packageJSON.version}_${env.BUILD_NUMBER}_${env.REVISION}_rc")
+                                }
+                            }
+                        }
+                    }
+                }
+            )
         }
         stage('UAT') {
             stages {
@@ -109,6 +140,8 @@ pipeline {
                             index = portOutput.indexOf(":") + 1
                             port = portOutput.drop(index)
                         }
+                        //TODO: use docker-compose!
+                        sh "docker run -p 8083:8083 --name ${ketchupPackageJSON.name}_uat_${env.RELEASE_NAME} -e NODE_ENV='uat' -d ${env.KETCHUP_DOCKER_IMAGE_NAME}_rc"
                         //flightcheck the deployment
                         retry(10) {
                             httpRequest acceptType: 'APPLICATION_JSON', responseHandle: 'NONE', url: "http://95.216.189.36:${port}", validResponseCodes: '200', validResponseContent: "Welcome to ${env.RELEASE_NAME}!"
@@ -146,6 +179,7 @@ pipeline {
                 always {
                     //kill the container
                     sh "docker kill ${packageJSON.name}_uat_${env.RELEASE_NAME} || true"
+                    sh "docker kill ${ketchupPackageJSON.name}_uat_${env.RELEASE_NAME} || true"
                 }
             }
         }

@@ -1,8 +1,11 @@
 node_modules/
+services/ketchup/node_modules/
 coverage/
 .nyc_output/
 package-lock.json
 cypress/fixtures/
 cypress/plugins/
-cypress/support/
+cypress/screenshots/
+cypress/videos/
 dist/
+.idea/

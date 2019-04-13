@@ -1,0 +1,39 @@
+{
+  "name": "ketchup",
+  "version": "1.0.0",
+  "description": "ketchup` fetches data provided by [Rotten Tomatoes](rottentomatoes.com) like user ratings and provides them ",
+  "main": "ketchup.js",
+  "scripts": {
+    "dev": "PORT='8083' node ketchup.js",
+    "test": "PORT='8083' RELEASE='mocha test' nyc --reporter=lcov --reporter=text mocha 'test/integration/*.js' --timeout 20000 --full-trace --exit",
+    "start": "node ketchup.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/schdief/moveez/services/ketchup"
+  },
+  "keywords": [
+    "moveez",
+    "rotten",
+    "tomatoes"
+  ],
+  "author": "schdief",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/schdief/moveez/issues"
+  },
+  "homepage": "http://www.moveez.de",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.4",
+    "http-status-codes": "^1.3.0",
+    "morgan": "^1.9.1",
+    "superagent": "^4.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.2.0"
+  }
+}

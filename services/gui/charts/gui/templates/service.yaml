@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gui-{{ template "branchName" . }}-{{ .Values.stage }}
+spec:
+  selector:
+    app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
