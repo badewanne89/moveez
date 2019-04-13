@@ -27,11 +27,11 @@ spec:
           value: '{{ .Values.stage }}'
         - name: DB_USER
           valueFrom:
-          secretKeyRef:
-            name: moveez-prod-db
-            key: dbuser
+            secretKeyRef:
+              name: moveez-prod-db
+              key: dbuser
         - name: DB_PASS
           valueFrom:
-          secretKeyRef:
-            name: moveez-prod-db
-            key: dbpass
+            secretKeyRef:
+              name: moveez-prod-db
+              key: dbpass

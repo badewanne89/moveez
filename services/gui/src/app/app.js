@@ -24,7 +24,7 @@ const dbUser = process.env.DB_USER || config.dbUser
 const dbPassword = process.env.DB_PASS || config.dbPassword
 var dbConnectionString = config.dbProtocol + "://" + dbUser + ":" + dbPassword + "@" + config.dbHost + ":" + config.dbPort + "/" + config.dbName
 //CosmosDB requires ssl=true
-if(process.env.NODE_EVN == "prod") dbConnectionString += "?ssl=true&replicaSet=globaldb"
+if(process.env.NODE_ENV === "prod") dbConnectionString += "?ssl=true&replicaSet=globaldb"
 mongoose.connect(dbConnectionString, config.dbConnectionOptions)
 var db = mongoose.connection
 db.on("error", console.error.bind(console, "connection error:"))
