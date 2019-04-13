@@ -4,8 +4,8 @@ metadata:
   name: letsencrypt
 spec:
   acme:
-    #server: https://acme-v02.api.letsencrypt.org/directory
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
+    #server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: schdief.law@gmail.com
     privateKeySecretRef:
       name: letsencrypt
