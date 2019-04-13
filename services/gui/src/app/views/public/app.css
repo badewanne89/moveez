@@ -103,3 +103,7 @@ i.imdb.icon {
     background: url(rottentomato.png) no-repeat;
     background-size: cover;
 }
+
+#inline {
+    display:inline;
+}

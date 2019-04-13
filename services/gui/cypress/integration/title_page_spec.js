@@ -1,8 +1,9 @@
+//TODO: add to avoid flaky test
 //reset database
-before(function () {
+/* before(function () {
   cy.log("reset db")
-  //clear all data before starting tests
-  //cy.request('PUT', 'https://api.mlab.com/api/1/databases/title_uat/collections/titles?apiKey=' + Cypress.env('API_KEY'), {})
+  clear all data before starting tests
+  cy.request('PUT', 'https://api.mlab.com/api/1/databases/title_uat/collections/titles?apiKey=' + Cypress.env('API_KEY'), {})
   cy.request({
     method: 'PUT',
     url: 'https://api.mlab.com/api/1/databases/title_uat/collections/titles?apiKey=' + Cypress.env('API_KEY'),
@@ -11,7 +12,7 @@ before(function () {
         'content-type': 'application/json'
     }
   })
-})
+}) */
 
 describe('The Title Page', function() {
   it('successfully loads', function() {
@@ -25,14 +26,17 @@ describe('Adding a Title', function() {
     cy.get('#newTitle').type('Inception', {delay: 1000}).wait(1000)
   })
   it('can be done by clicking +', function() {
-      cy.get('#add').click()
+    cy.get('#add').click()
   })
   it('shows a success flash message', function() {
-      cy.get('.header').should('be.visible')
-      cy.get('.header').should('contain', 'You\'ve added')
+    cy.get('.header').should('be.visible')
+    cy.get('.header').should('contain', 'You\'ve added')
   })
   it('results in a new entry in the list', function() {
-      cy.contains('Inception')
+    cy.contains('Inception')
+  })
+  it('fetches the user rating of Rottentomato via ketchup', function() {
+    cy.get('#tomatoUserRating').should('not.contain', '-')
   })
 })
 

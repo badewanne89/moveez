@@ -73,6 +73,7 @@ app.listen(PORT, HOST, () => {
     console.log(RELEASE + " started on " + HOST + ":" + PORT)
     console.log("mode: " + MODE)
     console.log("db: " + dbConnectionString)
+    console.log(`ketchup: ${process.env.KETCHUP_ENDPOINT}`)
 })
 
 //expose for integration testing with mocha

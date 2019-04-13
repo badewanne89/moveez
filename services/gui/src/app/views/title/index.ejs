@@ -30,14 +30,22 @@
                             <h4><%= title.name %></h4>
                             (<%= title.year %>)
                             <div class="description">
-                                <i class="imdb icon"></i>
-                                <%= title.imdbRating %>
-                                <i class="tomato icon"></i>
-                                <% if(title.tomatoUserRating === -1) { %>
-                                    - %
-                                <% } else { %>
-                                    <%= title.tomatoUserRating %> %
-                                <% } %>
+                                <span>
+                                    <i class="imdb icon"></i>
+                                    <p class="inline">
+                                        <%= title.imdbRating %>
+                                    </p>
+                                </span>
+                                <span>
+                                    <i class="tomato icon"></i>
+                                    <p class="inline" id="tomatoUserRating">
+                                        <% if(title.tomatoUserRating === -1) { %>
+                                            - %
+                                        <% } else { %>
+                                            <%= title.tomatoUserRating %> %
+                                        <% } %>
+                                    </p>
+                                </span>
                             </div>
                             <div class="description titleButtons">
                                 <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>

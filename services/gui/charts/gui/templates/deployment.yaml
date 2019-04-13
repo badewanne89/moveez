@@ -20,3 +20,6 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: 80
+        env:
+        - name: KETCHUP_ENDPOINT
+          value: "ketchup-{{ template 'branchName' . }}-{{ .Values.stage }}"
