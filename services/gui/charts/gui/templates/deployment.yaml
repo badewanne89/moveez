@@ -23,3 +23,5 @@ spec:
         env:
         - name: KETCHUP_ENDPOINT
           value: 'ketchup-{{ template "branchName" . }}-{{ .Values.stage }}'
+        - name: NODE_ENV
+          value: '{{ .Values.stage }}'
