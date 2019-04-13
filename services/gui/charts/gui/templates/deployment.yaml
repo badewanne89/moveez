@@ -5,7 +5,7 @@ metadata:
   labels:
     app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: gui-{{ template "branchName" . }}-{{ .Values.stage }}
@@ -25,3 +25,13 @@ spec:
           value: 'ketchup-{{ template "branchName" . }}-{{ .Values.stage }}'
         - name: NODE_ENV
           value: '{{ .Values.stage }}'
+        - name: DB_USER
+          valueFrom:
+          secretKeyRef:
+            name: moveez-prod-db
+            key: dbuser
+        - name: DB_PASS
+          valueFrom:
+          secretKeyRef:
+            name: moveez-prod-db
+            key: dbpass
