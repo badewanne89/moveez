@@ -21,3 +21,10 @@ spec:
         backend:
           serviceName: gui-master-prod
           servicePort: 80
+  - host: moveez.de
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gui-master-prod
+          servicePort: 80

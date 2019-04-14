@@ -41,6 +41,12 @@ To activate www.moveez.de we need to deploy a special ingress. Use the ingress.y
 ### Add an A record to DNS pointing to the Ingress Controller's public IP
 In your Azure DNS click "+ record set" and type in `www` with a TTL of 1 hour.
 
+### Add a CAA record for better TLS rating
+Add a CAA record to define which CAs can issue TLS for the domain. Use this command:
+```
+az network dns record-set caa add-record -g moveez -z moveez.de -n "*" --flags 0 --tag "issue" --value "letsencrypt.org"
+```
+
 ## TLS
 The goal of this step is to have a cluster-wide wildcard certificate serving *.moovez.de. We leverage Let's Encrypt to perform TLS termination in the ingress controller.
 
