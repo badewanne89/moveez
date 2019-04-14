@@ -32,11 +32,9 @@ mongoose.connect(dbConnectionString, {
       password: dbPassword
     }
   })
-  .then(() => console.log('connection successful'))
-  .catch((err) => console.error(err));
-
+  .then(() => console.log('connection to db successful'))
+  .catch((err) => console.log(err));
 var db = mongoose.connection
-db.on("error", console.error.bind(console, "connection error:"))
 
 //parse application/json and look for raw text
 app.use(bodyParser.json())

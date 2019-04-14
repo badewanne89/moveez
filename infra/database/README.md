@@ -16,6 +16,9 @@ Update the values in `services/gui/config/prod.json` taken from the connection s
 
 ### Create a secret with username and password for the database
 Create the secret with this command:
-````
+```
 kubectl create secret generic moveez-prod-db --from-literal=dbuser=secret --from-literal=dbpass=secret
 ```
+
+### Set down the RU/s
+Default is 1000 RU/s, 400 (minimum) should be enough, so scale it down via GUI and scale section.
