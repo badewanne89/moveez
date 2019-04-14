@@ -1,5 +1,6 @@
 # About
-[![Build Status](https://dev.azure.com/Schdieflaw0018/moveez/_apis/build/status/moveez?branchName=master)](https://dev.azure.com/Schdieflaw0018/moveez/_build/latest?definitionId=2&branchName=master)
+[![Build Status gui](https://dev.azure.com/Schdieflaw0018/moveez/_apis/build/status/gui?branchName=master)](https://dev.azure.com/Schdieflaw0018/moveez/_build/latest?definitionId=2&branchName=master)
+[![Build Status ketchup](https://dev.azure.com/Schdieflaw0018/moveez/_apis/build/status/ketchup?branchName=master)](https://dev.azure.com/Schdieflaw0018/moveez/_build/latest?definitionId=2&branchName=master)
 
 `Moveez` is a service to keep track of the movies you would like to watch in future. It shows you the ratings from sites like iMDB.com and Rottentomatoes.com.
 
@@ -10,7 +11,7 @@ Future updates might include:
 - Furthermore you can browse your list by ratings, release date or genre.
 - an own score calculated by the individual ratings of all moveez-users.
 
-![Screenshot](https://github.com/schdief/moveez/blob/master/screenshot.png)
+![Screenshot](https://github.com/schdief/moveez/blob/master/screenshot.jpg)
 
 # Development
 * `npm install` to install dependencies
@@ -26,7 +27,7 @@ Within Azure DevOps we are using Azure Pipelines to build and release moveez.
 
 # Stack
 This app consists of multiple microservices, all based on [Express](https://expressjs.com/). They can be found in the `services` directory.
-To deploy and run the services we are using [AKS](https://azure.microsoft.com/en-us/services/kubernetes-service/) and [helm](https://helm.sh). Currently we have no database, but we want to use CosmosDB.
+To deploy and run the services we are using [AKS](https://azure.microsoft.com/en-us/services/kubernetes-service/) and [helm](https://helm.sh). Our data is managed by [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction).
 
 # Run
 ## Monitoring

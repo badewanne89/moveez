@@ -38,8 +38,8 @@ Now we let Azure DNS manage our DNSing. Therefore we create an Azure DNS service
 ### Deploy ingress for www.moveez.de
 To activate www.moveez.de we need to deploy a special ingress. Use the ingress.yaml within this folder and apply it with `kubectl apply -f ingress.yaml`
 
-### Add an A record to DNS pointing to the Ingress Controller's public IP
-In your Azure DNS click "+ record set" and type in `www` with a TTL of 1 hour.
+### Add A records to DNS pointing to the Ingress Controller's public IP
+In your Azure DNS click "+ record set" and type in `www` with a TTL of 1 hour. Do the same again but without the `www`for the `apex` (or root or naked domain entry).
 
 ### Add a CAA record for better TLS rating
 Add a CAA record to define which CAs can issue TLS for the domain. Use this command:
