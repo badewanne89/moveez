@@ -98,7 +98,7 @@ const SignupButton = ()=>{
         open("/auth/facebook", "_self");
     };
     return (
-        <button id="enter" className="ui labeled icon facebook button teal" onClick={fnOnClick}><i class="icon play"></i>Login with <i class="facebook icon"></i></button>
+        <button id="enter" className="ui labeled icon facebook button" onClick={fnOnClick}>Login <i class="facebook icon"></i></button>
     );
 };
 
