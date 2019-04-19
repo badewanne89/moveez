@@ -15,8 +15,8 @@ Future updates might include:
 ## CI/CD with Azure DevOps
 We have switched from Jenkins to Azure DevOps. You can find the workspace [here](https://dev.azure.com/Schdieflaw0018/moveez/).
 Within Azure DevOps we are using Azure Pipelines to build and release moveez.
-* The build configuration is done `azure-pipelines.yml` per service.
-* The release is currently configured in GUI due to lack of support.
+* The build configuration is done via `azure-pipelines.yml` per service.
+* The release is currently configured in GUI due to lack of support of release config files.
 
 # Stack
 This app consists of multiple microservices, all based on [Express](https://expressjs.com/). They can be found in the `services` directory.
