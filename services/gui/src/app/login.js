@@ -20,7 +20,7 @@ const initialize = (app, port) => {
         {
             clientID: FACEBOOK_APP_ID,
             clientSecret: fbAppSecret,
-            callbackURL: `https://www.moveez.de:${port}/auth/facebook/callback`
+            callbackURL: `https://www.moveez.de/auth/facebook/callback`
         },
         function(accessToken, refreshToken, profile, done) {
               done(null, profile.id);
