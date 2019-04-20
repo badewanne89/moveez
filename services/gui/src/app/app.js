@@ -8,6 +8,7 @@ var express = require("express"),
     morgan = require("morgan"),
     title = require("./controllers/title"),
     landingPage = require("./controllers/landingPage"),
+    impressum = require("./controllers/impressum"),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
     methodOverride = require("method-override"),
@@ -78,6 +79,7 @@ app.use(express.static("views/public"))
 //ROUTES
 //index
 app.get("/", landingPage.landingPage);
+app.get("/impressum", impressum.impressum);
 app.all("*", connect.ensureLoggedIn("/"));
 //title RESTful routes
 app.route("/title")

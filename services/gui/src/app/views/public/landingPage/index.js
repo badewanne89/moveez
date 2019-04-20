@@ -27,6 +27,7 @@ const Content = ()=>{
             <MoveezIcon/>
             <BingeText/>
             <SignupButton/>
+            <GDPR/>
         </div>
     );
 };
@@ -99,6 +100,15 @@ const SignupButton = ()=>{
     };
     return (
         <button id="enter" className="ui labeled icon facebook button" onClick={fnOnClick}>Login <i class="facebook icon"></i></button>
+    );
+};
+
+const GDPR = ()=>{
+    return (
+        <p style={{
+            color: "white",
+            marginTop: "20px"
+        }}>You consent to our <a id="gdpr" href="/impressum">data privacy statement</a> by logging in.</p>
     );
 };
 
