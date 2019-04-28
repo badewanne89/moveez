@@ -32,7 +32,7 @@ steps:
     kubernetesCluster: moveez
     command: upgrade
     chartName: '$(registryName)/$(projectName)_$(Build.SourceBranchName)'
-    releaseName: '$(projectName)'
+    releaseName: '$(projectName)-$(Build.SourceBranchName)-$(Release.EnvironmentName)'
     arguments: '--version $(build.BuildNumber) --set image.repository=$(registryName).azurecr.io/$(projectName) --set image.tag=$(build.BuildNumber)_$(Build.SourceBranchName) --set ingress.enabled=false --set branchName=$(Build.SourceBranchName)  --set stage=$(Release.EnvironmentName)'
 
 - bash: |
