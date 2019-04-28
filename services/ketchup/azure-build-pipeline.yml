@@ -19,6 +19,13 @@ jobs:
   steps:
   - bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
     displayName: 'docker build'
+  
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage from istanbul via cobertura'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'cobertura-coverage.xml'
+      reportDirectory: coverage
 
   - bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
     displayName: 'docker login'
