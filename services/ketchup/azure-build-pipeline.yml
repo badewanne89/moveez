@@ -19,13 +19,6 @@ jobs:
   steps:
   - bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
     displayName: 'docker build'
-  
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage from istanbul via cobertura'
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: 'cobertura-coverage.xml'
-      reportDirectory: coverage
 
   - bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
     displayName: 'docker login'
@@ -56,7 +49,7 @@ jobs:
 
 - job: SonarCloud
   pool:
-    name: Hosted VS2017
+    name: 'ubuntu-16.04'
     demands: java
 
   steps:
@@ -73,6 +66,13 @@ jobs:
       workingDir: 'services/$(projectName)'
       verbose: false
       customCommand: test
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage from istanbul via cobertura'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'cobertura-coverage.xml'
+      reportDirectory: coverage
       
   - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
     displayName: 'Prepare analysis on SonarCloud'
