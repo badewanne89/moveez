@@ -49,7 +49,7 @@ jobs:
 
 - job: SonarCloud
   pool:
-    name: 'ubuntu-16.04'
+    vmImage: 'ubuntu-16.04'
     demands: java
 
   steps:
