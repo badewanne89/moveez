@@ -67,14 +67,11 @@ jobs:
       verbose: false
       customCommand: test
 
-  - bash: cd services/ketchup/coverage && ls
-    displayName: 'Bash Script'
-
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage from istanbul via cobertura'
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: 'services/ketchup/coverage/cobertura-coverage.xml'
+      summaryFileLocation: 'services/$(projectName)/coverage/cobertura-coverage.xml'
       
   - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
     displayName: 'Prepare analysis on SonarCloud'
@@ -83,9 +80,12 @@ jobs:
       organization: 'schdief-github'
       scannerMode: CLI
       configMode: manual
-      cliProjectKey: 'schdief:moveez-ketchup'
-      cliProjectName: 'moveez-ketchup'
-      cliSources: services/ketchup
+      cliProjectKey: 'schdief:moveez-$(projectName)'
+      cliProjectName: 'moveez-$(projectName)'
+      cliSources: services/$(projectName)
+      extraProperties: |
+        # setting path to code coverage report from istanbul in lcov format
+        sonar.javascript.lcov.reportPaths=./coverage/lcov.info
 
   - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'

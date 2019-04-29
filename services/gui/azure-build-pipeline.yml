@@ -20,13 +20,6 @@ jobs:
   - bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildNumber)_$(build.sourceBranchName) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
     displayName: 'docker build'
 
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage from istanbul via cobertura'
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: 'cobertura-coverage.xml'
-      reportDirectory: coverage
-
   - bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
     displayName: 'docker login'
 
@@ -62,10 +55,30 @@ jobs:
 
 - job: SonarCloud
   pool:
-    name: Hosted VS2017
+    vmImage: 'ubuntu-16.04'
     demands: java
 
   steps:
+  - task: Npm@1
+    displayName: 'npm install (dependencies)'
+    inputs:
+      workingDir: 'services/$(projectName)'
+      verbose: false
+
+  - task: Npm@1
+    displayName: 'npm test (unit)'
+    inputs:
+      command: custom
+      workingDir: 'services/$(projectName)'
+      verbose: false
+      customCommand: test
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage from istanbul via cobertura'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'services/$(projectName)/coverage/cobertura-coverage.xml'
+      
   - task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
     displayName: 'Prepare analysis on SonarCloud'
     inputs:
@@ -73,9 +86,12 @@ jobs:
       organization: 'schdief-github'
       scannerMode: CLI
       configMode: manual
-      cliProjectKey: 'schdief:moveez-gui'
-      cliProjectName: 'moveez-gui'
-      cliSources: services/gui/src
+      cliProjectKey: 'schdief:moveez-$(projectName)'
+      cliProjectName: 'moveez-$(projectName)'
+      cliSources: services/$(projectName)
+      extraProperties: |
+        # setting path to code coverage report from istanbul in lcov format
+        sonar.javascript.lcov.reportPaths=./coverage/lcov.info
 
   - task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
