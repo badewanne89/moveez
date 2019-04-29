@@ -67,6 +67,9 @@ jobs:
       verbose: false
       customCommand: test
 
+  - bash: ls
+    displayName: 'Bash Script'
+
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage from istanbul via cobertura'
     inputs:
