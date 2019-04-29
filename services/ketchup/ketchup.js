@@ -24,7 +24,7 @@ app.get('/', function (req, res) {
     res.redirect("/empty")
 })
 
-baseURL = "https://www.rottentomatoes.com/m/"
+const baseURL = "https://www.rottentomatoes.com/m/"
 
 app.get('/:id', function (req, res) {
     console.log("INF: Request for " + req.params.id)
@@ -43,12 +43,12 @@ app.get('/:id', function (req, res) {
                 } else {
                     //parse HTML for tomatoUserRating
                     var $ = cheerio.load(response.text)
-                    tomatoUserRatingRaw = $("span.mop-ratings-wrap__percentage--audience").text()
+                    var tomatoUserRatingRaw = $("span.mop-ratings-wrap__percentage--audience").text()
                     //check whether rating could be found
-                    indexOfPercentageCharacter = tomatoUserRatingRaw.indexOf("%")
+                    const indexOfPercentageCharacter = tomatoUserRatingRaw.indexOf("%")
                     if(indexOfPercentageCharacter != -1) {
                         //cut off % of rating
-                        tomatoUserRating = tomatoUserRatingRaw.substring(0, indexOfPercentageCharacter)
+                        var tomatoUserRating = tomatoUserRatingRaw.substring(0, indexOfPercentageCharacter)
                         //cut off leading linebreak and spaces
                         tomatoUserRating = tomatoUserRating.substring(41)
                         //TODO: check whether rating can be - or N/A or similar and act

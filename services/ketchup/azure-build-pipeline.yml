@@ -67,7 +67,7 @@ jobs:
       verbose: false
       customCommand: test
 
-  - bash: ls
+  - bash: cd services && ls
     displayName: 'Bash Script'
 
   - task: PublishCodeCoverageResults@1
