@@ -67,7 +67,7 @@ jobs:
       verbose: false
       customCommand: test
 
-  - bash: cd services && ls
+  - bash: cd services/ketchup/coverage && ls
     displayName: 'Bash Script'
 
   - task: PublishCodeCoverageResults@1
