@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: ketchup-{{ template "branchName" . }}-{{ .Values.stage }}
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: 'true'
     certmanager.k8s.io/acme-challenge-type: dns01
