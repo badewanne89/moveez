@@ -83,7 +83,6 @@ steps:
   condition: succeededOrFailed()
 
 - bash: |
-   # perform loadtest with octoperf (only if master branch)
-   curl --header "Authorization: Bearer $(octoperfAPIKey)" -v -X POST https://api.octoperf.com/runtime/scenarios/run/AWpj8NlL1jJrtCxKoxZ7
-  displayName: 'Perform Octoperf Loadtest'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+   echo "perform lighthouse test with npx lighthouse-ci https://$(projectName)-$(Build.SourceBranchName)-$(Release.EnvironmentName).moveez.de --performance=60 --output=html"
+   npx lighthouse-ci https://$(projectName)-$(Build.SourceBranchName)-$(Release.EnvironmentName).moveez.de --performance=60 --output=html
+  displayName: 'Perform Lighthouse Test'
