@@ -1,14 +1,21 @@
 <% include ../partials/header %>
 
-<div class="ui main text container" id="container">
-    <div class="ui top attached">
+<div class="container">
+    <div class="form-group">
+        <div class="input-group input-group-lg">
+            <input id="searchNewTitle" type="text" class="form-control" id="newTitle" placeholder="search to add..." name="title[name]" required autocomplete="off" onkeyup="suggestTitle()" onblur="hideSuggestions()">
+            <div class="input-group-append">
+                <i class="fas fa-search input-group-text"></i>
+            </div>
+        </div>
+    </div>
 
         <div class="ui horizontal segments grid">
           <div class="ui segment ten wide column">
             <div class="ui search focus">
             <div class="ui icon input">
-                <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off" onkeyup="suggestTitle()" onblur="hideSuggestions()">
-                <i class="search icon"></i>
+                
+                
             </div>
             <div class="results" id="results"></div>
             </div>

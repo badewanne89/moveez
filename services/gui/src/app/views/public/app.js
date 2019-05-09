@@ -36,7 +36,7 @@ function toggleSeenStatus(id, name, seen) {
 
 //suggestions from IMDB (via omdb api) for adding a new title
 function suggestTitle() {
-    var searchString = $('.search input').val()
+    var searchString = $('#searchNewTitle').val()
     if(searchString.length > 2) {
         superagent.get(`https://www.omdbapi.com/?s=${searchString}&apikey=b50af808`)
         .end((err, response) => {
@@ -49,7 +49,7 @@ function suggestTitle() {
                     $('.results').html("")
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
-                        if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com")) {
+                        if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com") || suggestion.Poster.includes("images-na")) {
                             suggestion.Poster = "/nocover.png"
                         }
                         //some titles are too long and mess with the layout (names don't show up because they are behind the other suggestions)
@@ -59,7 +59,7 @@ function suggestTitle() {
                         } else {
                             titleDisplayName = suggestion.Title
                         }
-                        $('.results').append("<div class=\"suggestion item\" onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
+                        $('.results').append("<div class=\"suggestion item\" onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img loading=\"lazy\" class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
                     }
                     $('.results').show()
                 }
