@@ -1,9 +1,7 @@
-//dialogue to delete a title
+//prepare modal to delete a title
 function prepareDeleteModal(name, id) {
 	//set name of modal
 	$('#deleteModalName').text(name)
-	//set button text for delete
-	$('#deleteModalButton').attr('value', "Yes, delete '" + name + "'!")
 	//set action to id of title
 	$('#deleteModalForm').attr('action', '/title/' + id + '/?_method=DELETE')
 	//show delete modal
@@ -12,8 +10,8 @@ function prepareDeleteModal(name, id) {
 
 //trigger fadeout of flash messages
 window.onload = function() {
-    $('.success.message').fadeOut(2500)
-    $('.error.message').fadeOut(2500)
+    $('#successAlert').fadeOut(5000)
+    $('#errorAlert').fadeOut(5000)
 }
 
 //update a title as seen or unseen
@@ -59,7 +57,7 @@ function suggestTitle() {
                         } else {
                             titleDisplayName = suggestion.Title
                         }
-                        $('.results').append("<div class=\"suggestion item\" onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img loading=\"lazy\" class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
+                        $('.results').append("<div class=\"suggestion\" onClick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><i class=\"fas fa-plus-circle addSuggestionButton\"></i><img loading=\"lazy\" class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
                     }
                     $('.results').show()
                 }
@@ -95,5 +93,7 @@ function addTitle(name, imdbID, year, poster) {
 
 //hide suggestions when search field loses focus
 function hideSuggestions() {
-    $('.results').delay(200).hide(0)
+    setTimeout(function () {
+        $('.results').hide(0)
+    }, 200);
 }

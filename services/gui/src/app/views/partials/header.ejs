@@ -19,65 +19,36 @@
     <body>
         
         <!-- nav bar -->
-        <nav class="navbar navbar-light bg-info text-white justify-content-between navbar-expand-sm">
+        <nav class="navbar navbar-light text-white navbar-expand-sm" style="background: teal">
             <a class="navbar-brand d-flex" href="/title">
                 <img src="/logo.png" width="60px" height="60px" class="d-inline-block align-top mr-3" alt="moveez logo">
                 <h2 class="d-inline my-auto text-white">Moveez</h2>
             </a>
             <!-- hamburger when collapsed -->
-            <button class="navbar-toggler bg-white" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler bg-white ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- collapsed nav -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <a id="logout" href="/logout" class="btn btn-social btn-danger">
-                    <i class="fas fa-sign-out-alt my-auto"></i> Logout
+                <hr class="d-sm-none">
+                <a id="logout" href="/logout" class="btn btn-icon-danger btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
         </nav>
 
         <br>
-        
-        <!-- TODO: move to own css file -->
-        <style>
-            .btn-social {
-                position: relative;
-                padding-left: 50px;
-                text-align: left;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-    
-            .btn-social :first-child {
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                width: 40px;
-                padding: 8px;
-                font-size: 1.2em;
-                text-align: center;
-                background-color: rgb(189, 34, 50);
-            }
-        </style>
 
-<!-- old layout -->
-
+        <!-- alerts for actions -->
         <% if(success && success.length > 0) { %>
-            <div class="ui success icon message">
-                <i class="checkmark icon"></i>
-                <div class="header">
-                    <%= success %>
-                </div>
+            <div id="successAlert" class="alert alert-success" role="alert">
+                <i class="fas fa-thumbs-up mr-1"></i>
+                <%= success %>
             </div>
         <% } %>
-
-        <% if(success && error.length > 0) { %>
-            <div class="ui error icon message">
-                <i class="warning icon"></i>
-                <div class="header">
-                    <%= error %>
-                </div>
+        <% if(error && error.length > 0) { %>
+            <div id="errorAlert" class="alert alert-danger" role="alert">
+                    <i class="fas fa-bomb mr-1"></i>
+                <%= error %>
             </div>
         <% } %>

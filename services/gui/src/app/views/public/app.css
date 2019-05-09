@@ -1,12 +1,73 @@
-#logo {
-    background-color: teal;
-    font-size: 20px;
-    font-weight: bold;
+.addSuggestionButton {
+    font-size: 2rem;
+    color: teal;
 }
 
-.inline {
-    display: inline;
+.tomato {
+    background: url(rottentomato.png) no-repeat;
+    background-size: cover;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
 }
+
+i.fa-imdb {
+    font-size: 2rem;
+}
+
+.alert {
+    z-index:1;
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+/* TODO: consolidate btn-icon-x */
+
+.btn-icon-danger {
+    position: relative;
+    padding-left: 50px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-icon-danger :first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    padding: 8px;
+    font-size: 1.2em;
+    text-align: center;
+    background-color: rgb(189, 34, 50);
+}
+
+.btn-icon-success {
+    position: relative;
+    padding-left: 50px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-icon-success :first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    padding: 8px;
+    font-size: 1.2em;
+    text-align: center;
+    background-color: rgb(26, 116, 38);
+}
+
+/* TODO: old style */
 
 .seen {
     text-decoration: line-through;
@@ -42,11 +103,6 @@
     vertical-align: top;
     margin: 0px 0px 0px 10px;
     display: inline-block;
-}
-
-#add {
-    vertical-align: top;
-    margin: 6px 5px 0px 10px;
 }
 
 .suggestionPoster {
@@ -86,10 +142,6 @@ h4 {
     background: #f7f7f7!important;
 }
 
-i.imdb.icon {
-    font-size: 1.5em;
-}
-
 .titleButtons {
     margin-top: 61px;
 }
@@ -97,13 +149,4 @@ i.imdb.icon {
 .seenPoster {
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%);
-}
-
-.tomato {
-    background: url(rottentomato.png) no-repeat;
-    background-size: cover;
-}
-
-#inline {
-    display:inline;
 }
