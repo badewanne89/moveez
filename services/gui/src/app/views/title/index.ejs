@@ -60,17 +60,17 @@
                     </div>
                 <% } %>
             <% }); %>
+            <!-- empty watchlist -->
+            <% if(titles.filter(title=>!title.seen).length == 0) { %>
+                <div class="container rounded bg-warning pb-3 mb-2">
+                    <h3 class="pt-3"><i class="fas fa-smile-wink mr-2"></i>Welcome!</h3>
+                    <hr>
+                    Seems like you haven't added any titles to your watchlist yet or you've run out of binge material <i class="fas fa-sad-cry"></i>
+                    <br> <br>
+                    <i class="fas fa-hand-point-up mr-2"></i>Find your next binge by typing in the search field above.
+                </div>
+            <% } %>
         </div>
-        
-            <!-- old layout -->
-                    <% if(titles.filter(title=>!title.seen).length == 0) { %>
-                        <div class="item title">
-                            <h1>😭</h1> Seems like you haven't added any titles to your watchlist yet or you've run out of binge material.
-                            <br>
-                            Look for your next binge by typing in the search field above.
-                        </div>
-                    <% } %>
-
         
         <!-- binge history -->
         <div class="col-lg-4 mt-lg-0 bg-secondary text-white rounded-left">
@@ -117,20 +117,16 @@
                     <% } %>
                 <% }); %>
 
-            <!-- old layout -->
-            
-            <div class="ui list">
-                    <% if(titles.filter(title=>title.seen).length == 0) { %>
-                        <div class="item watchedtitle">
-                            <h1>😭</h1> Looks like you haven't recorded any binge session yet, shame on you!
-                            <br>
-                            Record a binge by clicking the checkmark button "watched".
-                        </div>
-                    <% } %>
-        
-                    
-                    </div> 
-
+            <!-- empty history -->
+            <% if(titles.filter(title=>title.seen).length == 0) { %>
+                <div class="container rounded bg-warning pb-3 mb-2">
+                    <h3 class="pt-3"><i class="fas fa-surprise mr-2"></i>Oh no!</h3>
+                    <hr>
+                    Looks like you haven't recorded any binge session yet - shame on you! <i class="fas fa-sad-cry"></i>
+                    <br> <br>
+                    Record a binge by clicking the checkmark button (<i class="fas fa-check"></i>) "watched".
+                </div>
+            <% } %>
         </div>
     </div>
 </div>
