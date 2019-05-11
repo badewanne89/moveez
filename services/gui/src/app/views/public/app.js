@@ -53,10 +53,10 @@ function suggestTitle() {
                         //build string for suggestion
                         suggestion = `
                             <div class="suggestion d-flex" onClick="addTitle('${suggestion.Title}', '${suggestion.imdbID}', '${suggestion.Year}', '${suggestion.Poster}')">
-                                <i class="fas fa-plus-circle addSuggestionButton my-auto"></i>
+                                <i class="fas fa-plus-circle addSuggestionButton my-auto ml-2"></i>
                                 <img loading="lazy" class="my-auto ml-2" src="${suggestion.Poster}" width="33px" height="50px">
                                 <div class="container-fluid ml-2 my-auto p-0">
-                                    <h4 class="my-1 trimLength" style="min-width: 0px">${suggestion.Title}</h4>
+                                    <h4 class="my-1 d-block">${suggestion.Title}</h4>
                                     <p class="text-muted my-1">(${suggestion.Year})</p>
                                 </div>
                             </div>

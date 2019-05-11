@@ -18,16 +18,14 @@
         <div class="col-lg-8">
             <% titles.forEach(function(title){ %>
                 <% if(!title.seen) { %>
-                    <div class="card mb-3" style="max-width: 550px;">
+                    <div class="card mb-3">
                         <div class="row no-gutters">
-                            <div class="col" style="max-width: 133px">
-                                <img src="<%= title.poster %>" class="card-img" loading="lazy" alt="cover" style="height: 196px; width: 133px">
+                            <div class="col maximumWidthForPoster">
+                                <img src="<%= title.poster %>" class="card-img posterSize" loading="lazy" alt="cover">
                             </div>
                             <div class="col">
-                                <div class="card-header" tyle="max-width: 415px;">
-                                    <h5 class="card-title mb-1">
-                                        <%= title.name %>
-                                    </h5>
+                                <div class="card-header">
+                                    <h5 class="card-title mb-1"><%= title.name %></h5>
                                     <small class="card-text text-muted">(<%= title.year %>)</small>
                                 </div>
                                 <ul class="list-group list-group-flush">
@@ -85,21 +83,14 @@
                             <h5 class="mb-2"><i class="far fa-calendar-alt mr-2"></i><%= new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10) %> </h5>
                         <% } %>
                         <% previousDate = title.seenOn %>
-                        <div class="card mb-3 bg-dark text-white" style="max-width: 300px; max-height: 300px;">
+                        <div class="card mb-3 bg-dark text-white">
                             <div class="row no-gutters">
                                 <div class="col" style="max-width: 50px">
                                     <img src="<%= title.poster %>" class="card-img" loading="lazy" alt="cover" style="height: 75px; width: 50px">
                                 </div>
                                 <div class="col">
                                     <div class="card-header py-1"> 
-                                        <h6 class="card-title mb-1">
-                                            <% if(title.name.length > 28) { %>
-                                                <% name = title.name.substring(0, 23) + "..." %>
-                                            <% } else { %>
-                                                <% name = title.name %>
-                                            <% } %>
-                                            <%= name %>
-                                        </h6>
+                                        <h6 class="card-title mb-1"><%= title.name %></h6>
                                     </div>
                                         <li class="list-group-item py-1">
                                             <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="fas fa-redo"></i></button>

@@ -1,3 +1,23 @@
+.maximumWidthForPoster {
+    max-width: 100px;
+}
+
+.posterSize {
+    height: 148px;
+    width: 100px;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .maximumWidthForPoster {
+        max-width: 132px;
+    }
+    .posterSize {
+        height: 196px;
+        width: 132px;
+    }
+}
+
 .addSuggestionButton {
     font-size: 2rem;
     color: teal;
@@ -5,12 +25,6 @@
 
 img {
     flex-shrink: 0;
-}
-
-.trimLength {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
 }
 
 .tomato {
