@@ -40,31 +40,35 @@ function suggestTitle() {
         .end((err, response) => {
             if (err) {
                 console.log(`ERR: oMDB failed us, here is the reason: ${err}`)
-                $('.results').html("<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>")
-                $('.results').show()
+                $('#results').html("<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>")
+                $('#results').show()
             } else {
                 if(response.body.Search) {
-                    $('.results').html("")
+                    $('#results').html("")
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
                         if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com") || suggestion.Poster.includes("images-na")) {
                             suggestion.Poster = "/nocover.png"
                         }
-                        //some titles are too long and mess with the layout (names don't show up because they are behind the other suggestions)
-                        var titleDisplayName
-                        if(suggestion.Title.length > 40) {
-                            titleDisplayName = suggestion.Title.substring(0, 37) + "..."
-                        } else {
-                            titleDisplayName = suggestion.Title
-                        }
-                        $('.results').append("<div class=\"suggestion\" onClick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><i class=\"fas fa-plus-circle addSuggestionButton\"></i><img loading=\"lazy\" class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
+                        //build string for suggestion
+                        suggestion = `
+                            <div class="suggestion d-flex" onClick="addTitle('${suggestion.Title}', '${suggestion.imdbID}', '${suggestion.Year}', '${suggestion.Poster}')">
+                                <i class="fas fa-plus-circle addSuggestionButton my-auto"></i>
+                                <img loading="lazy" class="my-auto ml-2" src="${suggestion.Poster}" width="33px" height="50px">
+                                <div class="container-fluid ml-2 my-auto p-0">
+                                    <h4 class="my-1 trimLength" style="min-width: 0px">${suggestion.Title}</h4>
+                                    <p class="text-muted my-1">(${suggestion.Year})</p>
+                                </div>
+                            </div>
+                        `
+                        $('#results').append(suggestion)
                     }
-                    $('.results').show()
+                    $('#results').show()
                 }
             }
         })
     } else {
-        $('.results').hide(0)
+        $('#results').hide(0)
     }
 }
 
@@ -93,7 +97,7 @@ function addTitle(name, imdbID, year, poster) {
 
 //hide suggestions when search field loses focus
 function hideSuggestions() {
-    setTimeout(function () {
-        $('.results').hide(0)
-    }, 200);
+    //setTimeout(function () {
+    //    $('.results').hide(0)
+    //}, 200);
 }

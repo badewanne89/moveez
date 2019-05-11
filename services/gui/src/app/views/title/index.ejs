@@ -8,7 +8,7 @@
                 <i class="fas fa-search input-group-text"></i>
             </div>
         </div>
-        <div class="results" id="results"></div>
+        <div class="container-fluid" id="results"></div>
     </div>
 </div>
 
@@ -24,14 +24,9 @@
                                 <img src="<%= title.poster %>" class="card-img" loading="lazy" alt="cover" style="height: 196px; width: 133px">
                             </div>
                             <div class="col">
-                                <div class="card-header">
+                                <div class="card-header" tyle="max-width: 415px;">
                                     <h5 class="card-title mb-1">
-                                        <% if(title.name.length > 40) { %>
-                                            <% name = title.name.substring(0, 37) + "..." %>
-                                        <% } else { %>
-                                            <% name = title.name %>
-                                        <% } %>
-                                        <%= name %>
+                                        <%= title.name %>
                                     </h5>
                                     <small class="card-text text-muted">(<%= title.year %>)</small>
                                 </div>
@@ -90,14 +85,14 @@
                             <h5 class="mb-2"><i class="far fa-calendar-alt mr-2"></i><%= new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10) %> </h5>
                         <% } %>
                         <% previousDate = title.seenOn %>
-                        <div class="card mb-3" style="max-width: 300px; max-height: 300px;">
+                        <div class="card mb-3 bg-dark text-white" style="max-width: 300px; max-height: 300px;">
                             <div class="row no-gutters">
                                 <div class="col" style="max-width: 50px">
                                     <img src="<%= title.poster %>" class="card-img" loading="lazy" alt="cover" style="height: 75px; width: 50px">
                                 </div>
                                 <div class="col">
                                     <div class="card-header py-1"> 
-                                        <h6 class="card-title mb-1 text-dark">
+                                        <h6 class="card-title mb-1">
                                             <% if(title.name.length > 28) { %>
                                                 <% name = title.name.substring(0, 23) + "..." %>
                                             <% } else { %>
@@ -119,7 +114,7 @@
 
             <!-- empty history -->
             <% if(titles.filter(title=>title.seen).length == 0) { %>
-                <div class="container rounded bg-warning pb-3 mb-2">
+                <div class="container rounded pb-3 mb-2">
                     <h3 class="pt-3"><i class="fas fa-surprise mr-2"></i>Oh no!</h3>
                     <hr>
                     Looks like you haven't recorded any binge session yet - shame on you! <i class="fas fa-sad-cry"></i>
