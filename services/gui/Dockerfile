@@ -1,17 +1,3 @@
-FROM node:alpine as test
-
-# install dependencies (without cypress)
-COPY package*.json ./
-RUN npm install --no-optional
-
-# bundle app source
-COPY . .
-
-# run integration test with mocha
-RUN npm test
-
-# TODO: add sonarqube
-
 FROM node:alpine as build
 
 # TODO: reuse dependencies to speed up build
@@ -24,7 +10,6 @@ COPY . .
 
 # build frontend javascript (react)
 RUN npm run babel
-RUN npm run webpack
 
 FROM node:alpine AS final
 LABEL maintainer="schdief.law@gmail.com"
