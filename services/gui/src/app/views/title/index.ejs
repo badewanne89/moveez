@@ -1,5 +1,8 @@
 <% include ../partials/header %>
 
+<%
+    const escapeName = (name) => name.replace(/['"]/,'');
+%>
 <div class="container-fluid">
     <div class="form-group">
         <div class="input-group input-group-lg">
@@ -44,8 +47,8 @@
                                         <% } %>
                                     </li>
                                     <li class="list-group-item">
-                                        <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="fas fa-check"></i></button>
-                                        <button id="deleteButton" class="btn btn-danger card-link py-1 px-2" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="fas fa-trash"></i></button>   
+                                        <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= escapeName(title.name) %>', true)" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="fas fa-check"></i></button>
+                                        <button id="deleteButton" class="btn btn-danger card-link py-1 px-2" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="fas fa-trash"></i></button>   
                                     </li>
                                 </ul>
                             </div>
@@ -93,8 +96,8 @@
                                         <h6 class="card-title mb-1"><%= title.name %></h6>
                                     </div>
                                         <li class="list-group-item py-1">
-                                            <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="fas fa-redo"></i></button>
-                                            <button id="deleteButton" class="btn btn-danger card-link py-1 px-2" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="fas fa-trash"></i></button>   
+                                            <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= escapeName(title.name) %>', false)" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="fas fa-redo"></i></button>
+                                            <button id="deleteButton" class="btn btn-danger card-link py-1 px-2" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="fas fa-trash"></i></button>   
                                         </li>
                                     </ul>
                                 </div>

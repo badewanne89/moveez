@@ -3,7 +3,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-http').BasicStrategy;
 const fs = require('fs');
 
-const UAT_MODE = process.env.NODE_ENV === "uat";
+const LOCAL_AUTH = process.env.AUTH === "local" || process.env.NODE_ENV === "uat";
 const DEV_MODE = !process.env.NODE_ENV;
 const FACEBOOK_APP_ID = 320908101860577;
 const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET;
@@ -32,7 +32,7 @@ const initialize = (app, port) => {
         (user, pass, done) => user === "cypress" && pass === "cypress" ? done(null, user) : done(null, false)
     );
 
-    const authorizationStrategy = UAT_MODE ? customStrategy : facebookStrategy;
+    const authorizationStrategy = LOCAL_AUTH ? customStrategy : facebookStrategy;
 
     passport.use("authorization", authorizationStrategy);
     
@@ -48,7 +48,7 @@ const initialize = (app, port) => {
     app.use(passport.session());
 
     // login page
-    if(UAT_MODE) {
+    if(LOCAL_AUTH) {
         app.post(
             '/login',
             passport.authenticate('authorization', {

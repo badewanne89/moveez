@@ -1,5 +1,3 @@
-process.env.NODE_ENV = 'test'
-
 var chai = require("chai"),
     chaitHttp = require("chai-http"),
     should = chai.should(),

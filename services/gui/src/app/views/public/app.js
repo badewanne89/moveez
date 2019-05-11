@@ -44,15 +44,16 @@ function suggestTitle() {
                 $('#results').show()
             } else {
                 if(response.body.Search) {
-                    $('#results').html("")
+                    const $results = $('#results');
+                    $results.html("");
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
                         if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com") || suggestion.Poster.includes("images-na")) {
                             suggestion.Poster = "/nocover.png"
                         }
                         //build string for suggestion
-                        suggestion = `
-                            <div class="suggestion flex-parent" onClick="addTitle('${suggestion.Title}', '${suggestion.imdbID}', '${suggestion.Year}', '${suggestion.Poster}')">
+                        let suggestionHtml = `
+                            <div class="suggestion flex-parent">
                                 <div class="flex-child short-and-fixed my-auto d-flex">
                                     <i class="fas fa-plus-circle addSuggestionButton my-auto ml-2"></i>
                                     <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
@@ -63,9 +64,10 @@ function suggestTitle() {
                                 </div>
                             </div>
                         `
-                        $('#results').append(suggestion)
+                        $results.append(suggestionHtml)
+                        $results.children().last().click(()=>addTitle(suggestion.Title, suggestion.imdbID, suggestion.Year, suggestion.Poster));
                     }
-                    $('#results').show()
+                    $results.show()
                 }
             }
         })
