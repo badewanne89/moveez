@@ -46,7 +46,9 @@ function suggestTitle() {
                 $('.results').show()
             } else {
                 if(response.body.Search) {
+                    console.log("--searched")
                     const $results = $('.results');
+                    $results.html("");
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
                         if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com")) {
