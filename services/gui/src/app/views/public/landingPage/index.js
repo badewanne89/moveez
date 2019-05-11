@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import sBackgroundImageUrl from "./top250.png";
+import sBackgroundImageUrl from "./top250.jpg";
 import sLogoUrl from "../logo.png";
 
 const LandingPage = ()=>{
