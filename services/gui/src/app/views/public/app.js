@@ -46,7 +46,7 @@ function suggestTitle() {
                 $('.results').show()
             } else {
                 if(response.body.Search) {
-                    $('.results').html("")
+                    const $results = $('.results');
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
                         if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com")) {
@@ -59,9 +59,10 @@ function suggestTitle() {
                         } else {
                             titleDisplayName = suggestion.Title
                         }
-                        $('.results').append("<div class=\"suggestion item\" onclick=\"addTitle('" + suggestion.Title + "', '" + suggestion.imdbID + "', '" + suggestion.Year + "', '" + suggestion.Poster + "')\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
+                        $results.append("<div class=\"suggestion item\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
+                        $results.children().last().click(()=>addTitle(suggestion.Title, suggestion.imdbID, suggestion.Year, suggestion.Poster));
                     }
-                    $('.results').show()
+                    $results.show()
                 }
             }
         })

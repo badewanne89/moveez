@@ -1,5 +1,9 @@
 <% include ../partials/header %>
 
+<%
+    const escapeName = (name) => name.replace(/['"]/,'');
+%>
+
 <div class="ui main text container" id="container">
     <div class="ui top attached">
 
@@ -57,8 +61,8 @@
                                 </span>
                             </div>
                             <div class="description titleButtons">
-                                <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
-                                <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                                <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title._id %>', '<%= escapeName(title.name) %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
+                                <button id="deleteButton" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -103,8 +107,8 @@
                                 <% } %>
                                 <%= name %>
                                 <div class="description">
-                                    <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title.id %>', '<%= title.name %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="redo icon"></i></button>
-                                    <button id="deleteButton" onclick="prepareDeleteModal('<%= title.name %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                                    <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title._id %>', '<%= escapeName(title.name) %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="redo icon"></i></button>
+                                    <button id="deleteButton" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
                                 </div>
                             </div>
                         </div>
