@@ -110,7 +110,7 @@ const HOST = '0.0.0.0'
 const MODE = process.env.NODE_ENV || "default"
 const RELEASE = process.env.RELEASE || "snapshot"
 
-if (MODE === "default") {
+if (MODE === "default" && !process.env.AUTH) {
     const privateKey  = fs.readFileSync(TLS_KEY_PATH, 'utf8');
     const certificate = fs.readFileSync(TLS_CRT_PATH, 'utf8');
     https.createServer({key:privateKey, cert:certificate}, app).listen(PORT, HOST, () => {
@@ -128,7 +128,7 @@ if (MODE === "default") {
         console.log("mode: " + MODE)
         console.log(`db: ${dbConnectionString} with ${dbPassword}`)
         console.log(`ketchup: ${process.env.KETCHUP_ENDPOINT}`)
-    })  
+    })
 }
 
 //expose for integration testing with mocha
