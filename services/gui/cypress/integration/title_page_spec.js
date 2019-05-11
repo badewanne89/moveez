@@ -30,7 +30,7 @@ describe('The Title Page', function() {
 describe('Adding a Title', function() {
   it('is aided by a suggestion from iMDB when typing', function() {
     //TODO: remove delay, not needed anymore
-    cy.get('#searchNewTitle').type('Inception', {delay: 10}).wait(100)
+    cy.get('#searchNewTitle').type('Inception', {delay: 10}).wait(1000)
   })
   it('can be done by clicking +', function() {
     cy.get('.addSuggestionButton').first().click()
@@ -69,7 +69,7 @@ describe('Marking a Title as seen', function() {
 
 describe('Deleting a Title', function() {
   it('can be triggered by clicking the trash symbol', function() {
-      cy.wait(500)  
+      cy.wait(1000)  
       cy.get('#deleteButton').click()
       cy.get('#deleteModal').should('be.visible')
   })
@@ -79,7 +79,7 @@ describe('Deleting a Title', function() {
       cy.get('#watchList').should('contain', 'Inception')
   })
   it('can be performed by saying delete', function() {
-      cy.wait(500)
+      cy.wait(1000)
       cy.get('#deleteButton').click()
       cy.get('#deleteModalButton').click()
   })
