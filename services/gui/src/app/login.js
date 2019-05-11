@@ -3,7 +3,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-http').BasicStrategy;
 const fs = require('fs');
 
-const LOCAL_AUTH = process.env.AUTH === "local" || process.env.NODE_ENV === "uat";
+const LOCAL_AUTH = process.env.AUTH === "basic" || process.env.NODE_ENV === "uat";
 const DEV_MODE = !process.env.NODE_ENV;
 const FACEBOOK_APP_ID = 320908101860577;
 const FACEBOOK_APP_SECRET = process.env.FACEBOOK_APP_SECRET;

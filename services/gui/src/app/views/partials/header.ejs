@@ -2,43 +2,53 @@
 <html>
     <head>
         <title>Moveez - manage your binge!</title>
-        <script
-            src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous">
-        </script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
-        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/4.1.0/superagent.min.js"></script>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <!-- Fontawesome CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+        <!-- our custom CSS -->
         <link rel="stylesheet" href="/app.css">
         <link rel="shortcut icon" href="/logo.png" type="image/x-icon">
     </head>
     <body>
         
-        <div class="ui flex inverted menu">
-            <a id="logo" href="/title" class="header item">
-                <img src="/logo.png" class="ui image logo" width="40px" height="40px">
-                Moveez
+        <!-- nav bar -->
+        <nav class="navbar navbar-light text-white navbar-expand-sm" style="background: teal">
+            <a class="navbar-brand d-flex" href="/title">
+                <img src="/logo.png" width="60px" height="60px" class="d-inline-block align-top mr-3" alt="moveez logo">
+                <h2 class="d-inline my-auto text-white">Moveez</h2>
             </a>
-            <a id="logout" href="/logout" class="header right item">
-                logout
-            </a>
-        </div>
+            <!-- hamburger when collapsed -->
+            <button class="navbar-toggler bg-white ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- collapsed nav -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <hr class="d-sm-none">
+                <a id="logout" href="/logout" class="btn btn-icon-danger btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </nav>
 
+        <br>
+
+        <!-- alerts for actions -->
         <% if(success && success.length > 0) { %>
-            <div class="ui success icon message">
-                <i class="checkmark icon"></i>
-                <div class="header">
-                    <%= success %>
-                </div>
+            <div id="successAlert" class="alert alert-success" role="alert">
+                <i class="fas fa-thumbs-up mr-1"></i>
+                <%= success %>
             </div>
         <% } %>
-
-        <% if(success && error.length > 0) { %>
-            <div class="ui error icon message">
-                <i class="warning icon"></i>
-                <div class="header">
-                    <%= error %>
-                </div>
+        <% if(error && error.length > 0) { %>
+            <div id="errorAlert" class="alert alert-danger" role="alert">
+                    <i class="fas fa-bomb mr-1"></i>
+                <%= error %>
             </div>
         <% } %>

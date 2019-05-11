@@ -1,9 +1,7 @@
-//dialogue to delete a title
+//prepare modal to delete a title
 function prepareDeleteModal(name, id) {
 	//set name of modal
 	$('#deleteModalName').text(name)
-	//set button text for delete
-	$('#deleteModalButton').attr('value', "Yes, delete '" + name + "'!")
 	//set action to id of title
 	$('#deleteModalForm').attr('action', '/title/' + id + '/?_method=DELETE')
 	//show delete modal
@@ -12,8 +10,8 @@ function prepareDeleteModal(name, id) {
 
 //trigger fadeout of flash messages
 window.onload = function() {
-    $('.success.message').fadeOut(2500)
-    $('.error.message').fadeOut(2500)
+    $('#successAlert').fadeOut(5000)
+    $('#errorAlert').fadeOut(5000)
 }
 
 //update a title as seen or unseen
@@ -36,32 +34,37 @@ function toggleSeenStatus(id, name, seen) {
 
 //suggestions from IMDB (via omdb api) for adding a new title
 function suggestTitle() {
-    var searchString = $('.search input').val()
+    var searchString = $('#searchNewTitle').val()
     if(searchString.length > 2) {
         superagent.get(`https://www.omdbapi.com/?s=${searchString}&apikey=b50af808`)
         .end((err, response) => {
             if (err) {
                 console.log(`ERR: oMDB failed us, here is the reason: ${err}`)
-                $('.results').html("<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>")
-                $('.results').show()
+                $('#results').html("<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>")
+                $('#results').show()
             } else {
                 if(response.body.Search) {
-                    console.log("--searched")
-                    const $results = $('.results');
+                    const $results = $('#results');
                     $results.html("");
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
-                        if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com")) {
+                        if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com") || suggestion.Poster.includes("images-na")) {
                             suggestion.Poster = "/nocover.png"
                         }
-                        //some titles are too long and mess with the layout (names don't show up because they are behind the other suggestions)
-                        var titleDisplayName
-                        if(suggestion.Title.length > 40) {
-                            titleDisplayName = suggestion.Title.substring(0, 37) + "..."
-                        } else {
-                            titleDisplayName = suggestion.Title
-                        }
-                        $results.append("<div class=\"suggestion item\"><button class=\"ui icon teal button\" id=\"add\"><i class=\"add circle icon\"></i></button><img class=\"suggestionPoster\" src=\"" + suggestion.Poster + "\" width=\"30px\" height=\"44px\"><div class=\"suggestionContent\"><h4>" + titleDisplayName + "</h4>(" + suggestion.Year +  ")</div></div>")
+                        //build string for suggestion
+                        let suggestionHtml = `
+                            <div class="suggestion flex-parent">
+                                <div class="flex-child short-and-fixed my-auto d-flex">
+                                    <i class="fas fa-plus-circle addSuggestionButton my-auto ml-2"></i>
+                                    <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
+                                </div>
+                                <div class="flex-child long-and-truncated-with-child my-auto ml-2">
+                                    <h4 class="my-1">${suggestion.Title}</h4>
+                                    <p class="text-muted my-1">(${suggestion.Year})</p>
+                                </div>
+                            </div>
+                        `
+                        $results.append(suggestionHtml)
                         $results.children().last().click(()=>addTitle(suggestion.Title, suggestion.imdbID, suggestion.Year, suggestion.Poster));
                     }
                     $results.show()
@@ -69,7 +72,7 @@ function suggestTitle() {
             }
         })
     } else {
-        $('.results').hide(0)
+        $('#results').hide(0)
     }
 }
 
@@ -98,5 +101,7 @@ function addTitle(name, imdbID, year, poster) {
 
 //hide suggestions when search field loses focus
 function hideSuggestions() {
-    $('.results').delay(200).hide(0)
+    setTimeout(function () {
+        $('#results').hide(0)
+    }, 200);
 }

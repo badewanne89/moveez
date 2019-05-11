@@ -30,17 +30,17 @@ describe('The Title Page', function() {
 describe('Adding a Title', function() {
   it('is aided by a suggestion from iMDB when typing', function() {
     //TODO: remove delay, not needed anymore
-    cy.get('#newTitle').type('Inception', {delay: 1000}).wait(1000)
+    cy.get('#searchNewTitle').type('Inception', {delay: 10}).wait(1000)
   })
   it('can be done by clicking +', function() {
-    cy.get('#add').click()
+    cy.get('.addSuggestionButton').first().click()
   })
   it('shows a success flash message', function() {
-    cy.get('.header').should('be.visible')
-    cy.get('.header').should('contain', 'You\'ve added')
+    cy.get('#successAlert').should('be.visible')
+    cy.get('#successAlert').should('contain', 'You\'ve added')
   })
   it('results in a new entry in the list', function() {
-    cy.contains('Inception')
+    cy.get('#watchList').contains('Inception')
   })
   it('fetches the user rating of Rottentomato via ketchup', function() {
     cy.get('#tomatoUserRating').should('not.contain', '-')
@@ -59,36 +59,36 @@ describe('Marking a Title as seen', function() {
       cy.get('#toggleSeenStatusButton').click()
   })
   it('shows the title in the binge history', function(){
-      cy.get('div.history.content.name').should('contain', 'Inception')
+      cy.get('#bingeHistory').should('contain', 'Inception')
   })
   it('can be put back to the list by clicking the reload symbol', function(){
       cy.get('#toggleSeenStatusButton').click()
-      cy.get('h4').should('contain', 'Inception')
+      cy.get('#watchList').contains('Inception')
   })
 })
 
 describe('Deleting a Title', function() {
   it('can be triggered by clicking the trash symbol', function() {
+      cy.wait(1000)  
       cy.get('#deleteButton').click()
       cy.get('#deleteModal').should('be.visible')
   })
   it('can be aborted by saying nope', function() {
-      cy.get('#abortDeleteButton').click()
+      cy.get('#abortDeleteButton > i').click()
       cy.get('#deleteModal').should('not.be.visible')
-      cy.get('.content').should('contain', 'Inception')
+      cy.get('#watchList').should('contain', 'Inception')
   })
   it('can be performed by saying delete', function() {
-      //TODO: find out why delete doesn't open with second click in cypress (works manually)
-      cy.reload()
+      cy.wait(1000)
       cy.get('#deleteButton').click()
       cy.get('#deleteModalButton').click()
   })
   it('shows a success flash message', function() {
-      cy.get('.header').should('be.visible')
-      cy.get('.header').should('contain', 'You\'ve deleted')
+      cy.get('#successAlert').should('be.visible')
+      cy.get('#successAlert').should('contain', 'You\'ve deleted')
   })
   it('results in a deleted entry', function() {
-      cy.get('.content').should('not.contain', 'Inception')
+      cy.get('#watchList').should('not.contain', 'Inception')
   })
 })
 

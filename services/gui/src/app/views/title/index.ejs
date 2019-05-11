@@ -3,139 +3,147 @@
 <%
     const escapeName = (name) => name.replace(/['"]/,'');
 %>
-
-<div class="ui main text container" id="container">
-    <div class="ui top attached">
-
-        <div class="ui horizontal segments grid">
-          <div class="ui segment ten wide column">
-            <div class="ui search focus">
-            <div class="ui icon input">
-                <input class="search" id="newTitle" type="text" placeholder="search to add..." name="title[name]" required autocomplete="off" onkeyup="suggestTitle()" onblur="hideSuggestions()">
-                <i class="search icon"></i>
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="input-group input-group-lg">
+            <input id="searchNewTitle" type="text" class="form-control" id="newTitle" placeholder="search to add..." name="title[name]" required autocomplete="off" onkeyup="suggestTitle()" onblur="hideSuggestions()">
+            <div class="input-group-append">
+                <i class="fas fa-search input-group-text"></i>
             </div>
-            <div class="results" id="results"></div>
-            </div>
+        </div>
+        <div class="container-fluid p-0" id="results"></div>
+    </div>
+</div>
 
-            <div class="ui list">
-            <% if(titles.filter(title=>!title.seen).length == 0) { %>
-                <div class="item title">
-                    <h1>😭</h1> Seems like you haven't added any titles to your watchlist yet or you've run out of binge material.
-                    <br>
-                    Look for your next binge by typing in the search field above.
-                </div>
-            <% } %>
-
+<div class="container-fluid">
+    <div class="row">
+        <!-- watchlist -->
+        <div id="watchList" class="col-lg-8">
             <% titles.forEach(function(title){ %>
                 <% if(!title.seen) { %>
-                    <div class="item title">
-                        <img class="ui image" src="<%= title.poster %>" height="150px" width="100px">
-                        <div class="content titleDetails">
-                            <% if(title.name.length > 45) { %>
-                                <% name = title.name.substring(0, 42) + "..." %>
-                            <% } else { %>
-                                <% name = title.name %>
-                            <% } %>
-                            <h4><%= name %></h4>
-                            (<%= title.year %>)
-                            <div class="description">
-                                <span>
-                                    <i class="imdb icon"></i>
-                                    <p class="inline">
+                    <div class="card mb-3">
+                        <div class="row no-gutters">
+                            <div class="col maximumWidthForPoster">
+                                <img src="<%= title.poster %>" class="card-img posterSize" loading="lazy" alt="cover">
+                            </div>
+                            <div class="col">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-1"><%= title.name %></h5>
+                                    <small class="card-text text-muted">(<%= title.year %>)</small>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <i class="fab fa-imdb mr-1"></i>
                                         <% if(title.imdbRating === -1) { %>
                                             - %
                                         <% } else { %>
-                                            <%= title.imdbRating %> %
+                                            <%= title.imdbRating %>
                                         <% } %>
-                                    </p>
-                                </span>
-                                <span>
-                                    <i class="tomato icon"></i>
-                                    <p class="inline" id="tomatoUserRating">
+                                        <i class="tomato ml-1 mr-1"></i>
                                         <% if(title.tomatoUserRating === -1) { %>
                                             - %
                                         <% } else { %>
                                             <%= title.tomatoUserRating %> %
                                         <% } %>
-                                    </p>
-                                </span>
-                            </div>
-                            <div class="description titleButtons">
-                                <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title._id %>', '<%= escapeName(title.name) %>', true)" class="ui icon teal mini button" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="check icon"></i></button>
-                                <button id="deleteButton" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= escapeName(title.name) %>', true)" data-tooltip="Watched '<%= title.name %>'" data-inverted=""><i class="fas fa-check"></i></button>
+                                        <button id="deleteButton" class="btn btn-danger card-link py-1 px-2" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="fas fa-trash"></i></button>   
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 <% } %>
             <% }); %>
-            </div>
-          </div>
-
-          <div class="ui segment history six wide column">
-            <h3><i class="tv icon"></i> Binge History</h3>
-
-            <div class="ui list">
-                <% if(titles.filter(title=>title.seen).length == 0) { %>
-                    <div class="item watchedtitle">
-                        <h1>😭</h1> Looks like you haven't recorded any binge session yet, shame on you!
-                        <br>
-                        Record a binge by clicking the checkmark button "watched".
-                    </div>
-                <% } %>
-
-                <% titles.sort(function(a, b) { %>
+            <!-- empty watchlist -->
+            <% if(titles.filter(title=>!title.seen).length == 0) { %>
+                <div class="container rounded bg-warning pb-3 mb-2">
+                    <h3 class="pt-3"><i class="fas fa-smile-wink mr-2"></i>Welcome!</h3>
+                    <hr>
+                    Seems like you haven't added any titles to your watchlist yet or you've run out of binge material <i class="fas fa-sad-cry"></i>
+                    <br> <br>
+                    <i class="fas fa-hand-point-up mr-2"></i>Find your next binge by typing in the search field above.
+                </div>
+            <% } %>
+        </div>
+        
+        <!-- binge history -->
+        <div id="bingeHistory" class="col-lg-4 mt-lg-0 bg-secondary text-white rounded-left">
+            <h3><i class="fas fa-tv mt-3 mr-2"></i>Binge History</h3>
+            <hr>
+            <% titles.sort(function(a, b) { %>
                 <%    a = new Date(a.seenOn); %>
                 <%    b = new Date(b.seenOn); %>
                 <%    return b - a; %>
                 <% }); %>
-
+    
                 <% previousDate = null %>
-
+    
                 <% titles.forEach(function(title){ %>
                     <% if(title.seen) { %>
                         <% if(!previousDate || (previousDate.toISOString().substring(0, 10) !== new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10))) { %>
-                            <h4> <%= new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10) %> </h4>
+                            <h5 class="mb-2"><i class="far fa-calendar-alt mr-2"></i><%= new Date(Date.parse(title.seenOn)).toISOString().substring(0, 10) %> </h5>
                         <% } %>
                         <% previousDate = title.seenOn %>
-                        <div class="item">
-                            <img class="ui image seenPoster" src="<%= title.poster %>" height="50px" width="30px">
-                            <div class="history content name">
-                                <% if(title.name.length > 27) { %>
-                                    <% name = title.name.substring(0, 27) + "..." %>
-                                <% } else { %>
-                                    <% name = title.name %>
-                                <% } %>
-                                <%= name %>
-                                <div class="description">
-                                    <button id="toggleSeenStatusButton" onclick="toggleSeenStatus('<%= title._id %>', '<%= escapeName(title.name) %>', false)" class="ui icon teal mini button" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="redo icon"></i></button>
-                                    <button id="deleteButton" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" class="ui icon black mini button" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="icon trash"></i></button>
+                        <div class="card mb-3 bg-dark text-white">
+                            <div class="row no-gutters">
+                                <div class="col" style="max-width: 50px">
+                                    <img src="<%= title.poster %>" class="card-img" loading="lazy" alt="cover" style="height: 75px; width: 50px">
+                                </div>
+                                <div class="col">
+                                    <div class="card-header py-1"> 
+                                        <h6 class="card-title mb-1"><%= title.name %></h6>
+                                    </div>
+                                        <li class="list-group-item py-1">
+                                            <button id="toggleSeenStatusButton" class="btn btn-secondary card-link py-1 px-2" onclick="toggleSeenStatus('<%= title.id %>', '<%= escapeName(title.name) %>', false)" data-tooltip="(Re-)Watch '<%= title.name %>'" data-inverted=""><i class="fas fa-redo"></i></button>
+                                            <button id="deleteButton" class="btn btn-danger card-link py-1 px-2" onclick="prepareDeleteModal('<%= escapeName(title.name) %>', '<%= title._id %>');" data-tooltip="Remove '<%= title.name %>'" data-inverted=""><i class="fas fa-trash"></i></button>   
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     <% } %>
                 <% }); %>
-                </div>
 
-          </div>
+            <!-- empty history -->
+            <% if(titles.filter(title=>title.seen).length == 0) { %>
+                <div class="container rounded pb-3 mb-2">
+                    <h3 class="pt-3"><i class="fas fa-surprise mr-2"></i>Oh no!</h3>
+                    <hr>
+                    Looks like you haven't recorded any binge session yet - shame on you! <i class="fas fa-sad-cry"></i>
+                    <br> <br>
+                    Record a binge by clicking the checkmark button (<i class="fas fa-check"></i>) "watched".
+                </div>
+            <% } %>
         </div>
+    </div>
+</div>
 
-        <div class="ui modal" id="deleteModal">
-            <i class="close icon" id="abortDeleteIcon"></i>
-            <div class="header">
-                Do you really want to <b>remove</b> "<span id="deleteModalName"></span>"?
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-3"></i>Do you really want to <b>remove</b> "<span id="deleteModalName"></span>"?</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="actions">
-                <div class="ui black deny right labeled icon button" id="abortDeleteButton">
+            <div class="modal-footer">
+                <button id="abortDeleteButton" type="button" class="btn btn-icon-success btn-success" data-dismiss="modal">
+                    <i class="fas fa-minus-circle"></i>
                     Nope, keep it!
-                    <i class="close icon"></i>
-                </div>
-                <form id="deleteModalForm" class="ui form inline" method="POST" action="/title">
-                    <input type="submit" value="Remove" form="deleteModalForm" class="ui red button" id="deleteModalButton"></button>
+                </button>
+                <form id="deleteModalForm" method="POST" action="/title">
+                    <button id="deleteModalButton" type="submit" value="Remove" form="deleteModalForm" class="btn btn-icon-danger btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Yes, delete it!
+                    </button>
                 </form>
             </div>
         </div>
-
     </div>
-</div>
+</div>    
 
 <% include ../partials/footer %>

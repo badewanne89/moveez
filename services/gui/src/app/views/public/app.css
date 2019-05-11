@@ -1,109 +1,131 @@
-#logo {
-    background-color: teal;
-    font-size: 20px;
-    font-weight: bold;
+.flex-parent {
+    display: flex;
+    align-items: center;
+}
+    
+.long-and-truncated {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.inline {
-    display: inline;
+.short-and-fixed {
+    white-space: nowrap;
 }
 
-.seen {
-    text-decoration: line-through;
-    font-weight: bold;
-}
-.unseen {
-    font-weight: bold;
+.short-and-fixed > * {
+    display: inline-block;
 }
 
-.hidden {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s 2s, opacity 2s linear;
+.long-and-truncated-with-child {
+    flex: 1;
+    min-width: 0; /* or some value */
+}
+
+.long-and-truncated-with-child > h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.maximumWidthForPoster {
+    max-width: 100px;
+}
+
+.posterSize {
+    height: 148px;
+    width: 100px;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .maximumWidthForPoster {
+        max-width: 132px;
+    }
+    .posterSize {
+        height: 196px;
+        width: 132px;
+    }
+}
+
+.addSuggestionButton {
+    font-size: 2rem;
+    color: teal;
+}
+
+img {
+    flex-shrink: 0;
+}
+
+.tomato {
+    background: url(rottentomato.png) no-repeat;
+    background-size: cover;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+}
+
+i.fa-imdb {
+    font-size: 2rem;
+}
+
+.alert {
+    z-index:1;
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 .suggestion:nth-of-type(odd) {
     background: #f7f7f7;
 }
 
-.suggestion {
-    height: 50px;
-    padding: 1px;
+.suggestion:hover { 
+    background: #d5f3f3; 
+}
+
+/* TODO: consolidate btn-icon-x */
+
+.btn-icon-danger {
+    position: relative;
+    padding-left: 50px;
+    text-align: left;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.suggestion:hover { background: #d5f3f3; }
-
-#results {
-    width: auto;
+.btn-icon-danger :first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    padding: 8px;
+    font-size: 1.2em;
+    text-align: center;
+    background-color: rgb(189, 34, 50);
 }
 
-.suggestionContent {
-    vertical-align: top;
-    margin: 0px 0px 0px 10px;
-    display: inline-block;
+.btn-icon-success {
+    position: relative;
+    padding-left: 50px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#add {
-    vertical-align: top;
-    margin: 6px 5px 0px 10px;
-}
-
-.suggestionPoster {
-    margin: 2px 0px 0px 5px;
-}
-
-.description {
-    margin-top: 4px;
-}
-
-h4 {
-    margin-bottom: 0px;
-}
-
-#imdb {
-    display: inline-block;
-}
-
-#container {
-    margin-left: 10px!important;
-    width: auto;
-}
-
-.logo {
-    margin-right: 5px;
-}
-
-.title:nth-of-type(even) {
-    background: #f7f7f7;
-}
-
-.titleDetails {
-    height: 150px;
-}
-
-.history {
-    background: #f7f7f7!important;
-}
-
-i.imdb.icon {
-    font-size: 1.5em;
-}
-
-.titleButtons {
-    margin-top: 61px;
-}
-
-.seenPoster {
-    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-    filter: grayscale(100%);
-}
-
-.tomato {
-    background: url(rottentomato.png) no-repeat;
-    background-size: cover;
-}
-
-#inline {
-    display:inline;
+.btn-icon-success :first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    padding: 8px;
+    font-size: 1.2em;
+    text-align: center;
+    background-color: rgb(26, 116, 38);
 }
