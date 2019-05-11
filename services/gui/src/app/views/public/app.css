@@ -1,3 +1,34 @@
+.flex-parent {
+    display: flex;
+    align-items: center;
+}
+    
+.long-and-truncated {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.short-and-fixed {
+    white-space: nowrap;
+}
+
+.short-and-fixed > * {
+    display: inline-block;
+}
+
+.long-and-truncated-with-child {
+    flex: 1;
+    min-width: 0; /* or some value */
+}
+
+.long-and-truncated-with-child > h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .maximumWidthForPoster {
     max-width: 100px;
 }
