@@ -71,10 +71,12 @@ describe('Deleting a Title', function() {
   it('can be triggered by clicking the trash symbol', function() {
       cy.wait(1000)  
       cy.get('#deleteButton').click()
+      cy.wait(1000) 
       cy.get('#deleteModal').should('be.visible')
   })
   it('can be aborted by saying nope', function() {
-      cy.get('#abortDeleteButton > i').click()
+      cy.get('#abortDeleteButton').click()
+      cy.wait(1000) 
       cy.get('#deleteModal').should('not.be.visible')
       cy.get('#watchList').should('contain', 'Inception')
   })
