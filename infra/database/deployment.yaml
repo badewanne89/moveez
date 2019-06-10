@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nosqlclient
+  labels:
+    app: nosqlclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nosqlclient
+  template:
+    metadata:
+      labels:
+        app: nosqlclient
+    spec:
+      containers:
+      - name: nosqlclient
+        image: mongoclient/mongoclient
+        ports:
+        - containerPort: 3000

@@ -27,3 +27,20 @@ helm install --name mongodb-moveez-prod -f ./values-production.yaml \
     --set mongodbRootPassword=SECRET,mongodbUsername=SECRET,mongodbPassword=SECRET,mongodbDatabase=prod \
     stable/mongodb
 ```
+
+## Management
+To access our databases we use an extra `MongoDB`. To connect to the production database follow these steps:
+```
+# start mongodb client
+kubectl run mongoclient --image=mongo
+# connect to its terminal via kubernetes VScode integration
+# connect to the database (use real name instead of USER)
+mongo "mongodb://USER@mongodb-moveez-prod:27017/prod"
+# type in the password
+# to list the content of the title collection for example, just type
+db.titles.find()
+```
+
+Here you can find the [MongoDB Shell command reference](https://docs.mongodb.com/manual/reference/mongo-shell/).
+
+In future we might use [NoSQLClient](https://www.nosqlclient.com). It could be accessable via `nosqlclient.moveez.de` and deployed with the ingress, service and deployment yamls defined in this folder. But it doesn't really work right now.
