@@ -72,6 +72,7 @@ kubectl create --namespace=cert-manager secret generic azuredns-config \
 
 # Get the Service Principal App ID for configuration
 echo $AZURE_CERT_MANAGER_SP_APP_ID
+```
 
 ### Deploy wildcard cluster issuer
 Amost done, now we need to set up a cluster-issuer that listens for new certificate objects and creates orders for the cert-manager to create new valid certificates.
@@ -82,4 +83,12 @@ kubectl create -f cluster-issuer.yml --namespace cert-manager
 ### Create the wildcard certifacte request for *.moovez.de
 ```
 kubectl create -f certificate.yml
+```
+
+## Set up the www-ingress
+All deployments of `gui` have their unique domain name based on their stage (uat or prod) and their branch (feature or master). There is a special domain `www.moveez.de` which has to be created and forwards to the same service like `gui-master-prod.moveez.de`.
+
+Deploy the ingress with:
+```
+kubectl apply -f ingress.yaml
 ```

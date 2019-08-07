@@ -12,7 +12,7 @@ spec:
   tls:
   - hosts:
     - www.moveez.de
-    secretName: wildcard
+    secretName: wildcardprod
   rules:
   - host: www.moveez.de
     http:

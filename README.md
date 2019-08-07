@@ -29,6 +29,12 @@ We use cypress.io to perform our regression testing. It is automaticly triggered
 This app consists of multiple [microservices](https://github.com/schdief/moveez/tree/master/services), all based on [Express](https://expressjs.com/). Our data is managed by [MongoDB](https://www.mongodb.com) - the setup is described in the [database directory](https://github.com/schdief/moveez/tree/master/infra/database). To run the services and database we are using [Rancher](https://rancher.com), which setup is described [here](https://github.com/schdief/moveez/tree/master/infra/rancher). The deployment of services to Rancher is done via [helm](https://helm.sh). 
 
 # Run
+## Initial Setup
+1. Set up the (servers and rancher)[https://github.com/schdief/moveez/tree/master/infra/rancher]
+2. Set up the (network configuration including DNS and TLS)[https://github.com/schdief/moveez/tree/master/infra/network]
+3. Set up the (databases for UAT and PROD)[https://github.com/schdief/moveez/tree/infra/database]
+4. Set up the (secret for the facebook login)[https://github.com/schdief/moveez/tree/master/services/gui]
+
 ## Monitoring
 To monitor our services we are using uptime robot that can be visited here:
 https://uptimerobot.com/dashboard#mainDashboard

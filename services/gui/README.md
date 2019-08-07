@@ -1,4 +1,4 @@
-# npm run scripts in package.json
+# How-To develop and run the service
 
 |script        | action | TLS | authentication
 | ------------- |:-------------:| -----:|---:|
