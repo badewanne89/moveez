@@ -4,7 +4,7 @@
 
 `Moveez` is a service to keep track of the movies you would like to watch in future. It shows you the ratings from sites like iMDB.com and Rottentomatoes.com.
 
-[Visit us](https://www.moveez.de)
+[Visit us at www.moveez.de](https://www.moveez.de)
 
 Future updates might include:
 - It even alerts you when a movie is running in cinema or is available on a VoD-plattform of your choice.
@@ -40,4 +40,4 @@ To monitor our services we are using uptime robot that can be visited here:
 https://uptimerobot.com/dashboard#mainDashboard
 
 ## Logs
-Currently you have to look at the AKS logs, but we want to use Azure Logs.
+Currently you have to look at the container logs e. g. via Rancher, but in future we want to use Graylog or something similar.
