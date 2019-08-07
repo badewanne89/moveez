@@ -14,7 +14,8 @@ var TitleSchema = new Schema(
         year: {type: String},
         tomatoUserRating: {type: Number},
         tomatoURL: {type: String},
-        user: {type: String}
+        user: {type: String},
+        genres: {type: Array}
     }
 )
 

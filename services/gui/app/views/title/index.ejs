@@ -30,6 +30,10 @@
                                 <div class="card-header">
                                     <h5 class="card-title mb-1"><%= title.name %></h5>
                                     <small class="card-text text-muted">(<%= title.year %>)</small>
+                                    <br>
+                                    <% title.genres.forEach(function(genre){ %>
+                                        <button type="button" class="btn btn-primary"> <%= genre %> </button>
+                                    <% }) %>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
