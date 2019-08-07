@@ -30,10 +30,10 @@ This app consists of multiple [microservices](https://github.com/schdief/moveez/
 
 # Run
 ## Initial Setup
-1. Set up the (servers and rancher)[https://github.com/schdief/moveez/tree/master/infra/rancher]
-2. Set up the (network configuration including DNS and TLS)[https://github.com/schdief/moveez/tree/master/infra/network]
-3. Set up the (databases for UAT and PROD)[https://github.com/schdief/moveez/tree/infra/database]
-4. Set up the (secret for the facebook login)[https://github.com/schdief/moveez/tree/master/services/gui]
+1. Set up the [servers and rancher](https://github.com/schdief/moveez/tree/master/infra/rancher)
+2. Set up the [network configuration including DNS and TLS](https://github.com/schdief/moveez/tree/master/infra/network)
+3. Set up the [databases for UAT and PROD](https://github.com/schdief/moveez/tree/infra/database)
+4. Set up the [secret for the facebook login](https://github.com/schdief/moveez/tree/master/services/gui)
 
 ## Monitoring
 To monitor our services we are using uptime robot that can be visited here:
