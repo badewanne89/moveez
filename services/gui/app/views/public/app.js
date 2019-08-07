@@ -8,6 +8,11 @@ function prepareDeleteModal(name, id) {
 	$('#deleteModal').modal('show')
 }
 
+//clicking the magnifier activates the search bar
+function activateSearchBar() {
+    $('#searchNewTitle').focus()
+}
+
 //trigger fadeout of flash messages
 window.onload = function() {
     $('#successAlert').fadeOut(5000)
