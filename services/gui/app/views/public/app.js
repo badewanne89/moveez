@@ -92,9 +92,9 @@ function addTitle(name, imdbID, year, poster, genres) {
     ratingRequest.onreadystatechange = function() {
         if (ratingRequest.readyState == 4 && ratingRequest.status == 200) {
 
-            genreArray = JSON.parse(ratingRequest.responseText).Genre.split(',')
+            let genreArray = JSON.parse(ratingRequest.responseText).Genre.split(',')
             let genreInput = ""
-            for (i=0; i<genreArray.length; i++) {
+            for (let i=0; i<genreArray.length; i++) {
                 genreInput += `<input name="title[genres][${i}]" value="${genreArray[i]}"></input>`
             }
 
@@ -110,7 +110,6 @@ function addTitle(name, imdbID, year, poster, genres) {
             //the form must be in the document to submit it, but should be invisible
             form.hidden = true
             document.body.append(form)
-            
             form.submit()
         }
     }
