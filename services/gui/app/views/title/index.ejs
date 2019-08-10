@@ -27,15 +27,27 @@
                                 <img src="<%= title.poster %>" class="card-img posterSize" loading="lazy" alt="cover">
                             </div>
                             <div class="col">
-                                <div class="card-header">
-                                    <h5 class="card-title mb-1"><%= title.name %></h5>
-                                    <small class="card-text text-muted">(<%= title.year %>)</small>
-                                    <br>
-                                    <% title.genres.forEach(function(genre){ %>
-                                        <button type="button" class="btn btn-primary"> <%= genre %> </button>
-                                    <% }) %>
+                                <div class="card-header row justify-content-between">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title mb-1"><%= title.name %></h5>
+                                        <small class="card-text text-muted">(<%= title.year %>)</small>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <% title.genres.forEach(function(genre){ %>
+                                            <button type="button" class="d-none d-md-inline-flex btn genre btn-sm text-white mb-1"> <%= genre %> </button>
+                                        <% }) %>
+                                        <div class="d-inline-flex d-md-none">
+                                            <i class="fas bigger teal fa-angle-down collapse show genres<%=title._id%>" data-toggle="collapse" data-target=".genres<%=title._id%>" aria-expanded="true" aria-controls="genres<%=title._id%>"></i>
+                                            <i class="fas bigger teal fa-angle-up collapse genres<%=title._id%>" data-toggle="collapse" data-target=".genres<%=title._id%>" aria-expanded="true" aria-controls="genres<%=title._id%>"></i>
+                                        </div>
+                                    </div>
                                 </div>
                                 <ul class="list-group list-group-flush">
+                                    <li class="list-group-item flex-wrap collapse genres<%=title._id%>">
+                                        <% title.genres.forEach(function(genre){ %>
+                                            <button type="button" class="btn genre btn-sm text-white mb-1 mr-1"> <%= genre %> </button>
+                                        <% }) %>
+                                    </li>
                                     <li class="list-group-item">
                                         <i class="fab fa-imdb mr-2"></i>
                                         <% if(title.imdbRating === -1) { %>
