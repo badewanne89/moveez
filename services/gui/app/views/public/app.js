@@ -1,52 +1,52 @@
 //prepare modal to delete a title
 function prepareDeleteModal(name, id) {
-	//set name of modal
-	$('#deleteModalName').text(name)
-	//set action to id of title
-	$('#deleteModalForm').attr('action', '/title/' + id + '/?_method=DELETE')
-	//show delete modal
-	$('#deleteModal').modal('show')
+    //set name of modal
+    $('#deleteModalName').text(name);
+    //set action to id of title
+    $('#deleteModalForm').attr('action', '/title/' + id + '/?_method=DELETE');
+    //show delete modal
+    $('#deleteModal').modal('show');
 }
 
 //clicking the magnifier activates the search bar
 function activateSearchBar() {
-    $('#searchNewTitle').focus()
+    $('#searchNewTitle').focus();
 }
 
 //trigger fadeout of flash messages
 window.onload = function() {
-    $('#successAlert').fadeOut(5000)
-    $('#errorAlert').fadeOut(5000)
-}
+    $('#successAlert').fadeOut(5000);
+    $('#errorAlert').fadeOut(5000);
+};
 
 //update a title as seen or unseen
 function toggleSeenStatus(id, name, seen) {
-    let form = document.createElement('form')
-    form.action = '/title/' + id + '/?_method=PUT'
-    form.method = 'POST'
+    let form = document.createElement('form');
+    form.action = '/title/' + id + '/?_method=PUT';
+    form.method = 'POST';
     if(seen) {
-        form.innerHTML = '<input name="title[seen]" value="true"> <input name="title[seenOn]" value="' + Date.now() + '">'
+        form.innerHTML = '<input name="title[seen]" value="true"> <input name="title[seenOn]" value="' + Date.now() + '">';
     } else {
-        form.innerHTML = '<input name="title[seen]" value="false">'
+        form.innerHTML = '<input name="title[seen]" value="false">';
     }
 
     //the form must be in the document to submit it, but should be invisible
-    form.hidden = true
-    document.body.append(form)
+    form.hidden = true;
+    document.body.append(form);
 
-    form.submit()
+    form.submit();
 }
 
 //suggestions from IMDB (via omdb api) for adding a new title
 function suggestTitle() {
-    var searchString = $('#searchNewTitle').val()
+    var searchString = $('#searchNewTitle').val();
     if(searchString.length > 2) {
         superagent.get(`https://www.omdbapi.com/?s=${searchString}&apikey=b50af808`)
         .end((err, response) => {
             if (err) {
-                console.log(`ERR: oMDB failed us, here is the reason: ${err}`)
-                $('#results').html("<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>")
-                $('#results').show()
+                console.log(`ERR: oMDB failed us, here is the reason: ${err}`);
+                $('#results').html("<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>");
+                $('#results').show();
             } else {
                 if(response.body.Search) {
                     const $results = $('#results');
@@ -54,7 +54,7 @@ function suggestTitle() {
                     for (let suggestion of response.body.Search) {
                         //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
                         if(suggestion.Poster === "N/A" || suggestion.Poster.includes("media-imdb.com") || suggestion.Poster.includes("images-na")) {
-                            suggestion.Poster = "/nocover.png"
+                            suggestion.Poster = "/nocover.png";
                         }
                         //build string for suggestion
                         let suggestionHtml = `
@@ -68,34 +68,34 @@ function suggestTitle() {
                                     <p class="text-muted my-1">(${suggestion.Year})</p>
                                 </div>
                             </div>
-                        `
-                        $results.append(suggestionHtml)
+                        `;
+                        $results.append(suggestionHtml);
                         $results.children().last().click(()=>addTitle(suggestion.Title, suggestion.imdbID, suggestion.Year, suggestion.Poster));
                     }
-                    $results.show()
+                    $results.show();
                 }
             }
-        })
+        });
     } else {
-        $('#results').hide(0)
+        $('#results').hide(0);
     }
 }
 
 //add a new title
 function addTitle(name, imdbID, year, poster, genres) {
 
-    let form = document.createElement('form')
-    form.action = '/title'
-    form.method = 'POST'
+    let form = document.createElement('form');
+    form.action = '/title';
+    form.method = 'POST';
 
     var ratingRequest = new XMLHttpRequest();
     ratingRequest.onreadystatechange = function() {
         if (ratingRequest.readyState == 4 && ratingRequest.status == 200) {
 
-            let genreArray = JSON.parse(ratingRequest.responseText).Genre.split(',')
-            let genreInput = ""
+            let genreArray = JSON.parse(ratingRequest.responseText).Genre.split(',');
+            let genreInput = "";
             for (let i=0; i<genreArray.length; i++) {
-                genreInput += `<input name="title[genres][${i}]" value="${genreArray[i]}"></input>`
+                genreInput += `<input name="title[genres][${i}]" value="${genreArray[i]}"></input>`;
             }
 
             form.innerHTML = `
@@ -106,21 +106,21 @@ function addTitle(name, imdbID, year, poster, genres) {
                 <input name="title[year]" value="${year}">
                 <input name="title[poster]" value="${poster}">
                 ${genreInput}
-            `
+            `;
             //the form must be in the document to submit it, but should be invisible
-            form.hidden = true
-            document.body.append(form)
-            form.submit()
+            form.hidden = true;
+            document.body.append(form);
+            form.submit();
         }
-    }
+    };
 
-    ratingRequest.open("GET", "https://www.omdbapi.com/?i=" + imdbID + "&apikey=b50af808&tomatoes=true")
-    ratingRequest.send()
+    ratingRequest.open("GET", "https://www.omdbapi.com/?i=" + imdbID + "&apikey=b50af808&tomatoes=true");
+    ratingRequest.send();
 }
 
 //hide suggestions when search field loses focus
 function hideSuggestions() {
     setTimeout(function () {
-        $('#results').hide(0)
+        $('#results').hide(0);
     }, 200);
 }

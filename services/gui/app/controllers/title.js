@@ -22,6 +22,7 @@ function postTitle(req, res){
     //TODO: check tomatoURL upfront, if empty skip ketchup request - needs promises
     //get path of tomatoURL
     var path
+    
     if(req.body.title.tomatoURL){
         path = req.body.title.tomatoURL.substring(req.body.title.tomatoURL.indexOf("m/")+4)
     }
