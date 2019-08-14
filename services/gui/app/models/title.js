@@ -1,6 +1,6 @@
 var mongoose = require("mongoose"),
-    Schema = mongoose.Schema
-    
+    Schema = mongoose.Schema;
+
 //schema definition for title
 var TitleSchema = new Schema(
     {
@@ -17,6 +17,6 @@ var TitleSchema = new Schema(
         user: {type: String},
         genres: {type: Array}
     }
-)
+);
 
-module.exports = mongoose.model("title", TitleSchema)
+module.exports = mongoose.model("title", TitleSchema);
