@@ -67,11 +67,8 @@ describe("The Title Page", function() {
   });
 
   //TODO: currently the suggestion call to omdb might fail, resulting in an exception which isn't caught
-  Cypress.on("uncaught:exception", (err, runnable) => {
-    // returning false here prevents Cypress from
-    // failing the test
-    return false;
-  });
+  // returning false here prevents Cypress from failing the test
+  Cypress.on("uncaught:exception", (err, runnable) => false);
 
   describe("Marking a Title as seen", function() {
     it("can be done by clicking the checkmark symbol", function() {
