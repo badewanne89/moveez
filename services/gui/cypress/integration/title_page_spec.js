@@ -52,13 +52,12 @@ describe("The Title Page", function() {
       cy.get(".imdbRating").should("not.contain", "-");
     });
     it("fetches the genres", function() {
-      cy.get(".genreList")
-      .should($genreList => {
+      cy.get(".genreList").should($genreList => {
         // should have found more than 0 elements
         expect($genreList).to.have.length.of.at.least(1);
 
         // make sure the first contains some text content
-        expect($genreList.first()).to.contain('Action');
+        expect($genreList.first()).to.contain("Action");
       });
     });
     it("fetches the user rating of Rottentomato via ketchup", function() {
