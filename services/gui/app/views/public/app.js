@@ -71,30 +71,12 @@ function suggestTitle() {
               suggestion.Poster = "/nocover.png";
             }
             //build string for suggestion
-            let suggestionHtml = `
-              <div class="suggestion flex-parent">
-                  <div class="flex-child short-and-fixed my-auto d-flex">
-                      <i class="fas fa-plus-circle addSuggestionButton my-auto ml-2"></i>
-                      <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
-                  </div>
-                  <div class="flex-child long-and-truncated-with-child my-auto ml-2">
-                      <h4 class="my-1">${suggestion.Title}</h4>
-                      <p class="text-muted my-1">(${suggestion.Year})</p>
-                  </div>
-              </div>
-            `;
+            let suggestionHtml = renderSuggestion(suggestion);
             results.append(suggestionHtml);
-            results
+            $results
               .children()
               .last()
-              .click(() =>
-                addTitle(
-                  suggestion.Title,
-                  suggestion.imdbID,
-                  suggestion.Year,
-                  suggestion.Poster
-                )
-              );
+              .click(() => onSuggestionSelected(suggestion));
           }
           results.show();
         }
@@ -114,6 +96,34 @@ function suggestTitle() {
     $("#results").hide(0);
   }
 }
+
+const renderSuggestion = suggestion => {
+  return `
+<div class="suggestion flex-parent">
+    <div class="flex-child short-and-fixed my-auto d-flex">
+        <i class="fas ${isInWatchList(suggestion) ? '' : 'fa-plus-circle'} addSuggestionButton my-auto ml-2"></i>
+        <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
+    </div>
+    <div class="flex-child long-and-truncated-with-child my-auto ml-2">
+        <h4 class="my-1">${suggestion.Title}</h4>
+        <p class="text-muted my-1">(${suggestion.Year})</p>
+    </div>
+</div>
+`;
+};
+
+const onSuggestionSelected = suggestion => {
+  if (!isInWatchList(suggestion)) {
+    addTitle(
+      suggestion.Title,
+      suggestion.imdbID,
+      suggestion.Year,
+      suggestion.Poster
+    )
+  }
+};
+
+const isInWatchList = suggestion => moveez.titles.some(title => title.imdbID === suggestion.imdbID);
 
 //add a new title
 function addTitle(name, imdbID, year, poster, genres) {
