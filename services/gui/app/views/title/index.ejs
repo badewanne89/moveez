@@ -21,7 +21,7 @@
         <div id="watchList" class="col-lg-8">
             <% titles.forEach(function(title){ %>
                 <% if(!title.seen) { %>
-                    <div class="card mb-3">
+                    <div id="watch-list-item-<%=title.imdbID%>" class="card mb-3">
                         <div class="row no-gutters">
                             <div class="col maximumWidthForPoster">
                                 <img src="<%= title.poster %>" class="card-img posterSize" loading="lazy" alt="cover">

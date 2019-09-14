@@ -98,11 +98,22 @@ function suggestTitle() {
 }
 
 const renderSuggestion = suggestion => {
+  const bIsInWatchlist = isInWatchList(suggestion);
   return `
 <div class="suggestion flex-parent">
     <div class="flex-child short-and-fixed my-auto d-flex">
-        <i class="fas ${isInWatchList(suggestion) ? '' : 'fa-plus-circle'} addSuggestionButton my-auto ml-2"></i>
-        <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
+        <a ${
+          bIsInWatchlist ? `href='#watch-list-item-${suggestion.imdbID}'` : ""
+        } class=" my-auto ml-2">
+          <i class="fas ${
+            bIsInWatchlist
+              ? "fa-arrow-alt-circle-down text-secondary"
+              : "fa-plus-circle"
+          } addSuggestionButton"></i>
+        </a>
+        <img loading="lazy" class="ml-2 my-auto" src="${
+          suggestion.Poster
+        }" width="33px" height="50px">
     </div>
     <div class="flex-child long-and-truncated-with-child my-auto ml-2">
         <h4 class="my-1">${suggestion.Title}</h4>
@@ -119,11 +130,12 @@ const onSuggestionSelected = suggestion => {
       suggestion.imdbID,
       suggestion.Year,
       suggestion.Poster
-    )
+    );
   }
 };
 
-const isInWatchList = suggestion => moveez.titles.some(title => title.imdbID === suggestion.imdbID);
+const isInWatchList = suggestion =>
+  moveez.titles.some(title => title.imdbID === suggestion.imdbID);
 
 //add a new title
 function addTitle(name, imdbID, year, poster, genres) {
