@@ -48,11 +48,11 @@ function suggestTitle() {
   if (searchString.length > 2) {
     //ask omdb to find a title based on the input provided
     omdbRequest = jQuery.ajax({
-      type: 'GET',
+      type: "GET",
       url: `https://www.omdbapi.com/?s=${searchString}&apikey=b50af808`,
-      beforeSend : function() {
+      beforeSend: function() {
         //if there is an unfinished request to omdb, abort it, to avoid overlapping responses
-        if(omdbRequest != null) {
+        if (omdbRequest != null) {
           omdbRequest.abort();
         }
       },
@@ -99,12 +99,12 @@ function suggestTitle() {
           results.show();
         }
       },
-      error:function(err){
+      error: function(err) {
         console.log(`ERR: oMDB failed us, here is the reason: ${err}`);
-          $("#results").html(
-            "<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>"
-          );
-          $("#results").show();
+        $("#results").html(
+          "<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>"
+        );
+        $("#results").show();
       }
     });
   } else {
