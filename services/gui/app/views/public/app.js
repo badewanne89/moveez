@@ -41,61 +41,72 @@ function toggleSeenStatus(id, name, seen) {
 }
 
 //suggestions from IMDB (via omdb api) for adding a new title
+//needs to be globally available
+var omdbRequest = null;
 function suggestTitle() {
   var searchString = $("#searchNewTitle").val();
   if (searchString.length > 2) {
-    superagent
-      .get(`https://www.omdbapi.com/?s=${searchString}&apikey=b50af808`)
-      .end((err, response) => {
-        if (err) {
-          console.log(`ERR: oMDB failed us, here is the reason: ${err}`);
+    //ask omdb to find a title based on the input provided
+    omdbRequest = jQuery.ajax({
+      type: 'GET',
+      url: `https://www.omdbapi.com/?s=${searchString}&apikey=b50af808`,
+      beforeSend : function() {
+        //if there is an unfinished request to omdb, abort it, to avoid overlapping responses
+        if(omdbRequest != null) {
+          omdbRequest.abort();
+        }
+      },
+      success: function(response) {
+        if (response.Response === "True" && response.Search.length > 0) {
+          const results = $("#results");
+          //clear suggestion list
+          results.html("");
+          for (let suggestion of response.Search) {
+            //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
+            if (
+              suggestion.Poster === "N/A" ||
+              suggestion.Poster.includes("media-imdb.com") ||
+              suggestion.Poster.includes("images-na")
+            ) {
+              suggestion.Poster = "/nocover.png";
+            }
+            //build string for suggestion
+            let suggestionHtml = `
+              <div class="suggestion flex-parent">
+                  <div class="flex-child short-and-fixed my-auto d-flex">
+                      <i class="fas fa-plus-circle addSuggestionButton my-auto ml-2"></i>
+                      <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
+                  </div>
+                  <div class="flex-child long-and-truncated-with-child my-auto ml-2">
+                      <h4 class="my-1">${suggestion.Title}</h4>
+                      <p class="text-muted my-1">(${suggestion.Year})</p>
+                  </div>
+              </div>
+            `;
+            results.append(suggestionHtml);
+            results
+              .children()
+              .last()
+              .click(() =>
+                addTitle(
+                  suggestion.Title,
+                  suggestion.imdbID,
+                  suggestion.Year,
+                  suggestion.Poster
+                )
+              );
+          }
+          results.show();
+        }
+      },
+      error:function(err){
+        console.log(`ERR: oMDB failed us, here is the reason: ${err}`);
           $("#results").html(
             "<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us! </p>"
           );
           $("#results").show();
-        } else {
-          if (response.body.Search) {
-            const $results = $("#results");
-            $results.html("");
-            for (let suggestion of response.body.Search) {
-              //some titles have no cover and some covers are hosted at imdb, seems like they don't allow external usage of those, we replace those with a default one
-              if (
-                suggestion.Poster === "N/A" ||
-                suggestion.Poster.includes("media-imdb.com") ||
-                suggestion.Poster.includes("images-na")
-              ) {
-                suggestion.Poster = "/nocover.png";
-              }
-              //build string for suggestion
-              let suggestionHtml = `
-                            <div class="suggestion flex-parent">
-                                <div class="flex-child short-and-fixed my-auto d-flex">
-                                    <i class="fas fa-plus-circle addSuggestionButton my-auto ml-2"></i>
-                                    <img loading="lazy" class="ml-2 my-auto" src="${suggestion.Poster}" width="33px" height="50px">
-                                </div>
-                                <div class="flex-child long-and-truncated-with-child my-auto ml-2">
-                                    <h4 class="my-1">${suggestion.Title}</h4>
-                                    <p class="text-muted my-1">(${suggestion.Year})</p>
-                                </div>
-                            </div>
-                        `;
-              $results.append(suggestionHtml);
-              $results
-                .children()
-                .last()
-                .click(() =>
-                  addTitle(
-                    suggestion.Title,
-                    suggestion.imdbID,
-                    suggestion.Year,
-                    suggestion.Poster
-                  )
-                );
-            }
-            $results.show();
-          }
-        }
-      });
+      }
+    });
   } else {
     $("#results").hide(0);
   }
