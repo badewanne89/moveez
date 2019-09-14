@@ -33,7 +33,7 @@ describe("The Title Page", function() {
     it("is aided by a suggestion from iMDB when typing", function() {
       //TODO: remove delay, not needed anymore
       cy.get("#searchNewTitle")
-        .type("Inception", { delay: 100 })
+        .type("Inception")
         .wait(1000);
     });
     it("can be done by clicking +", function() {
