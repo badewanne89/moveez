@@ -48,17 +48,26 @@ describe("The Title Page", function() {
     it("results in a new entry in the list", function() {
       cy.get("#watchList").contains("Inception");
     });
+    it("fetches the imdb rating", function() {
+      cy.get(".imdbRating").should("not.contain", "-");
+    });
+    it("fetches the genres", function() {
+      cy.get(".genreList").should($genreList => {
+        // should have found more than 0 elements
+        expect($genreList).to.have.length.of.at.least(1);
+
+        // make sure the first contains some text content
+        expect($genreList.first()).to.contain("Action");
+      });
+    });
     it("fetches the user rating of Rottentomato via ketchup", function() {
-      cy.get("#tomatoUserRating").should("not.contain", "-");
+      cy.get(".tomatoUserRating").should("not.contain", "-");
     });
   });
 
   //TODO: currently the suggestion call to omdb might fail, resulting in an exception which isn't caught
-  Cypress.on("uncaught:exception", (err, runnable) => {
-    // returning false here prevents Cypress from
-    // failing the test
-    return false;
-  });
+  // returning false here prevents Cypress from failing the test
+  Cypress.on("uncaught:exception", (err, runnable) => false);
 
   describe("Marking a Title as seen", function() {
     it("can be done by clicking the checkmark symbol", function() {

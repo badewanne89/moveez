@@ -19,10 +19,23 @@ Within Azure DevOps we are using Azure Pipelines to build and release moveez.
 * The build configuration is done via `azure-build-pipeline.yml` per service.
 * The release is currently configured in GUI due to [lack of support of release config files](https://dev.azure.com/mseng/AzureDevOpsRoadmap/_workitems/edit/1364226/). Nevertheless we already store the release config in `azure-release-pipeline.yaml`.
 
-## Code analysis with Sonarcloud.io
+## Code analysis with sonarcloud.io
 We use sonarcloud.io for our static code analysis. It is automaticly triggered for all branches as a parallel step to the build. The results are published to Azure DevOps and a [dashboard](https://sonarcloud.io/organizations/schdief-github/projects).
 
-## Regression testing with Cypress.io
+## Linting our code style with prettier.io
+We use prettier.io to lint our code style. To prevent manual effort, you can add the prettier to your `.git/hooks`. Just use the following `pre-commit`hook (requires prettier to be installed globally via npm):
+```
+#!/bin/sh
+FILES=$(git diff --cached --name-only --diff-filter=ACM “.js” “.jsx” | sed ‘s| |\\ |g’)
+[ -z “$FILES” ] && exit 0
+# Prettify all selected files
+echo “$FILES” | xargs prettier --write
+# Add back the modified/prettified files to staging
+echo “$FILES” | xargs git add
+exit 0
+```
+
+## Regression testing with cypress.io
 We use cypress.io to perform our regression testing. It is automaticly triggered for all branches on UAT stage after the deployment. The results are published to Azure DevOps and a [dashboard](https://dashboard.cypress.io/#/projects/dhwwh4/runs).
 
 # Stack/Architecture

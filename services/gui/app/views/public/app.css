@@ -1,3 +1,25 @@
+.dark {
+    background: rgba(0,0,0,.03);
+}
+
+.bigger {
+    font-size: 2rem;
+  }
+
+.genre {
+    background: teal;
+}
+
+.teal {
+    color: teal;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
 li.list-group-item {
     display: flex;
     align-items: center;

@@ -22,6 +22,7 @@ function postTitle(req, res) {
   //TODO: check tomatoURL upfront, if empty skip ketchup request - needs promises
   //get path of tomatoURL
   var path;
+
   if (req.body.title.tomatoURL) {
     path = req.body.title.tomatoURL.substring(
       req.body.title.tomatoURL.indexOf("m/") + 4
@@ -40,9 +41,9 @@ function postTitle(req, res) {
         newTitle.tomatoUserRating = response.body.tomatoUserRating;
       }
 
-      newTitle.save((err, title) => {
-        if (err) {
-          res.status(HttpStatus.NOT_FOUND).send(err);
+      newTitle.save((sErr, title) => {
+        if (sErr) {
+          res.status(HttpStatus.NOT_FOUND).send(sErr);
         } else {
           //respond with JSON when asked (for API calls and integration testing), otherwise render HTML
           if (req.get("Accept") === "application/json") {
