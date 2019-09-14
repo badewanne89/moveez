@@ -101,7 +101,7 @@ function suggestTitle() {
       },
       error: function(err, errText) {
         //aborting a request also calls the error function - crazy people
-        if (errText != "abort") {
+        if(errText != "abort") {
           console.log(`ERR: oMDB failed us, here is the reason: ${errText}`);
           $("#results").html(
             "<p style='padding:5px;'> 😰ooops we can't get results from iMDB, please notify us!</p>"
