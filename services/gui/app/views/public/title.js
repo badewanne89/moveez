@@ -67,7 +67,7 @@ export function suggestTitle() {
             //build string for suggestion
             let suggestionHtml = renderSuggestion(suggestion);
             results.append(suggestionHtml);
-            $results
+            results
               .children()
               .last()
               .click(() => onSuggestionSelected(suggestion));
