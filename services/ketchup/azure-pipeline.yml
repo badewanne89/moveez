@@ -10,7 +10,7 @@ trigger:
 
 variables:
   projectName: 'ketchup'
-  registryServerName: 'schdieflaw/$(projectName)'
+  registryServerName: 'schdieflaw'
   imageName: '$(projectName)'
   #Your build pipeline references a secret variable named ‘registryPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
   registryLogin: 'fc5f6c73-2b9d-4694-acb6-fcccc6fd2791'
