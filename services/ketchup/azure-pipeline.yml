@@ -11,6 +11,7 @@ trigger:
 variables:
   projectName: 'ketchup'
   #Your build pipeline references a secret variable named ‘registryPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+  #Your build pipeline references a secret variable named ‘helmRepoToken’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
   registry: 'moveez'
   registryUserName: 'schdieflaw'
 
@@ -47,9 +48,18 @@ stages:
 
     - bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
       displayName: 'helm package'
-      
-    - bash: az acr helm push -n $(registryName) -u $(registry) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz
-      displayName: 'az acr helm push'
+    
+    - bash: helm plugin install https://github.com/chartmuseum/helm-push
+      displayName: 'helm install chart museum plugin'
+
+    - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+      displayName: 'helm repo add codefresh repository'
+
+    - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+      displayName: 'prepare login for codefresh helm repository'
+
+    - bash: helm push $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz chartmuseum
+      displayName: 'helm push'
 
   - job: Scan
     pool:
@@ -125,8 +135,14 @@ stages:
               command: init
               arguments: '--service-account tiller'
 
-          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registry) --password $(registryPassword)'
-            displayName: 'helm repo add'
+          - bash: helm plugin install https://github.com/chartmuseum/helm-push
+            displayName: 'helm install chart museum plugin'
+
+          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+            displayName: 'helm repo add codefresh repository'
+
+          - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+            displayName: 'prepare login for codefresh helm repository'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
@@ -171,8 +187,15 @@ stages:
               command: init
               arguments: '--service-account tiller'
 
-          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registry) --password $(registryPassword)'
-            displayName: 'helm repo add'
+          - bash: helm plugin install https://github.com/chartmuseum/helm-push
+            displayName: 'helm install chart museum plugin'
+
+          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+            displayName: 'helm repo add codefresh repository'
+
+          - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+            displayName: 'prepare login for codefresh helm repository'
+
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
             inputs:
