@@ -10,10 +10,9 @@ trigger:
 
 variables:
   projectName: 'ketchup'
-  registryServerName: 'schdieflaw'
   imageName: '$(projectName)'
   #Your build pipeline references a secret variable named ‘registryPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
-  registryLogin: 'fc5f6c73-2b9d-4694-acb6-fcccc6fd2791'
+  registry: 'schdieflaw'
 
 stages:
 - stage: BUILD
@@ -22,15 +21,15 @@ stages:
     pool:
       vmImage: 'ubuntu-16.04'
     steps:
-    - bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
+    - bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registry)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName) -t $(registry)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
       displayName: 'docker build'
 
-    #- bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
-    #  displayName: 'docker login'
+    - bash: docker login -u $(registry) -p $(registryPassword)
+      displayName: 'docker login'
 
     - bash: |
-        docker push $(registryServerName)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName)
-        docker push $(registryServerName)/$(imageName):latest
+        docker push $(registry)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName)
+        docker push $(registry)/$(imageName):latest
       displayName: 'docker push'
       
   - job: Helm
@@ -49,7 +48,7 @@ stages:
     - bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
       displayName: 'helm package'
       
-    - bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz
+    - bash: az acr helm push -n $(registryName) -u $(registry) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz
       displayName: 'az acr helm push'
 
   - job: Scan
@@ -126,7 +125,7 @@ stages:
               command: init
               arguments: '--service-account tiller'
 
-          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registryLogin) --password $(registryPassword)'
+          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registry) --password $(registryPassword)'
             displayName: 'helm repo add'
 
           - task: HelmDeploy@0
@@ -172,7 +171,7 @@ stages:
               command: init
               arguments: '--service-account tiller'
 
-          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registryLogin) --password $(registryPassword)'
+          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registry) --password $(registryPassword)'
             displayName: 'helm repo add'
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
