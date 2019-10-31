@@ -12,6 +12,7 @@ variables:
   projectName: 'ketchup'
   #Your build pipeline references a secret variable named ‘registryPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
   #Your build pipeline references a secret variable named ‘helmRepoToken’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+  #helmRepoToken can be found in codefresh user setting as API token
   registry: 'moveez'
   registryUserName: 'schdieflaw'
 
@@ -52,10 +53,9 @@ stages:
     - bash: helm plugin install https://github.com/chartmuseum/helm-push
       displayName: 'helm install chart museum plugin'
 
-    - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
-      displayName: 'prepare login for codefresh helm repository'
-
-    - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+    - bash:  |
+        export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+        helm repo add chartmuseum cm://h.cfcr.io/schdief/default
       displayName: 'helm repo add codefresh repository'
 
     - bash: helm push $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz chartmuseum
@@ -138,10 +138,9 @@ stages:
           - bash: helm plugin install https://github.com/chartmuseum/helm-push
             displayName: 'helm install chart museum plugin'
 
-          - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
-            displayName: 'prepare login for codefresh helm repository'
-
-          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+          - bash:  |
+              export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+              helm repo add chartmuseum cm://h.cfcr.io/schdief/default
             displayName: 'helm repo add codefresh repository'
 
           - task: HelmDeploy@0
@@ -190,10 +189,9 @@ stages:
           - bash: helm plugin install https://github.com/chartmuseum/helm-push
             displayName: 'helm install chart museum plugin'
 
-          - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
-            displayName: 'prepare login for codefresh helm repository'
-
-          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+          - bash:  |
+              export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+              helm repo add chartmuseum cm://h.cfcr.io/schdief/default
             displayName: 'helm repo add codefresh repository'
 
           - task: HelmDeploy@0
