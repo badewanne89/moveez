@@ -52,11 +52,11 @@ stages:
     - bash: helm plugin install https://github.com/chartmuseum/helm-push
       displayName: 'helm install chart museum plugin'
 
-    - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
-      displayName: 'helm repo add codefresh repository'
-
     - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
       displayName: 'prepare login for codefresh helm repository'
+
+    - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+      displayName: 'helm repo add codefresh repository'
 
     - bash: helm push $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz chartmuseum
       displayName: 'helm push'
@@ -138,11 +138,11 @@ stages:
           - bash: helm plugin install https://github.com/chartmuseum/helm-push
             displayName: 'helm install chart museum plugin'
 
-          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
-            displayName: 'helm repo add codefresh repository'
-
           - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
             displayName: 'prepare login for codefresh helm repository'
+
+          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+            displayName: 'helm repo add codefresh repository'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
@@ -190,11 +190,11 @@ stages:
           - bash: helm plugin install https://github.com/chartmuseum/helm-push
             displayName: 'helm install chart museum plugin'
 
-          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
-            displayName: 'helm repo add codefresh repository'
-
           - bash: export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
             displayName: 'prepare login for codefresh helm repository'
+
+          - bash: helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+            displayName: 'helm repo add codefresh repository'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
