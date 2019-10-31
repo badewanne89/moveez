@@ -9,12 +9,11 @@ trigger:
     - services/ketchup/*
 
 variables:
-  registryServerName: '$(registryName).azurecr.io'
+  projectName: 'ketchup'
+  registryServerName: 'schdieflaw/$(projectName)'
   imageName: '$(projectName)'
   #Your build pipeline references a secret variable named ‘registryPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
-  registryName: 'moveez'
   registryLogin: 'fc5f6c73-2b9d-4694-acb6-fcccc6fd2791'
-  projectName: 'ketchup'
 
 stages:
 - stage: BUILD
@@ -26,8 +25,8 @@ stages:
     - bash: docker build -f $(system.defaultWorkingDirectory)/services/$(projectName)/Dockerfile -t $(registryServerName)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName) -t $(registryServerName)/$(imageName):latest $(system.defaultWorkingDirectory)/services/$(projectName)
       displayName: 'docker build'
 
-    - bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
-      displayName: 'docker login'
+    #- bash: docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
+    #  displayName: 'docker login'
 
     - bash: |
         docker push $(registryServerName)/$(imageName):$(build.BuildNumber)_$(build.sourceBranchName)
