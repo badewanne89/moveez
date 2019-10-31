@@ -58,7 +58,9 @@ stages:
         helm repo add chartmuseum cm://h.cfcr.io/schdief/default
       displayName: 'helm repo add codefresh repository'
 
-    - bash: helm push $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz chartmuseum
+    - bash: |
+        export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+        helm push $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz chartmuseum
       displayName: 'helm push'
 
   - job: Scan
