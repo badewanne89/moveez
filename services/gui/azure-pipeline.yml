@@ -11,6 +11,8 @@ trigger:
 variables:
   projectName: 'gui'
   #Your build pipeline references a secret variable named ‘registryPassword’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+  #Your build pipeline references a secret variable named ‘helmRepoToken’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+  #helmRepoToken can be found in codefresh user setting as API token
   registry: 'moveez'
   registryUserName: 'schdieflaw'
 
@@ -28,7 +30,7 @@ stages:
       displayName: 'docker login'
 
     - bash: |
-        docker push $(registry)/$(projectName):$(build.buildNumber)_$(build.sourceBranchName)
+        docker push $(registry)/$(projectName):$(build.BuildNumber)_$(build.sourceBranchName)
         docker push $(registry)/$(projectName):latest
       displayName: 'docker push'
       
@@ -48,8 +50,18 @@ stages:
     - bash: helm package --version $(build.BuildNumber) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/services/$(projectName)/charts/$(projectName)_$(build.sourceBranchName)
       displayName: 'helm package'
 
-    - bash: az acr helm push -n $(registryName) -u $(registry) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.buildNumber).tgz
-      displayName: 'az acr helm push'
+    - bash: helm plugin install https://github.com/chartmuseum/helm-push
+      displayName: 'helm install chart museum plugin'
+
+    - bash:  |
+        export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+        helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+      displayName: 'helm repo add codefresh repository'
+
+    - bash: |
+        export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+        helm push $(build.artifactStagingDirectory)/$(projectName)_$(build.sourceBranchName)-$(build.BuildNumber).tgz chartmuseum
+      displayName: 'helm push'
       
     - task: PublishPipelineArtifact@0
       displayName: 'Store Cypress Tests'
@@ -132,8 +144,13 @@ stages:
               command: init
               arguments: '--service-account tiller'
 
-          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registry) --password $(registryPassword)'
-            displayName: 'helm repo add'
+          - bash: helm plugin install https://github.com/chartmuseum/helm-push
+            displayName: 'helm install chart museum plugin'
+
+          - bash:  |
+              export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+              helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+            displayName: 'helm repo add codefresh repository'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
@@ -248,8 +265,13 @@ stages:
               command: init
               arguments: '--service-account tiller'
 
-          - bash: 'helm repo add $(registryName) https://$(registryName).azurecr.io/helm/v1/repo --username $(registry) --password $(registryPassword)'
-            displayName: 'helm repo add'
+          - bash: helm plugin install https://github.com/chartmuseum/helm-push
+            displayName: 'helm install chart museum plugin'
+
+          - bash:  |
+              export HELM_REPO_ACCESS_TOKEN="$(helmRepoToken)"
+              helm repo add chartmuseum cm://h.cfcr.io/schdief/default
+            displayName: 'helm repo add codefresh repository'
 
           - task: HelmDeploy@0
             displayName: 'helm upgrade'
